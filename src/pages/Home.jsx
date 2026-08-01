@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
 import Reveal from '../components/Reveal.jsx'
 import CtaBand from '../components/CtaBand.jsx'
-import { trades, audience } from '../data/content.js'
+import Faq from '../components/Faq.jsx'
+import { trades, audience, episodes, founderFaqs, partnerFaqs } from '../data/content.js'
 
 export default function Home() {
   return (
@@ -223,6 +224,43 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ===================== SEASON 01 ===================== */}
+      <section className="section-pad" id="season">
+        <div className="container">
+          <div className="two-col top">
+            <div>
+              <Reveal><span className="eyebrow">Season 01 · Creator Founders</span></Reveal>
+              <Reveal as="h2" className="h-lg" delay={1} style={{ marginTop: 20 }}>
+                Four episodes. Four founders. One fire.
+              </Reveal>
+              <Reveal as="p" className="lead muted" delay={2} style={{ marginTop: 20, maxWidth: '44ch' }}>
+                Season 01 gathers creator founders who have built both an audience and a
+                business. Sixteen founders across four fires — Episode 01 films on{' '}
+                <span className="copper">9 August</span>.
+              </Reveal>
+              <Reveal delay={3} style={{ marginTop: 28 }}>
+                <Link to="/season-01" className="text-link">Explore Season 01 <span className="arw">→</span></Link>
+              </Reveal>
+            </div>
+            <div>
+              <div className="ep-list">
+                {episodes.map((e) => (
+                  <Reveal className={`ep-row ${e.status === 'filming' ? 'live' : ''}`} key={e.n}>
+                    <span className="ep-num">{e.n}</span>
+                    <div>
+                      <h3>{e.title}</h3>
+                      {e.status === 'filming'
+                        ? <span className="badge"><span className="pulse" /> Filming 9 August</span>
+                        : <span className="badge soon">Coming this season</span>}
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ===================== WHO IS THIS FOR ===================== */}
       <section className="section-pad">
         <div className="container">
@@ -263,6 +301,72 @@ export default function Home() {
               Every founder should dream of receiving an invitation.
             </p>
           </Reveal>
+        </div>
+      </section>
+
+      {/* ===================== BRAND PARTNERSHIP ===================== */}
+      <section className="section-pad" id="partner-teaser">
+        <div className="container">
+          <div className="two-col top">
+            <div>
+              <Reveal><span className="eyebrow">For Brands</span></Reveal>
+              <Reveal as="h2" className="h-lg" delay={1} style={{ marginTop: 20 }}>
+                Why partner with Stranger Founders?
+              </Reveal>
+              <Reveal as="p" className="lead muted" delay={2} style={{ marginTop: 20, maxWidth: '44ch' }}>
+                Your brand isn't sponsoring another event. You're becoming part of a
+                founder movement — woven into the story, the content and the community
+                that keeps meeting long after the season.
+              </Reveal>
+              <Reveal delay={3} style={{ marginTop: 30 }}>
+                <Link to="/partners" className="btn btn-ghost">Become a Partner <span className="arw">→</span></Link>
+              </Reveal>
+            </div>
+            <div className="benefits">
+              {[
+                ['Founder Audience', 'Direct presence with vetted founders and creators — not a hall of cold contacts.'],
+                ['Creator Reach', 'Amplification across the combined audiences of every creator in the season.'],
+                ['Authentic Content', 'Weeks of trailers, clips and BTS your brand is genuinely woven into.'],
+                ['Premium Positioning', 'A cinematic, editorial world your brand sits inside — never a banner on a wall.'],
+                ['Long-term Visibility', 'The SF Circle keeps meeting. Partners stay part of a community, not a single date.'],
+              ].map(([t, d], i) => (
+                <Reveal className="benefit" key={t} delay={(i % 3) + 1}>
+                  <span className="b-num">{String(i + 1).padStart(2, '0')}</span>
+                  <div><h4>{t}</h4><p>{d}</p></div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== FAQs ===================== */}
+      <section className="section-pad-sm" style={{ background: 'var(--forest-925)' }} id="faq">
+        <div className="container">
+          <Reveal className="block-head" style={{ marginBottom: 48 }}>
+            <span className="eyebrow">Questions</span>
+            <h2 className="h-lg" style={{ marginTop: 20 }}>Everything you need to know.</h2>
+          </Reveal>
+          <div className="two-col top" style={{ alignItems: 'flex-start', gap: 60 }}>
+            <div>
+              <Reveal>
+                <h3 style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: '1.35rem', color: 'var(--copper)', marginBottom: 28 }}>For Founders</h3>
+              </Reveal>
+              <Faq items={founderFaqs} />
+              <Reveal style={{ marginTop: 28 }}>
+                <Link to="/apply" className="text-link">Request an invitation <span className="arw">→</span></Link>
+              </Reveal>
+            </div>
+            <div>
+              <Reveal>
+                <h3 style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: '1.35rem', color: 'var(--copper)', marginBottom: 28 }}>For Partners</h3>
+              </Reveal>
+              <Faq items={partnerFaqs} />
+              <Reveal style={{ marginTop: 28 }}>
+                <Link to="/partners" className="text-link">Partner with us <span className="arw">→</span></Link>
+              </Reveal>
+            </div>
+          </div>
         </div>
       </section>
 
