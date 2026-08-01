@@ -271,7 +271,7 @@ export default function Home() {
           <div className="who-grid">
             {audience.map((a, i) => (
               <Reveal className="who-cell" key={a} delay={(i % 3) + 1}>
-                <span className="tick">✕</span><span>{a}</span>
+                <span className="tick">✓</span><span>{a}</span>
               </Reveal>
             ))}
           </div>
@@ -322,7 +322,7 @@ export default function Home() {
                 <Link to="/partners" className="btn btn-ghost">Become a Partner <span className="arw">→</span></Link>
               </Reveal>
             </div>
-            <div className="benefits">
+            <div className="benefits" style={{ gridTemplateColumns: '1fr', gap: 0 }}>
               {[
                 ['Founder Audience', 'Direct presence with vetted founders and creators — not a hall of cold contacts.'],
                 ['Creator Reach', 'Amplification across the combined audiences of every creator in the season.'],

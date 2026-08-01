@@ -25,9 +25,9 @@
   --cream-dim: #c8bb9c;
   --cream-faint: #9a927e;
 
-  --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
-  --sans: 'Manrope', system-ui, -apple-system, sans-serif;
-  --script: 'Marck Script', cursive;
+  --serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --script: 'Playfair Display', Georgia, serif;
 
   --container: 1180px;
   --container-narrow: 820px;
@@ -43,9 +43,9 @@ body {
   color: var(--cream);
   font-family: var(--sans);
   font-weight: 400;
-  line-height: 1.65;
+  line-height: 1.7;
   font-size: 17px;
-  letter-spacing: 0.005em;
+  letter-spacing: 0;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
@@ -74,8 +74,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .narrow { max-width: var(--container-narrow); margin-left: auto; margin-right: auto; }
 
 section { position: relative; }
-.section-pad { padding: clamp(72px, 11vw, 156px) 0; }
-.section-pad-sm { padding: clamp(56px, 8vw, 104px) 0; }
+.section-pad { padding: clamp(56px, 8vw, 110px) 0; }
+.section-pad-sm { padding: clamp(40px, 6vw, 78px) 0; }
 
 .rule { height: 1px; background: var(--forest-line); border: 0; width: 100%; }
 
@@ -93,17 +93,17 @@ section { position: relative; }
 .eyebrow.center { justify-content: center; }
 .eyebrow.plain::before { display: none; }
 
-h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; line-height: 1.04; letter-spacing: -0.01em; }
+h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; letter-spacing: -0.01em; }
 
 .display {
-  font-family: var(--serif); font-weight: 400;
-  font-size: clamp(2.6rem, 7vw, 5.6rem); line-height: 0.98;
+  font-family: var(--serif); font-weight: 700;
+  font-size: clamp(2.4rem, 6vw, 5rem); line-height: 1.04;
   letter-spacing: -0.02em;
 }
 .h-xl { font-size: clamp(2.2rem, 5vw, 3.9rem); line-height: 1.02; }
 .h-lg { font-size: clamp(1.9rem, 4vw, 3rem); }
 .h-md { font-size: clamp(1.4rem, 2.6vw, 2rem); }
-.script { font-family: var(--script); color: var(--copper-light); font-weight: 400; }
+.script { font-family: var(--script); font-style: italic; color: var(--copper-light); font-weight: 400; }
 .italic { font-style: italic; }
 
 .lead { font-size: clamp(1.05rem, 1.7vw, 1.32rem); color: var(--cream-2); line-height: 1.62; font-weight: 400; }
@@ -117,8 +117,8 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; line-height: 1.04;
 }
 
 .kicker-quote {
-  font-family: var(--serif); font-style: italic;
-  font-size: clamp(1.5rem, 3.4vw, 2.6rem); line-height: 1.28; color: var(--cream);
+  font-family: var(--serif); font-style: italic; font-weight: 500;
+  font-size: clamp(1.4rem, 3vw, 2.3rem); line-height: 1.35; color: var(--cream);
 }
 
 /* ---------- Buttons ------------------------------------------------------- */
@@ -258,8 +258,8 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; line-height: 1.04;
 
 /* Manifesto / statement */
 .statement p {
-  font-family: var(--serif); font-weight: 300;
-  font-size: clamp(1.5rem, 3.6vw, 2.9rem); line-height: 1.32; letter-spacing: -0.01em;
+  font-family: var(--serif); font-weight: 500;
+  font-size: clamp(1.4rem, 3.2vw, 2.5rem); line-height: 1.38; letter-spacing: -0.01em;
   color: var(--cream);
 }
 .statement p + p { margin-top: 0.7em; }
