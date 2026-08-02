@@ -3,6 +3,10 @@ import Reveal from '../components/Reveal.jsx'
 import CtaBand from '../components/CtaBand.jsx'
 import Faq from '../components/Faq.jsx'
 import { episodes, journey } from '../data/content.js'
+import { HiOutlineUserGroup, HiOutlineChatBubbleLeftRight } from 'react-icons/hi2'
+import { TbMountain, TbWalk } from 'react-icons/tb'
+import { FaHandshake } from 'react-icons/fa6'
+import { GiPartyPopper } from 'react-icons/gi'
 
 /* Five most essential questions for a home-page visitor */
 const homeFaqs = [
@@ -96,33 +100,53 @@ export default function Home() {
         </div>
       </header>
 
-
-      {/* ===================== COMPARED TO USUAL FORMATS ===================== */}
-      <section className="compared-section">
+      {/* ===================== FEATURE STRIP (5 Pillars) ===================== */}
+      <section className="feature-strip-section">
+        <div className="strip-torn-edge" aria-hidden="true">
+          <svg viewBox="0 0 1440 24" preserveAspectRatio="none">
+            <path d="M0,24 L0,8 Q30,18 60,6 T120,16 T180,5 T240,18 T300,7 T360,17 T420,4 T480,16 T540,6 T600,18 T660,8 T720,17 T780,5 T840,16 T900,6 T960,18 T1020,7 T1080,17 T1140,5 T1200,16 T1260,7 T1320,18 T1380,6 T1440,15 L1440,24 Z" fill="var(--forest-950)"/>
+          </svg>
+        </div>
         <div className="container">
-          <Reveal>
-            <p className="compared-eyebrow">COMPARED TO THE USUAL FORMATS</p>
-          </Reveal>
-          <Reveal className="compared-grid" delay={1}>
+          <Reveal className="feature-strip-grid">
             {[
-              { icon: 'podcast',     label: 'Podcast' },
-              { icon: 'conference',  label: 'Conference' },
-              { icon: 'networking', label: 'Networking Event' },
-              { icon: 'retreat',     label: 'Retreat' },
-            ].map(({ icon, label }) => (
-              <div className="compared-card" key={label}>
-                <div className="compared-icon">
-                  {icon === 'podcast'     && <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="22" r="10" stroke="currentColor" strokeWidth="3"/><path d="M20 22c0 6.627 5.373 12 12 12s12-5.373 12-12" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/><line x1="32" y1="34" x2="32" y2="46" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/><line x1="24" y1="46" x2="40" y2="46" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/><circle cx="32" cy="22" r="4" fill="currentColor"/></svg>}
-                  {icon === 'conference' && <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="10" width="24" height="4" rx="1" fill="currentColor"/><rect x="18" y="14" width="28" height="20" rx="2" stroke="currentColor" strokeWidth="3"/><path d="M32 34 L24 50 M32 34 L40 50" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/><line x1="20" y1="50" x2="44" y2="50" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/><circle cx="32" cy="8" r="4" fill="currentColor"/></svg>}
-                  {icon === 'networking'&& <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="18" stroke="currentColor" strokeWidth="3"/><ellipse cx="32" cy="32" rx="8" ry="18" stroke="currentColor" strokeWidth="2"/><line x1="14" y1="32" x2="50" y2="32" stroke="currentColor" strokeWidth="2"/><line x1="16" y1="22" x2="48" y2="22" stroke="currentColor" strokeWidth="2"/><line x1="16" y1="42" x2="48" y2="42" stroke="currentColor" strokeWidth="2"/></svg>}
-                  {icon === 'retreat'   && <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="22" cy="18" r="6" fill="currentColor" opacity="0.8"/><circle cx="42" cy="18" r="6" fill="currentColor" opacity="0.8"/><circle cx="32" cy="12" r="6" fill="currentColor"/><path d="M10 48 C10 36 22 30 32 30 C42 30 54 36 54 48" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/><path d="M28 10 L32 6 L36 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
-                </div>
-                <span className="compared-label">{label}</span>
+              {
+                icon: <HiOutlineUserGroup size={42} />,
+                t1: 'MEET',
+                t2: 'STRANGERS'
+              },
+              {
+                icon: <TbMountain size={42} />,
+                t1: 'STEP OUT OF',
+                t2: 'YOUR COMFORT ZONE'
+              },
+              {
+                icon: <HiOutlineChatBubbleLeftRight size={42} />,
+                t1: 'SHARE STORIES &',
+                t2: 'BUSINESS INSIGHTS'
+              },
+              {
+                icon: <TbWalk size={42} />,
+                t1: 'FUN ACTIVITIES &',
+                t2: 'LEARNING'
+              },
+              {
+                icon: <FaHandshake size={38} />,
+                t1: 'BUILD CONNECTIONS.',
+                t2: 'CREATE LEGACIES.'
+              }
+            ].map((item, idx) => (
+              <div className="feature-strip-item" key={idx}>
+                <div className="feature-strip-icon">{item.icon}</div>
+                <p className="feature-strip-text">
+                  {item.t1}<br />{item.t2}
+                </p>
               </div>
             ))}
           </Reveal>
         </div>
       </section>
+
 
       {/* ===================== THE STORY ===================== */}
       <section className="story-section">
@@ -150,22 +174,7 @@ export default function Home() {
               </p>
             </Reveal>
             <Reveal className="story-visual" delay={1}>
-              <div className="story-visual-inner">
-                <svg viewBox="0 0 480 400" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-                  <defs>
-                    <linearGradient id="storyGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#0d2218"/>
-                      <stop offset="100%" stopColor="#0b1610"/>
-                    </linearGradient>
-                  </defs>
-                  <rect width="480" height="400" fill="url(#storyGrad)"/>
-                  <polygon points="0,280 40,250 70,270 110,235 150,265 190,230 230,260 270,228 310,258 350,225 390,255 430,240 480,258 480,400 0,400" fill="#1a3828" opacity="0.7"/>
-                  <polygon points="0,310 50,285 90,305 130,272 175,300 215,268 255,295 295,265 335,292 375,260 415,288 455,270 480,282 480,400 0,400" fill="#142e20" opacity="0.9"/>
-                  <polygon points="0,340 60,315 100,338 145,308 185,335 225,305 265,332 305,302 345,330 385,300 425,328 465,310 480,322 480,400 0,400" fill="#0b1e14"/>
-                  <ellipse cx="240" cy="395" rx="60" ry="18" fill="#d69a5c" opacity="0.35"/>
-                  <path d="M240 355 C232 368 234 378 240 382 C246 378 248 367 240 355Z" fill="#f5ecd8" opacity="0.8"/>
-                </svg>
-              </div>
+              <img src="/STORY.png" alt="Why Stranger Founders Exists" className="story-img" />
             </Reveal>
           </div>
         </div>
@@ -197,6 +206,87 @@ export default function Home() {
           </Reveal>
           <Reveal delay={2}>
             <p className="diff-footer-label">COMPARED TO THE USUAL FORMATS</p>
+            <div className="compared-grid">
+              {[
+                {
+                  label: 'Podcast',
+                  icon: (
+                    <svg viewBox="0 0 64 64" fill="currentColor">
+                      {/* Outer concentric ring */}
+                      <circle cx="32" cy="24" r="19" fill="none" stroke="currentColor" strokeWidth="2.2" />
+                      {/* Inner concentric ring */}
+                      <circle cx="32" cy="24" r="13.5" fill="none" stroke="currentColor" strokeWidth="2" />
+                      {/* Mic capsule */}
+                      <rect x="26.5" y="15" width="11" height="18" rx="5.5" fill="currentColor" />
+                      <circle cx="32" cy="22" r="1.3" fill="var(--forest-925)" />
+                      <circle cx="32" cy="26" r="1.5" fill="var(--forest-925)" />
+                      {/* U-Bracket */}
+                      <path d="M22.5 23 v4 a9.5 9.5 0 0 0 19 0 v-4" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+                      {/* Stem */}
+                      <line x1="32" y1="36" x2="32" y2="43" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" />
+                      {/* Base foot */}
+                      <rect x="23" y="43" width="18" height="3" rx="1.5" />
+                    </svg>
+                  )
+                },
+                {
+                  label: 'Conference',
+                  icon: (
+                    <svg viewBox="0 0 64 64" fill="currentColor">
+                      {/* Left flexible mic */}
+                      <path d="M26 23 C24 16, 29 13, 27 9" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
+                      <circle cx="27" cy="7.5" r="2.8" />
+                      {/* Right flexible mic */}
+                      <path d="M38 23 C40 16, 35 13, 37 9" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
+                      <circle cx="37" cy="7.5" r="2.8" />
+                      {/* Slanted desktop podium */}
+                      <polygon points="12,23 52,23 45,33 19,33" />
+                      {/* Pedestal neck */}
+                      <rect x="23" y="33" width="18" height="12" />
+                      {/* Base plate */}
+                      <rect x="18" y="45" width="28" height="4" rx="1" />
+                    </svg>
+                  )
+                },
+                {
+                  label: 'Networking Event',
+                  icon: (
+                    <svg viewBox="0 0 64 64" fill="currentColor">
+                      {/* Central Globe */}
+                      <circle cx="32" cy="32" r="14" fill="currentColor" />
+                      {/* Globe Grid lines */}
+                      <circle cx="32" cy="32" r="14" fill="none" stroke="var(--forest-925)" strokeWidth="1.8" />
+                      <line x1="18" y1="32" x2="46" y2="32" stroke="var(--forest-925)" strokeWidth="1.5" />
+                      <path d="M19 25 Q32 28 45 25" fill="none" stroke="var(--forest-925)" strokeWidth="1.4" />
+                      <path d="M19 39 Q32 36 45 39" fill="none" stroke="var(--forest-925)" strokeWidth="1.4" />
+                      <ellipse cx="32" cy="32" rx="7" ry="14" fill="none" stroke="var(--forest-925)" strokeWidth="1.4" />
+                      <line x1="32" y1="18" x2="32" y2="46" stroke="var(--forest-925)" strokeWidth="1.4" />
+
+                      {/* 4 Outer Arc Segments */}
+                      <path d="M17 17 A 21 21 0 0 1 47 17" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+                      <path d="M17 47 A 21 21 0 0 0 47 47" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+                      <path d="M17 17 A 21 21 0 0 0 17 47" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+                      <path d="M47 17 A 21 21 0 0 1 47 47" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+
+                      {/* 4 Cardinal Node Dots */}
+                      <circle cx="32" cy="9" r="3" />
+                      <circle cx="32" cy="55" r="3" />
+                      <circle cx="9" cy="32" r="3" />
+                      <circle cx="55" cy="32" r="3" />
+                    </svg>
+                  )
+                },
+                {
+                  label: 'Retreat',
+                  icon: <GiPartyPopper size={68} />
+                }
+              ].map(({ icon, label }) => (
+                <div className="compared-card" key={label}>
+                  <div className="compared-icon">{icon}</div>
+                  <span className="compared-label">{label}</span>
+                </div>
+              ))}
+            </div>
           </Reveal>
         </div>
       </section>
