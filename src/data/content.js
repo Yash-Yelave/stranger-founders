@@ -3,11 +3,9 @@
 export const journey = [
   { t: 'The Invitation', d: 'It begins quietly. No open sign-ups — a curated founder receives a single line: “You’ve been invited.”' },
   { t: 'The Arrival', d: 'Four strangers reach a venue in the wild. No badges, no schedule on a screen — only the sound of the forest.' },
-  { t: 'First Fire', d: 'The ice breaks around the flames. Names, stories, the reason each of them said yes to the unknown.' },
   { t: 'Founder Activities', d: 'Challenges built to pull everyone out of their comfort zone — where real character shows up faster than any pitch.' },
   { t: 'The Conversations', d: 'Guided by Ram Prayaga: candid business, money and craft — the tactics founders rarely share on a stage.' },
-  { t: 'Campfire Stories', d: 'As night falls, the guards come down. The talk turns to failures, fears and the things worth building.' },
-  { t: 'Collaborations', d: 'Ideas that could only have been born here. Partnerships, trades and creative bets between former strangers.' },
+  { t: 'Conversations', d: 'Ideas that could only have been born here. Partnerships, trades and creative bets between former strangers.' },
   { t: 'The Circle', d: 'They arrived as strangers. They leave as Stranger Founders — inside a circle that keeps meeting long after.' },
 ]
 
