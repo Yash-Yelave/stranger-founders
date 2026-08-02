@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import Reveal from '../components/Reveal.jsx'
 import CtaBand from '../components/CtaBand.jsx'
 import Faq from '../components/Faq.jsx'
-import { trades, episodes, journey } from '../data/content.js'
+import { episodes, journey } from '../data/content.js'
 
 /* Five most essential questions for a home-page visitor */
 const homeFaqs = [
@@ -20,7 +20,7 @@ export default function Home() {
       {/* ===================== HERO ===================== */}
       <header className="hero" id="top">
         <div className="hero-scene" aria-hidden="true">
-          <svg viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMax slice">
+          <svg viewBox="0 0 1600 1100" preserveAspectRatio="xMidYMax slice">
             <defs>
               <linearGradient id="skyHero" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%"   stopColor="#0b1610"/>
@@ -34,7 +34,7 @@ export default function Home() {
                 <stop offset="100%" stopColor="#8a5527" stopOpacity="0"/>
               </radialGradient>
             </defs>
-            <rect width="1600" height="1000" fill="url(#skyHero)"/>
+            <rect width="1600" height="1100" fill="url(#skyHero)"/>
             <g opacity="0.65">
               <circle cx="140"  cy="90"  r="1.4" fill="#f5ecd8"/><circle cx="320"  cy="140" r="1"   fill="#f5ecd8"/>
               <circle cx="480"  cy="70"  r="1.3" fill="#f5ecd8"/><circle cx="650"  cy="130" r="1"   fill="#f5ecd8"/>
@@ -44,24 +44,29 @@ export default function Home() {
               <circle cx="200"  cy="180" r="0.9" fill="#f5ecd8"/><circle cx="760"  cy="110" r="1.1" fill="#f5ecd8"/>
               <circle cx="1050" cy="55"  r="1"   fill="#f5ecd8"/><circle cx="1380" cy="200" r="0.8" fill="#f5ecd8"/>
             </g>
-            <ellipse cx="800" cy="992" rx="300" ry="75" fill="url(#glowHero)"/>
+            {/* Big ambient glow — fully inside viewBox now */}
+            <ellipse cx="800" cy="1060" rx="320" ry="90" fill="url(#glowHero)"/>
             <polygon className="ridge-far"
-              points="0,900 120,875 220,895 340,865 450,890 570,860 690,885 810,858 930,888 1050,862 1170,890 1290,865 1410,892 1530,870 1600,888 1600,1000 0,1000"
+              points="0,900 120,875 220,895 340,865 450,890 570,860 690,885 810,858 930,888 1050,862 1170,890 1290,865 1410,892 1530,870 1600,888 1600,1100 0,1100"
               fill="#8a5527" opacity="0.25"/>
             <polygon className="ridge-mid"
-              points="0,930 130,908 240,925 360,900 470,922 590,895 700,920 820,898 940,924 1060,902 1180,926 1300,905 1420,928 1540,910 1600,922 1600,1000 0,1000"
+              points="0,930 130,908 240,925 360,900 470,922 590,895 700,920 820,898 940,924 1060,902 1180,926 1300,905 1420,928 1540,910 1600,922 1600,1100 0,1100"
               fill="#4a3420" opacity="0.5"/>
-            <path d="M0,962 L55,942 L80,962 L125,932 L160,962 L200,938 L235,962 L280,928 L315,962 L360,940 L395,962 L440,922 L475,962 L520,936 L555,962 L600,924 L635,962 L675,938 L710,962 L755,918 L790,962 L835,936 L870,962 L915,924 L950,962 L995,938 L1030,962 L1075,924 L1110,962 L1155,938 L1190,962 L1235,920 L1270,962 L1315,936 L1350,962 L1395,924 L1430,962 L1475,938 L1510,962 L1555,928 L1600,962 L1600,1000 L0,1000 Z"
+            {/* Jagged treeline — extended to 1100 bottom */}
+            <path d="M0,962 L55,942 L80,962 L125,932 L160,962 L200,938 L235,962 L280,928 L315,962 L360,940 L395,962 L440,922 L475,962 L520,936 L555,962 L600,924 L635,962 L675,938 L710,962 L755,918 L790,962 L835,936 L870,962 L915,924 L950,962 L995,938 L1030,962 L1075,924 L1110,962 L1155,938 L1190,962 L1235,920 L1270,962 L1315,936 L1350,962 L1395,924 L1430,962 L1475,938 L1510,962 L1555,928 L1600,962 L1600,1100 L0,1100 Z"
               fill="#0b1610"/>
-            <ellipse cx="800" cy="974" rx="46"  ry="15" fill="#d69a5c" opacity="0.9"/>
-            <ellipse cx="800" cy="974" rx="125" ry="40" fill="#8a5527" opacity="0.24"/>
+            {/* Fire base glow — pushed down for breathing room */}
+            <ellipse cx="800" cy="1034" rx="46"  ry="15" fill="#d69a5c" opacity="0.9"/>
+            <ellipse cx="800" cy="1034" rx="140" ry="46" fill="#8a5527" opacity="0.22"/>
+            {/* Flame */}
             <path className="flame"
-              d="M800 922 C 785 946, 789 962, 800 970 C 811 962, 815 944, 800 922 Z"
+              d="M800 982 C 785 1006, 789 1022, 800 1030 C 811 1022, 815 1004, 800 982 Z"
               fill="#f5ecd8" opacity="0.94"/>
-            <circle className="ember ember-1" cx="789" cy="934" r="1.6" fill="#d69a5c"/>
-            <circle className="ember ember-2" cx="808" cy="928" r="1.3" fill="#f5ecd8"/>
-            <circle className="ember ember-3" cx="796" cy="940" r="1.4" fill="#d69a5c"/>
-            <circle className="ember ember-4" cx="813" cy="936" r="1.2" fill="#f5ecd8"/>
+            {/* Embers */}
+            <circle className="ember ember-1" cx="789" cy="994" r="1.6" fill="#d69a5c"/>
+            <circle className="ember ember-2" cx="808" cy="988" r="1.3" fill="#f5ecd8"/>
+            <circle className="ember ember-3" cx="796" cy="1000" r="1.4" fill="#d69a5c"/>
+            <circle className="ember ember-4" cx="813" cy="996" r="1.2" fill="#f5ecd8"/>
           </svg>
         </div>
 
@@ -87,44 +92,116 @@ export default function Home() {
             <Link to="/apply"    className="btn btn-primary">Request an Invitation <span className="arw">→</span></Link>
             <Link to="/partners" className="btn btn-ghost">Become a Partner</Link>
           </Reveal>
-          <Reveal className="hero-meta" delay={4}>
-            <span>Invite-only</span><span className="dot" />
-            <span>4 founders per fire</span><span className="dot" />
-            <span>Nature venues · India</span><span className="dot" />
-            <span>Powered by FinanceBox</span>
-          </Reveal>
           <div className="scroll-cue"><span>Scroll</span><span className="line" /></div>
         </div>
       </header>
 
-      {/* ===================== MANIFESTO ===================== */}
-      <section className="manifesto-section" id="why">
+
+      {/* ===================== COMPARED TO USUAL FORMATS ===================== */}
+      <section className="compared-section">
         <div className="container">
-          <Reveal className="manifesto-inner">
-            <p className="manifesto-line">
-              Most events introduce you to <span className="strike">people</span>.
-            </p>
-            <p className="manifesto-line manifesto-line--em">
-              We introduce you to the <span className="em">version of yourself</span> you haven't met yet.
-            </p>
-            <p className="manifesto-sub">
-              Four founders. One fire. One night in the wild — no stage, no audience, no pitching.
-              They arrive as strangers. They leave as <span className="copper">Stranger Founders</span>.
-            </p>
+          <Reveal>
+            <p className="compared-eyebrow">COMPARED TO THE USUAL FORMATS</p>
           </Reveal>
-          <Reveal className="trade-strip" delay={1}>
-            {trades.map(([from, to]) => (
-              <span className="trade-pill" key={from}>
-                <span className="pill-from">{from}</span>
-                <span className="pill-arrow">→</span>
-                <span className="pill-to">{to}</span>
-              </span>
+          <Reveal className="compared-grid" delay={1}>
+            {[
+              { icon: 'podcast',     label: 'Podcast' },
+              { icon: 'conference',  label: 'Conference' },
+              { icon: 'networking', label: 'Networking Event' },
+              { icon: 'retreat',     label: 'Retreat' },
+            ].map(({ icon, label }) => (
+              <div className="compared-card" key={label}>
+                <div className="compared-icon">
+                  {icon === 'podcast'     && <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="22" r="10" stroke="currentColor" strokeWidth="3"/><path d="M20 22c0 6.627 5.373 12 12 12s12-5.373 12-12" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/><line x1="32" y1="34" x2="32" y2="46" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/><line x1="24" y1="46" x2="40" y2="46" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/><circle cx="32" cy="22" r="4" fill="currentColor"/></svg>}
+                  {icon === 'conference' && <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="10" width="24" height="4" rx="1" fill="currentColor"/><rect x="18" y="14" width="28" height="20" rx="2" stroke="currentColor" strokeWidth="3"/><path d="M32 34 L24 50 M32 34 L40 50" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/><line x1="20" y1="50" x2="44" y2="50" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/><circle cx="32" cy="8" r="4" fill="currentColor"/></svg>}
+                  {icon === 'networking'&& <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="18" stroke="currentColor" strokeWidth="3"/><ellipse cx="32" cy="32" rx="8" ry="18" stroke="currentColor" strokeWidth="2"/><line x1="14" y1="32" x2="50" y2="32" stroke="currentColor" strokeWidth="2"/><line x1="16" y1="22" x2="48" y2="22" stroke="currentColor" strokeWidth="2"/><line x1="16" y1="42" x2="48" y2="42" stroke="currentColor" strokeWidth="2"/></svg>}
+                  {icon === 'retreat'   && <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="22" cy="18" r="6" fill="currentColor" opacity="0.8"/><circle cx="42" cy="18" r="6" fill="currentColor" opacity="0.8"/><circle cx="32" cy="12" r="6" fill="currentColor"/><path d="M10 48 C10 36 22 30 32 30 C42 30 54 36 54 48" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/><path d="M28 10 L32 6 L36 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                </div>
+                <span className="compared-label">{label}</span>
+              </div>
             ))}
           </Reveal>
         </div>
       </section>
 
-      {/* ===================== THE FORMAT (4 rules) ===================== */}
+      {/* ===================== THE STORY ===================== */}
+      <section className="story-section">
+        <div className="container">
+          <div className="story-grid">
+            <Reveal className="story-copy">
+              <span className="story-eyebrow"><span className="story-eyebrow-line" />THE STORY</span>
+              <h2 className="story-title">Why Stranger Founders exists</h2>
+              <p className="story-unlike">
+                Unlike conferences.<br />
+                Unlike networking events.<br />
+                Unlike podcasts.
+              </p>
+              <p className="story-body">
+                We bring strangers together in forests, farms, mountains and
+                nature — away from stages, away from noise, away from business cards.
+              </p>
+              <p className="story-body">
+                Founders participate in challenges. Share stories. Discuss
+                business. Learn from each other. Build lifelong relationships.
+                Everything is filmed cinematically.
+              </p>
+              <p className="story-quote">
+                "Participants arrive as strangers. They leave as Stranger Founders."
+              </p>
+            </Reveal>
+            <Reveal className="story-visual" delay={1}>
+              <div className="story-visual-inner">
+                <svg viewBox="0 0 480 400" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="storyGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#0d2218"/>
+                      <stop offset="100%" stopColor="#0b1610"/>
+                    </linearGradient>
+                  </defs>
+                  <rect width="480" height="400" fill="url(#storyGrad)"/>
+                  <polygon points="0,280 40,250 70,270 110,235 150,265 190,230 230,260 270,228 310,258 350,225 390,255 430,240 480,258 480,400 0,400" fill="#1a3828" opacity="0.7"/>
+                  <polygon points="0,310 50,285 90,305 130,272 175,300 215,268 255,295 295,265 335,292 375,260 415,288 455,270 480,282 480,400 0,400" fill="#142e20" opacity="0.9"/>
+                  <polygon points="0,340 60,315 100,338 145,308 185,335 225,305 265,332 305,302 345,330 385,300 425,328 465,310 480,322 480,400 0,400" fill="#0b1e14"/>
+                  <ellipse cx="240" cy="395" rx="60" ry="18" fill="#d69a5c" opacity="0.35"/>
+                  <path d="M240 355 C232 368 234 378 240 382 C246 378 248 367 240 355Z" fill="#f5ecd8" opacity="0.8"/>
+                </svg>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== WHY DIFFERENT ===================== */}
+      <section className="diff-section">
+        <div className="container diff-inner">
+          <Reveal>
+            <p className="diff-eyebrow"><span className="diff-eyebrow-line" />WHY DIFFERENT</p>
+            <h2 className="diff-title">We traded the familiar for the real</h2>
+          </Reveal>
+          <Reveal delay={1}>
+            <div className="diff-rows">
+              {[
+                ['Conference Rooms', 'Forests'],
+                ['Networking',       'Experiences'],
+                ['Speeches',         'Conversations'],
+                ['Business Cards',   'Relationships'],
+                ['Audiences',        'Communities'],
+              ].map(([from, to]) => (
+                <div className="diff-row" key={from}>
+                  <span className="diff-from">{from}</span>
+                  <span className="diff-arrow">→</span>
+                  <span className="diff-to">{to}</span>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+          <Reveal delay={2}>
+            <p className="diff-footer-label">COMPARED TO THE USUAL FORMATS</p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ===================== THE FORMAT (4 rules) — hidden =====================
       <section className="format-section" style={{ background: 'var(--forest-925)' }}>
         <div className="container">
           <Reveal className="format-head">
@@ -147,12 +224,13 @@ export default function Home() {
           </div>
         </div>
       </section>
+      */}
 
       {/* ===================== THE JOURNEY ARC ===================== */}
       <section className="journey-section" id="experience">
         <div className="container">
           <Reveal className="journey-head">
-            <span className="eyebrow">One Night. Eight Chapters.</span>
+            <span className="eyebrow">One Night. Six Chapters.</span>
             <h2 className="h-lg" style={{ marginTop: 18 }}>
               The arc of an invitation.
             </h2>
@@ -164,7 +242,7 @@ export default function Home() {
 
           <div className="arc-grid">
             {journey.map(({ t, d }, i) => (
-              <Reveal className="arc-step" key={t} delay={(i % 4) + 1}>
+              <Reveal className="arc-step" key={t} delay={(i % 3) + 1}>
                 <span className="arc-num">{String(i + 1).padStart(2, '0')}</span>
                 <h3 className="arc-title">{t}</h3>
                 <p className="arc-desc">{d}</p>
