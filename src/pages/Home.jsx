@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Reveal from '../components/Reveal.jsx'
 import CtaBand from '../components/CtaBand.jsx'
@@ -19,8 +19,6 @@ const homeFaqs = [
 
 
 
-
-import { useEffect } from 'react'
 
 function PullQuote() {
   const quoteRef = useRef(null)
@@ -493,23 +491,7 @@ export default function Home() {
       <section className="pull-quote-section">
         <div className="container">
           <Reveal>
-            <p 
-              className="pull-quote"
-              onMouseMove={(e) => {
-                const el = e.currentTarget
-                const rect = el.getBoundingClientRect()
-                const x = e.clientX - rect.left
-                const y = e.clientY - rect.top
-                el.style.setProperty('--tx', `${x}px`)
-                el.style.setProperty('--ty', `${y}px`)
-                el.classList.add('active')
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.classList.remove('active')
-              }}
-            >
-              "Every founder should dream<br />of receiving an invitation."
-            </p>
+            <PullQuote />
           </Reveal>
         </div>
       </section>

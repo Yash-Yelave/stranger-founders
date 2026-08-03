@@ -552,29 +552,26 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
   font-size: clamp(2.8rem, 6vw, 4.8rem);
   line-height: 1.15;
   letter-spacing: -0.01em;
-  color: rgba(245, 236, 216, 0.22);
   position: relative;
   z-index: 1;
   cursor: pointer;
   margin: 0 auto;
   padding: 10px 0;
   max-width: 20ch;
-  transition: color 0.3s var(--ease), filter 0.3s var(--ease);
-}
-.pull-quote.active {
   background: radial-gradient(
-    circle 350px at var(--tx, 50%) var(--ty, 50%),
+    circle calc(var(--torch-r, 0px) * 0.62) at var(--tx, 50%) var(--ty, 50%),
     #ffffff 0%,
-    #fff8e8 25%,
-    #f5ecd8 45%,
-    #d69a5c 70%,
-    rgba(214, 154, 92, 0.45) 85%,
+    #fff8e8 20%,
+    #f5ecd8 40%,
+    #d69a5c 60%,
+    rgba(214, 154, 92, 0.3) 80%,
     rgba(245, 236, 216, 0.22) 100%
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 0 25px rgba(214, 154, 92, 0.75)) drop-shadow(0 0 45px rgba(245, 236, 216, 0.45));
+  will-change: background, filter;
+  transition: filter 0.3s var(--ease);
 }
 
 /* Guide quote blockquote */
