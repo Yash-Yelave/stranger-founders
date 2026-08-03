@@ -563,16 +563,18 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
 }
 .pull-quote.active {
   background: radial-gradient(
-    circle 190px at var(--tx, 50%) var(--ty, 50%),
+    circle 350px at var(--tx, 50%) var(--ty, 50%),
     #ffffff 0%,
-    #f5ecd8 35%,
-    #d69a5c 65%,
+    #fff8e8 25%,
+    #f5ecd8 45%,
+    #d69a5c 70%,
+    rgba(214, 154, 92, 0.45) 85%,
     rgba(245, 236, 216, 0.22) 100%
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 0 18px rgba(214, 154, 92, 0.6));
+  filter: drop-shadow(0 0 25px rgba(214, 154, 92, 0.75)) drop-shadow(0 0 45px rgba(245, 236, 216, 0.45));
 }
 
 /* Guide quote blockquote */
@@ -836,11 +838,53 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
 .trio-item p { color: var(--cream-dim); }
 
 /* Big CTA band */
-.cta-band { position: relative; text-align: center; overflow: hidden; }
-.cta-band .container { position: relative; z-index: 2; }
+.cta-band { position: relative; text-align: center; overflow: hidden; background: var(--forest-950); }
+.cta-band .container { position: relative; z-index: 3; }
 .cta-band .seal { width: 120px; height: 120px; margin: 0 auto 30px; }
 .cta-band .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 36px; }
-.cta-glow { position: absolute; inset: 0; z-index: 0; background: radial-gradient(60% 70% at 50% 100%, rgba(200,130,63,0.2), transparent 65%); }
+
+.ember-sparks-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.9;
+}
+
+.cta-flame-aura {
+  position: absolute;
+  bottom: -25%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120%;
+  height: 130%;
+  background: radial-gradient(
+    ellipse 65% 55% at 50% 100%,
+    rgba(214, 154, 92, 0.22) 0%,
+    rgba(179, 112, 58, 0.12) 40%,
+    rgba(11, 22, 16, 0) 75%
+  );
+  pointer-events: none;
+  z-index: 1;
+  animation: ctaFlamePulse 4.5s ease-in-out infinite alternate;
+}
+
+@keyframes ctaFlamePulse {
+  0% {
+    transform: translateX(-50%) scale(0.96);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translateX(-48%) scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-52%) scale(1.01);
+    opacity: 0.82;
+  }
+}
 
 /* Partners */
 .tiers { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--forest-line-soft); border: 1px solid var(--forest-line-soft); }

@@ -20,6 +20,71 @@ const homeFaqs = [
 
 
 
+import { useEffect } from 'react'
+
+function PullQuote() {
+  const quoteRef = useRef(null)
+  const coordsRef = useRef({ x: 0, y: 0 })
+  const radiusRef = useRef(0)
+  const targetRadiusRef = useRef(0)
+  const animationFrameRef = useRef(null)
+
+  useEffect(() => {
+    const el = quoteRef.current
+    if (!el) return
+
+    const update = () => {
+      // Lerp radius
+      radiusRef.current += (targetRadiusRef.current - radiusRef.current) * 0.08
+      
+      // Update element styles
+      el.style.setProperty('--tx', `${coordsRef.current.x}px`)
+      el.style.setProperty('--ty', `${coordsRef.current.y}px`)
+      el.style.setProperty('--torch-r', `${radiusRef.current}px`)
+      
+      // Calculate drop-shadow filter based on current radius ratio
+      const glowIntensity = radiusRef.current / 350
+      el.style.filter = `drop-shadow(0 0 ${glowIntensity * 25}px rgba(214, 154, 92, ${glowIntensity * 0.75})) drop-shadow(0 0 ${glowIntensity * 45}px rgba(245, 236, 216, ${glowIntensity * 0.45}))`
+
+      animationFrameRef.current = requestAnimationFrame(update)
+    }
+
+    animationFrameRef.current = requestAnimationFrame(update)
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current)
+      }
+    }
+  }, [])
+
+  const handleMouseMove = (e) => {
+    const el = quoteRef.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    coordsRef.current = {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    }
+    targetRadiusRef.current = 350
+  }
+
+  const handleMouseLeave = () => {
+    targetRadiusRef.current = 0
+  }
+
+  return (
+    <p 
+      ref={quoteRef}
+      className="pull-quote"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      "Every founder should dream<br />of receiving an invitation."
+    </p>
+  )
+}
+
 function GuidePhoto3D() {
   const cardRef = useRef(null)
 
