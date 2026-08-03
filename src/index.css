@@ -1271,6 +1271,9 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
   .story-grid { grid-template-columns: 1fr; }
   .story-visual { aspect-ratio: 16/9; }
   .story-body { max-width: 100%; }
+  .manifesto-layout { grid-template-columns: 1fr; gap: 32px; }
+  .manifesto-left { border-right: none; border-bottom: 1px solid var(--forest-line-soft); padding-right: 0; padding-bottom: 24px; flex-direction: row; gap: 8px; }
+  .manifesto-quote { text-align: left; max-width: 100%; }
 }
 
 /* =========================================================================
