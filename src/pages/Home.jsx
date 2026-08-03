@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Reveal from '../components/Reveal.jsx'
 import CtaBand from '../components/CtaBand.jsx'
@@ -121,9 +121,9 @@ function GuidePhoto3D() {
         onMouseLeave={handleMouseLeave}
       >
         <span className="guide-badge">THE GUIDE</span>
-        {/* Layer 1: Dark Forest Slate Texture Background */}
+        {/* Layer 1: Grey Sand Wave Texture Background */}
         <div className="guide-layer guide-layer-bg">
-          <img src="/img/ram-dark-texture.jpg" alt="" />
+          <img src="/img/ram-sand-texture.jpg" alt="" />
         </div>
         <div className="guide-vignette" aria-hidden="true" />
         {/* Layer 2: Dead-Centered Subject Cutout in 3D Space */}
@@ -132,6 +132,118 @@ function GuidePhoto3D() {
         </div>
       </div>
     </Reveal>
+  )
+}
+
+const mediaItems = [
+  {
+    category: 'Rural Innovation',
+    title: 'Empowering Rural Ambitions',
+    img: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=600&auto=format&fit=crop',
+    videoUrl: 'https://www.youtube.com/embed/qy88Uo-J5j8'
+  },
+  {
+    category: 'Pitches',
+    title: 'Junicorns Pitching Session',
+    img: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?q=80&w=600&auto=format&fit=crop',
+    videoUrl: 'https://www.youtube.com/embed/L_LUpnjgPso'
+  },
+  {
+    category: 'Leaders',
+    title: 'Future Leaders Showcase',
+    img: 'https://images.unsplash.com/photo-1542744094-3a31f103e35f?q=80&w=600&auto=format&fit=crop',
+    videoUrl: 'https://www.youtube.com/embed/5mIMhN9-m5o'
+  },
+  {
+    category: 'Ecosystem',
+    title: 'Ecosystem Partner Network',
+    img: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600&auto=format&fit=crop',
+    videoUrl: 'https://www.youtube.com/embed/w77zPAtVTuI'
+  },
+  {
+    category: 'Dialogues',
+    title: 'Mountain Fireside Dialogues',
+    img: 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?q=80&w=600&auto=format&fit=crop',
+    videoUrl: 'https://www.youtube.com/embed/L_LUpnjgPso'
+  },
+  {
+    category: 'Challenges',
+    title: 'Outdoor Leadership Challenge',
+    img: 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?q=80&w=600&auto=format&fit=crop',
+    videoUrl: 'https://www.youtube.com/embed/5mIMhN9-m5o'
+  }
+]
+
+function MediaShowcase() {
+  const scrollRef = useRef(null)
+  const [activeVideo, setActiveVideo] = useState(null)
+
+  const scroll = (direction) => {
+    const el = scrollRef.current
+    if (!el) return
+    const cardWidth = 320 + 24
+    const scrollAmount = direction === 'left' ? -cardWidth * 2 : cardWidth * 2
+    el.scrollBy({ left: scrollAmount, behavior: 'smooth' })
+  }
+
+  return (
+    <section className="section-pad media-section" id="media">
+      <div className="container">
+        <div className="media-header">
+          <Reveal>
+            <span className="eyebrow">MOMENTS & HIGHLIGHTS</span>
+            <h2 className="h-lg" style={{ marginTop: 12 }}>Media Showcase</h2>
+            <p className="lead muted" style={{ marginTop: 16, maxWidth: '52ch' }}>
+              Highlights, stories, and moments from our global summits and challenges.
+            </p>
+          </Reveal>
+          <div className="media-nav-buttons">
+            <button onClick={() => scroll('left')} className="nav-arrow" aria-label="Slide Left">←</button>
+            <button onClick={() => scroll('right')} className="nav-arrow" aria-label="Slide Right">→</button>
+          </div>
+        </div>
+
+        <Reveal delay={1}>
+          <div className="media-carousel" ref={scrollRef}>
+            {mediaItems.map((item, idx) => (
+              <div key={idx} className="media-card" onClick={() => setActiveVideo(item.videoUrl)}>
+                <div className="media-thumb-wrapper">
+                  <img src={item.img} alt={item.title} className="media-thumb" />
+                  <div className="media-overlay">
+                    <button className="play-button-circle" aria-label="Play video">
+                      <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div className="media-card-body">
+                  <span className="media-category">{item.category}</span>
+                  <h3 className="media-card-title">{item.title}</h3>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+      </div>
+
+      {activeVideo && (
+        <div className="lightbox-modal" onClick={() => setActiveVideo(null)}>
+          <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
+            <button className="lightbox-close" onClick={() => setActiveVideo(null)}>&times;</button>
+            <div className="lightbox-iframe-wrapper">
+              <iframe
+                src={`${activeVideo}?autoplay=1`}
+                title="Video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      )}
+    </section>
   )
 }
 
@@ -154,11 +266,6 @@ export default function Home() {
                 <stop offset="55%" stopColor="#8a5527" stopOpacity="0.28" />
                 <stop offset="100%" stopColor="#8a5527" stopOpacity="0" />
               </radialGradient>
-              <filter id="smokeFilter" x="-100%" y="-100%" width="300%" height="300%">
-                <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" result="noise" />
-                <feDisplacementMap in="SourceGraphic" in2="noise" scale="35" xChannelSelector="R" yChannelSelector="G" result="displaced" />
-                <feGaussianBlur in="displaced" stdDeviation="15" />
-              </filter>
             </defs>
             <rect width="1600" height="1100" fill="url(#skyHero)" />
             <g opacity="0.65">
@@ -203,10 +310,10 @@ export default function Home() {
               <line x1="768" y1="1038" x2="832" y2="1038" stroke="#5a381c" strokeWidth="4" strokeLinecap="round" />
 
               {/* Rising Smoke Wisps */}
-              <g opacity="0.45">
-                <path className="smoke-wisp smoke-1" d="M790 960 Q765 900 795 830 T780 730" fill="none" stroke="#d69a5c" strokeWidth="45" strokeLinecap="round" filter="url(#smokeFilter)" />
-                <path className="smoke-wisp smoke-2" d="M810 955 Q835 895 805 825 T815 720" fill="none" stroke="#f5ecd8" strokeWidth="38" strokeLinecap="round" filter="url(#smokeFilter)" />
-                <path className="smoke-wisp smoke-3" d="M800 965 Q775 905 810 840 T790 740" fill="none" stroke="#cdbe9c" strokeWidth="32" strokeLinecap="round" filter="url(#smokeFilter)" />
+              <g opacity="0.6">
+                <path className="smoke-wisp smoke-1" d="M790 960 Q770 900 795 830 T780 730" fill="none" stroke="#d69a5c" strokeWidth="24" strokeLinecap="round" />
+                <path className="smoke-wisp smoke-2" d="M810 955 Q830 895 805 825 T815 720" fill="none" stroke="#f5ecd8" strokeWidth="20" strokeLinecap="round" />
+                <path className="smoke-wisp smoke-3" d="M800 965 Q780 905 810 840 T790 740" fill="none" stroke="#cdbe9c" strokeWidth="18" strokeLinecap="round" />
               </g>
 
               {/* Layered Flickering Campfire Flames */}
@@ -536,6 +643,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ===================== MEDIA SHOWCASE ===================== */}
+      <MediaShowcase />
 
       {/* ===================== FAQ ===================== */}
       <section className="faq-section" id="faq">

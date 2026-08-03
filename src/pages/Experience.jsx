@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import Reveal from '../components/Reveal.jsx'
 import CtaBand from '../components/CtaBand.jsx'
 import { journey } from '../data/content.js'
@@ -67,6 +67,83 @@ function ManifestoQuote() {
 }
 
 export default function Experience() {
+  const journeyRef = useRef(null)
+  const stepsRef = useRef([])
+  const [activeSteps, setActiveSteps] = useState([])
+  const [lineStyles, setLineStyles] = useState({ top: 12, height: 0, bgHeight: 0 })
+
+  const targetProgressRef = useRef(0)
+  const currentProgressRef = useRef(0)
+  const animFrameRef = useRef(null)
+
+  useEffect(() => {
+    const update = () => {
+      const diff = targetProgressRef.current - currentProgressRef.current
+      currentProgressRef.current += diff * 0.08
+
+      const firstEl = stepsRef.current[0]
+      const lastEl = stepsRef.current[stepsRef.current.length - 1]
+      if (firstEl && lastEl) {
+        const y1 = firstEl.offsetTop + 12
+        const y2 = lastEl.offsetTop + 12
+        const currentHeight = currentProgressRef.current * (y2 - y1)
+        setLineStyles({
+          top: y1,
+          height: currentHeight,
+          bgHeight: y2 - y1
+        })
+      }
+
+      animFrameRef.current = requestAnimationFrame(update)
+    }
+    animFrameRef.current = requestAnimationFrame(update)
+    return () => {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current)
+    }
+  }, [])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const firstEl = stepsRef.current[0]
+      const lastEl = stepsRef.current[stepsRef.current.length - 1]
+      if (!firstEl || !lastEl) return
+
+      const windowHeight = window.innerHeight
+      const rectFirst = firstEl.getBoundingClientRect()
+      const rectLast = lastEl.getBoundingClientRect()
+
+      const triggerY = windowHeight * 0.65
+
+      const totalDist = rectLast.top - rectFirst.top
+      const currentDist = triggerY - rectFirst.top
+
+      let targetProgress = 0
+      if (totalDist > 0) {
+        targetProgress = Math.min(Math.max(currentDist / totalDist, 0), 1)
+      }
+      targetProgressRef.current = targetProgress
+
+      // Determine active steps dynamically based on position
+      const newActive = journey.map((_, idx) => {
+        const stepEl = stepsRef.current[idx]
+        if (!stepEl) return false
+        const stepRect = stepEl.getBoundingClientRect()
+        return stepRect.top < triggerY
+      })
+      setActiveSteps(newActive)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleScroll, { passive: true })
+    const timer = setTimeout(handleScroll, 100)
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
+      clearTimeout(timer)
+    }
+  }, [])
+
   return (
     <>
       <section className="page-hero">
@@ -95,15 +172,20 @@ export default function Experience() {
       {/* Journey */}
       <section className="section-pad">
         <div className="container narrow">
-          <div className="journey">
-            <span className="journey-line" aria-hidden="true" />
+          <div className="journey" ref={journeyRef}>
+            <span className="journey-line-bg" style={{ top: `${lineStyles.top}px`, height: `${lineStyles.bgHeight}px` }} aria-hidden="true" />
+            <span className="journey-line-fill" style={{ top: `${lineStyles.top}px`, height: `${lineStyles.height}px` }} aria-hidden="true" />
             {journey.map((s, i) => (
-              <Reveal className="jstep in" key={s.t} delay={(i % 3) + 1}>
+              <div
+                ref={el => stepsRef.current[i] = el}
+                className={`jstep ${activeSteps[i] ? 'active' : ''}`}
+                key={s.t}
+              >
                 <span className="node" aria-hidden="true" />
                 <span className="st-idx">Movement {String(i + 1).padStart(2, '0')}</span>
                 <h3>{s.t}</h3>
                 <p>{s.d}</p>
-              </Reveal>
+              </div>
             ))}
           </div>
         </div>
