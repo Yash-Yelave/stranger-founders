@@ -2024,3 +2024,375 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* =========================================================================
+   SEASON 01 — HERO
+   ========================================================================= */
+
+.s1-hero {
+  position: relative;
+  min-height: 100svh;
+  background: var(--forest-950);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  border-bottom: 1px solid var(--forest-line-soft);
+}
+
+/* Floating embers */
+.s1-embers {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.s1-ember {
+  position: absolute;
+  bottom: 12%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #f5ecd8 15%, #d69a5c 55%, transparent 100%);
+  box-shadow: 0 0 6px rgba(214, 154, 92, 0.7);
+  animation: emberRise linear infinite;
+  opacity: 0;
+}
+@keyframes emberRise {
+  0%   { transform: translateY(0) scale(0.3);  opacity: 0; }
+  15%  { opacity: 0.8; }
+  80%  { opacity: 0.4; }
+  100% { transform: translateY(-55vh) scale(0); opacity: 0; }
+}
+
+/* Arc ornament at top */
+.s1-arc-ornament {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.s1-arc-ornament svg {
+  width: 100%;
+  height: 80px;
+  display: block;
+}
+
+/* Main inner layout — two columns */
+.s1-hero-inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 64px;
+  align-items: center;
+  padding: 160px 0 80px;
+}
+
+/* Left: text column */
+.s1-hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.s1-hero-title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(56px, 8vw, 110px);
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+  color: var(--cream);
+  margin: 16px 0 28px;
+}
+
+.s1-hero-lead {
+  font-family: var(--sans);
+  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  color: var(--cream-dim);
+  line-height: 1.7;
+  max-width: 44ch;
+  margin-bottom: 36px;
+}
+
+/* Countdown widget */
+.s1-countdown {
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.s1-countdown-label {
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--copper);
+}
+.s1-countdown-digits {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.s1-cd-unit {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+.s1-cd-unit b {
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.s1-cd-unit small {
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--cream-faint);
+  text-transform: lowercase;
+}
+.s1-cd-sep {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  color: rgba(214, 154, 92, 0.4);
+  line-height: 1;
+  margin: 0 1px;
+}
+.s1-countdown-live {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--copper-light);
+  background: rgba(214, 154, 92, 0.1);
+  border: 1px solid rgba(214, 154, 92, 0.25);
+  border-radius: 2px;
+  padding: 6px 14px;
+  display: inline-block;
+}
+
+/* Hero actions */
+.s1-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+/* Right: visual column */
+.s1-hero-visual {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+/* Fire ring SVG */
+.s1-fire-ring {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.s1-ring-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0 32px rgba(214, 154, 92, 0.18));
+}
+
+/* Animated stats grid below the ring */
+.s1-stats-orbit {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  justify-content: center;
+}
+.s1-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 68px;
+  padding: 16px 14px 14px;
+  border: 1px solid var(--forest-line-soft);
+  border-radius: 4px;
+  background: rgba(16, 33, 23, 0.7);
+  backdrop-filter: blur(8px);
+  transition: border-color 0.3s var(--ease);
+}
+.s1-stat:hover {
+  border-color: rgba(214, 154, 92, 0.3);
+}
+.s1-stat-num {
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 700;
+  color: var(--copper-light);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.s1-stat-label {
+  font-family: var(--sans);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* Bottom fade */
+.s1-hero-fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, var(--forest-950));
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .s1-hero-inner {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    padding: 140px 0 70px;
+  }
+  .s1-hero-visual {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .s1-fire-ring {
+    width: 180px;
+    height: 180px;
+  }
+}
+@media (max-width: 520px) {
+  .s1-hero-title {
+    font-size: clamp(42px, 9vw, 72px);
+  }
+  .s1-hero-inner {
+    padding: 120px 0 60px;
+  }
+  .s1-stats-orbit {
+    gap: 12px;
+  }
+  .s1-stat {
+    padding: 12px 10px 10px;
+  }
+}
+
+/* =========================================================================
+   WHO'S IN THE ROOM — Editorial stacked typography
+   ========================================================================= */
+
+.witr-section {
+  background: var(--forest-950);
+  padding: clamp(64px, 9vw, 110px) 0 0;
+  border-top: 1px solid var(--forest-line-soft);
+  overflow: hidden;
+}
+
+.witr-opener {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+  color: var(--cream-dim);
+  max-width: 48ch;
+  line-height: 1.65;
+  margin-top: 14px;
+  margin-bottom: 56px;
+}
+
+/* Full-bleed stack */
+.witr-stack {
+  width: 100%;
+  border-top: 1px solid var(--forest-line-soft);
+}
+
+.witr-row {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 0 clamp(20px, 4vw, 60px);
+  border-bottom: 1px solid var(--forest-line-soft);
+  cursor: default;
+  transition: background 0.3s var(--ease);
+  overflow: hidden;
+}
+.witr-row:hover {
+  background: rgba(214, 154, 92, 0.04);
+}
+
+/* Row number */
+.witr-num {
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--copper);
+  opacity: 0.6;
+  flex-shrink: 0;
+  width: 28px;
+  transition: opacity 0.3s;
+}
+.witr-row:hover .witr-num {
+  opacity: 1;
+}
+
+/* The big name */
+.witr-name {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(2.4rem, 5vw, 5.2rem);
+  color: var(--cream);
+  line-height: 1;
+  padding: clamp(14px, 2.2vw, 26px) 0;
+  letter-spacing: -0.01em;
+  transition: color 0.3s var(--ease), letter-spacing 0.4s var(--ease);
+  flex-shrink: 0;
+}
+.witr-row:hover .witr-name {
+  color: var(--copper-light);
+  letter-spacing: 0.01em;
+}
+
+/* Stretching copper rule */
+.witr-rule {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, rgba(214, 154, 92, 0.2), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease);
+}
+.witr-row:hover .witr-rule {
+  transform: scaleX(1);
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .witr-name {
+    font-size: clamp(1.8rem, 6vw, 3rem);
+  }
+  .witr-row {
+    gap: 16px;
+    padding: 0 16px;
+  }
+}
