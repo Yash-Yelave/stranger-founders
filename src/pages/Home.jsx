@@ -137,54 +137,102 @@ function GuidePhoto3D() {
 
 const mediaItems = [
   {
-    category: 'Rural Innovation',
-    title: 'Empowering Rural Ambitions',
-    img: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=600&auto=format&fit=crop',
-    videoUrl: 'https://www.youtube.com/embed/qy88Uo-J5j8'
+    category: 'The Fire',
+    title: 'Fireside Reflections',
+    id: 'JJQFoYgRv-Q'
   },
   {
-    category: 'Pitches',
-    title: 'Junicorns Pitching Session',
-    img: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?q=80&w=600&auto=format&fit=crop',
-    videoUrl: 'https://www.youtube.com/embed/L_LUpnjgPso'
+    category: 'Vibe',
+    title: 'Stranger Founders Gather',
+    id: 'L58JITDOQt0'
   },
   {
-    category: 'Leaders',
-    title: 'Future Leaders Showcase',
-    img: 'https://images.unsplash.com/photo-1542744094-3a31f103e35f?q=80&w=600&auto=format&fit=crop',
-    videoUrl: 'https://www.youtube.com/embed/5mIMhN9-m5o'
+    category: 'Legacies',
+    title: 'Building Legacies',
+    id: '2js5CVDKB4k'
   },
   {
-    category: 'Ecosystem',
-    title: 'Ecosystem Partner Network',
-    img: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600&auto=format&fit=crop',
-    videoUrl: 'https://www.youtube.com/embed/w77zPAtVTuI'
+    category: 'Invitation',
+    title: 'Receiving The Call',
+    id: 'Bz_aFjN4vTY'
   },
   {
-    category: 'Dialogues',
-    title: 'Mountain Fireside Dialogues',
-    img: 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?q=80&w=600&auto=format&fit=crop',
-    videoUrl: 'https://www.youtube.com/embed/L_LUpnjgPso'
+    category: 'Creator',
+    title: 'Creator Founders Season',
+    id: 'TM79p5MplyI'
   },
   {
-    category: 'Challenges',
-    title: 'Outdoor Leadership Challenge',
-    img: 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?q=80&w=600&auto=format&fit=crop',
-    videoUrl: 'https://www.youtube.com/embed/5mIMhN9-m5o'
+    category: 'Moments',
+    title: 'Uncovering the Truth',
+    id: 'uQoGH_mH6G4'
+  },
+  {
+    category: 'Walks',
+    title: 'The Forest Walk',
+    id: 'AwxRgXAqqec'
+  },
+  {
+    category: 'Fireside',
+    title: 'Late Night Talk',
+    id: '4GERWTg2VWw'
   }
 ]
 
-function MediaShowcase() {
-  const scrollRef = useRef(null)
-  const [activeVideo, setActiveVideo] = useState(null)
+function MediaCard({ item, onPlay }) {
+  const [loadVideo, setLoadVideo] = useState(false)
+  const timerRef = useRef(null)
 
-  const scroll = (direction) => {
-    const el = scrollRef.current
-    if (!el) return
-    const cardWidth = 320 + 24
-    const scrollAmount = direction === 'left' ? -cardWidth * 2 : cardWidth * 2
-    el.scrollBy({ left: scrollAmount, behavior: 'smooth' })
+  const handleMouseEnter = () => {
+    timerRef.current = setTimeout(() => {
+      setLoadVideo(true)
+    }, 300)
   }
+
+  const handleMouseLeave = () => {
+    if (timerRef.current) clearTimeout(timerRef.current)
+    setLoadVideo(false)
+  }
+
+  const thumbUrl = `https://img.youtube.com/vi/${item.id}/hqdefault.jpg`
+  const embedUrl = `https://www.youtube.com/embed/${item.id}?autoplay=1&mute=1&loop=1&playlist=${item.id}&controls=0&modestbranding=1&rel=0&iv_load_policy=3`
+
+  return (
+    <div 
+      className="media-card" 
+      onMouseEnter={handleMouseEnter} 
+      onMouseLeave={handleMouseLeave}
+      onClick={() => onPlay(item.id)}
+    >
+      <div className="media-thumb-wrapper">
+        {loadVideo ? (
+          <iframe
+            className="media-hover-video"
+            src={embedUrl}
+            title={item.title}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          ></iframe>
+        ) : (
+          <img src={thumbUrl} alt={item.title} className="media-thumb" />
+        )}
+        <div className="media-overlay">
+          <button className="play-button-circle" aria-label="Play video">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div className="media-card-body">
+        <span className="media-category">{item.category}</span>
+        <h3 className="media-card-title">{item.title}</h3>
+      </div>
+    </div>
+  )
+}
+
+function MediaShowcase() {
+  const [activeVideo, setActiveVideo] = useState(null)
 
   return (
     <section className="section-pad media-section" id="media">
@@ -197,43 +245,26 @@ function MediaShowcase() {
               Highlights, stories, and moments from our global summits and challenges.
             </p>
           </Reveal>
-          <div className="media-nav-buttons">
-            <button onClick={() => scroll('left')} className="nav-arrow" aria-label="Slide Left">←</button>
-            <button onClick={() => scroll('right')} className="nav-arrow" aria-label="Slide Right">→</button>
-          </div>
         </div>
+      </div>
 
-        <Reveal delay={1}>
-          <div className="media-carousel" ref={scrollRef}>
-            {mediaItems.map((item, idx) => (
-              <div key={idx} className="media-card" onClick={() => setActiveVideo(item.videoUrl)}>
-                <div className="media-thumb-wrapper">
-                  <img src={item.img} alt={item.title} className="media-thumb" />
-                  <div className="media-overlay">
-                    <button className="play-button-circle" aria-label="Play video">
-                      <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-                <div className="media-card-body">
-                  <span className="media-category">{item.category}</span>
-                  <h3 className="media-card-title">{item.title}</h3>
-                </div>
-              </div>
+      <Reveal delay={1}>
+        <div className="media-carousel-wrapper">
+          <div className="media-carousel-track">
+            {[...mediaItems, ...mediaItems].map((item, idx) => (
+              <MediaCard key={idx} item={item} onPlay={setActiveVideo} />
             ))}
           </div>
-        </Reveal>
-      </div>
+        </div>
+      </Reveal>
 
       {activeVideo && (
         <div className="lightbox-modal" onClick={() => setActiveVideo(null)}>
-          <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
+          <div className="lightbox-content vertical" onClick={(e) => e.stopPropagation()}>
             <button className="lightbox-close" onClick={() => setActiveVideo(null)}>&times;</button>
-            <div className="lightbox-iframe-wrapper">
+            <div className="lightbox-iframe-wrapper vertical">
               <iframe
-                src={`${activeVideo}?autoplay=1`}
+                src={`https://www.youtube.com/embed/${activeVideo}?autoplay=1&controls=1&modestbranding=1&rel=0`}
                 title="Video player"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

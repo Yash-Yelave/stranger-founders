@@ -1026,6 +1026,7 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
 .page-hero { padding: 168px 0 clamp(40px, 6vw, 72px); position: relative; }
 .page-hero h1 { margin: 20px 0 22px; max-width: 18ch; }
 .page-hero .lead { max-width: 56ch; }
+.page-hero .hero-actions { justify-content: flex-start; }
 
 /* Pull image band */
 .image-band { position: relative; height: clamp(280px, 42vw, 520px); overflow: hidden; }
@@ -1134,10 +1135,44 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
   .hero-stamp { display: none; }
   .def-row { grid-template-columns: 1fr; gap: 8px; }
 }
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: clamp(38px, 8vw, 80px) !important;
+  }
+  .hero-tagline {
+    font-size: clamp(18px, 2.5vw, 24px) !important;
+  }
+  .hero-content {
+    transform: translateY(-40px);
+  }
+  .display {
+    font-size: clamp(1.8rem, 4vw, 2.8rem) !important;
+  }
+  .mobile-menu {
+    padding: 0 24px;
+  }
+}
+
 @media (max-width: 520px) {
   .seats { grid-template-columns: 1fr; }
   .trade-row { gap: 12px; }
-  .container { padding: 0 20px; }
+  .container { padding: 0 16px; }
+  .hero-title {
+    font-size: clamp(32px, 7vw, 56px) !important;
+  }
+  .hero-tagline {
+    font-size: clamp(16px, 2.5vw, 22px) !important;
+  }
+  .hero-content {
+    transform: translateY(-20px);
+  }
+  .compared-grid {
+    grid-template-columns: 1fr;
+  }
+  .media-card {
+    flex: 0 0 190px;
+  }
 }
 
 /* =========================================================================
@@ -1794,54 +1829,47 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
   position: relative;
   margin-bottom: 44px;
 }
-.media-nav-buttons {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  margin-top: 24px;
-}
-@media (min-width: 768px) {
-  .media-nav-buttons {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    margin-top: 0;
-  }
-}
-.nav-arrow {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--forest-925);
-  border: 1px solid var(--forest-line-soft);
+.media-header h2 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(2.2rem, 4.5vw, 3.6rem);
   color: var(--cream);
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s var(--ease);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
 }
-.nav-arrow:hover {
-  background: var(--copper);
-  border-color: var(--copper);
-  color: var(--forest-950);
-  box-shadow: 0 0 18px rgba(214, 154, 92, 0.4);
+.media-header .eyebrow {
+  margin-bottom: 4px;
 }
-.media-carousel {
+
+/* Media Carousel Layout and Loop */
+.media-carousel-wrapper {
+  overflow: hidden;
+  width: 100%;
+  padding: 10px 0 30px;
+}
+.media-carousel-track {
   display: flex;
   gap: 24px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  padding: 10px 4px 30px;
-  scroll-behavior: smooth;
+  width: max-content;
+  animation: infiniteScroll 35s linear infinite;
+  will-change: transform;
 }
-.media-carousel::-webkit-scrollbar {
-  display: none;
+/* Pause scrolling on hover */
+.media-carousel-wrapper:hover .media-carousel-track {
+  animation-play-state: paused;
+}
+
+@keyframes infiniteScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 .media-card {
-  flex: 0 0 310px;
+  flex: 0 0 220px;
   scroll-snap-align: start;
   background: var(--forest-925);
   border: 1px solid var(--forest-line-soft);
@@ -1858,9 +1886,18 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
 .media-thumb-wrapper {
   position: relative;
   width: 100%;
-  aspect-ratio: 16/10;
+  aspect-ratio: 9/16;
   overflow: hidden;
   background: #000;
+}
+.media-hover-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
 }
 .media-thumb {
   width: 100%;
@@ -1947,6 +1984,11 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.95);
   border: 1px solid var(--forest-line-soft);
 }
+.lightbox-content.vertical {
+  max-width: 360px;
+  aspect-ratio: 9/16;
+  border-radius: 12px;
+}
 .lightbox-close {
   position: absolute;
   top: 10px;
@@ -1967,6 +2009,9 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
   position: relative;
   width: 100%;
   padding-top: 56.25%;
+}
+.lightbox-iframe-wrapper.vertical {
+  padding-top: 177.77%;
 }
 .lightbox-iframe-wrapper iframe {
   position: absolute;
