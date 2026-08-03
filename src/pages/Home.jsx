@@ -154,6 +154,11 @@ export default function Home() {
                 <stop offset="55%" stopColor="#8a5527" stopOpacity="0.28" />
                 <stop offset="100%" stopColor="#8a5527" stopOpacity="0" />
               </radialGradient>
+              <filter id="smokeFilter" x="-100%" y="-100%" width="300%" height="300%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" result="noise" />
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="35" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+                <feGaussianBlur in="displaced" stdDeviation="15" />
+              </filter>
             </defs>
             <rect width="1600" height="1100" fill="url(#skyHero)" />
             <g opacity="0.65">
@@ -198,10 +203,10 @@ export default function Home() {
               <line x1="768" y1="1038" x2="832" y2="1038" stroke="#5a381c" strokeWidth="4" strokeLinecap="round" />
 
               {/* Rising Smoke Wisps */}
-              <g opacity="0.7">
-                <path className="smoke-wisp smoke-1" d="M790 960 Q775 920 795 870 T785 810" fill="none" stroke="#d69a5c" strokeWidth="3.5" strokeLinecap="round" />
-                <path className="smoke-wisp smoke-2" d="M810 955 Q825 915 805 865 T815 800" fill="none" stroke="#f5ecd8" strokeWidth="3" strokeLinecap="round" />
-                <path className="smoke-wisp smoke-3" d="M800 965 Q790 930 810 885 T795 830" fill="none" stroke="#cdbe9c" strokeWidth="2.5" strokeLinecap="round" />
+              <g opacity="0.45">
+                <path className="smoke-wisp smoke-1" d="M790 960 Q765 900 795 830 T780 730" fill="none" stroke="#d69a5c" strokeWidth="45" strokeLinecap="round" filter="url(#smokeFilter)" />
+                <path className="smoke-wisp smoke-2" d="M810 955 Q835 895 805 825 T815 720" fill="none" stroke="#f5ecd8" strokeWidth="38" strokeLinecap="round" filter="url(#smokeFilter)" />
+                <path className="smoke-wisp smoke-3" d="M800 965 Q775 905 810 840 T790 740" fill="none" stroke="#cdbe9c" strokeWidth="32" strokeLinecap="round" filter="url(#smokeFilter)" />
               </g>
 
               {/* Layered Flickering Campfire Flames */}
