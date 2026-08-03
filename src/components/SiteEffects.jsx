@@ -45,7 +45,39 @@ export default function SiteEffects() {
       const glow = document.getElementById('cursorGlow')
       let gx = 0, gy = 0, tx = 0, ty = 0, rafId = null
 
-      function handleMouseMove(e) { tx = e.clientX; ty = e.clientY; if (glow) glow.classList.add('active') }
+      let lastSparkle = 0
+      function handleMouseMove(e) {
+        tx = e.clientX
+        ty = e.clientY
+        if (glow) glow.classList.add('active')
+
+        // Cursor particle sparkle effect
+        const now = Date.now()
+        if (now - lastSparkle > 32) {
+          lastSparkle = now
+          const particle = document.createElement('span')
+          particle.className = 'cursor-sparkle'
+          const size = Math.random() * 4 + 3
+          const offsetX = (Math.random() - 0.5) * 8
+          const offsetY = (Math.random() - 0.5) * 8
+
+          particle.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX + offsetX}px;top:${e.clientY + offsetY}px;`
+          document.body.appendChild(particle)
+
+          const angle = Math.random() * Math.PI * 2
+          const dist = 12 + Math.random() * 20
+          const dx = Math.cos(angle) * dist
+          const dy = Math.sin(angle) * dist + 6
+
+          particle.animate(
+            [
+              { transform: 'translate(0,0) scale(1) rotate(0deg)', opacity: 1 },
+              { transform: `translate(${dx}px, ${dy}px) scale(0) rotate(${Math.random() * 180}deg)`, opacity: 0 }
+            ],
+            { duration: 500 + Math.random() * 250, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }
+          ).onfinish = () => particle.remove()
+        }
+      }
       function handleMouseLeaveDoc() { if (glow) glow.classList.remove('active') }
       window.addEventListener('mousemove', handleMouseMove, { passive: true })
       document.addEventListener('mouseleave', handleMouseLeaveDoc)

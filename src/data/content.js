@@ -5,8 +5,8 @@ export const journey = [
   { t: 'The Arrival', d: 'Four strangers reach a venue in the wild. No badges, no schedule on a screen — only the sound of the forest.' },
   { t: 'Founder Activities', d: 'Challenges built to pull everyone out of their comfort zone — where real character shows up faster than any pitch.' },
   { t: 'The Conversations', d: 'Guided by Ram Prayaga: candid business, money and craft — the tactics founders rarely share on a stage.' },
-  { t: 'Conversations', d: 'Ideas that could only have been born here. Partnerships, trades and creative bets between former strangers.' },
-  { t: 'The Circle', d: 'They arrived as strangers. They leave as Stranger Founders — inside a circle that keeps meeting long after.' },
+  { t: 'Experience', d: 'Ideas that could only have been born here. Partnerships, trades and creative bets between former strangers.' },
+  { t: 'The Inner Circle', d: 'They arrived as strangers. They leave as Stranger Founders — inside a circle that keeps meeting long after.' },
 ]
 
 export const trades = [

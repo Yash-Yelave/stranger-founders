@@ -1,11 +1,11 @@
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import Reveal from '../components/Reveal.jsx'
 import CtaBand from '../components/CtaBand.jsx'
 import Faq from '../components/Faq.jsx'
 import { episodes, journey } from '../data/content.js'
-import { HiOutlineUserGroup, HiOutlineChatBubbleLeftRight } from 'react-icons/hi2'
-import { TbMountain, TbWalk } from 'react-icons/tb'
-import { FaHandshake } from 'react-icons/fa6'
+import { TbUsers, TbMountain, TbMessages, TbWalk, TbMicrophone, TbBuildingSkyscraper, TbUsersGroup, TbTent } from 'react-icons/tb'
+import { PiHandshakeThin } from 'react-icons/pi'
 import { GiPartyPopper } from 'react-icons/gi'
 
 /* Five most essential questions for a home-page visitor */
@@ -18,6 +18,60 @@ const homeFaqs = [
 ]
 
 
+
+
+function GuidePhoto3D() {
+  const cardRef = useRef(null)
+
+  const handleMouseMove = (e) => {
+    const card = cardRef.current
+    if (!card) return
+    const rect = card.getBoundingClientRect()
+    const x = e.clientX - rect.left - rect.width / 2
+    const y = e.clientY - rect.top - rect.height / 2
+    const rotateX = (-y / rect.height) * 18
+    const rotateY = (x / rect.width) * 18
+    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`
+    
+    const bg = card.querySelector('.guide-layer-bg img')
+    const fg = card.querySelector('.guide-layer-subject img')
+    if (bg) bg.style.transform = `scale(1.14) translate(${-x * 0.04}px, ${-y * 0.04}px)`
+    if (fg) fg.style.transform = `scale(1.06) translate(${x * 0.06}px, ${y * 0.06 - 6}px)`
+  }
+
+  const handleMouseLeave = () => {
+    const card = cardRef.current
+    if (!card) return
+    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`
+    const bg = card.querySelector('.guide-layer-bg img')
+    const fg = card.querySelector('.guide-layer-subject img')
+    if (bg) bg.style.transform = `scale(1.08) translate(0, 0)`
+    if (fg) fg.style.transform = `scale(1) translate(0, 0)`
+  }
+
+  return (
+    <Reveal className="guide-photo-3d-wrapper">
+      <div 
+        ref={cardRef} 
+        className="guide-card-3d"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+      >
+        <span className="guide-badge">THE GUIDE</span>
+        {/* Layer 1: Dark Forest Slate Texture Background */}
+        <div className="guide-layer guide-layer-bg">
+          <img src="/img/ram-dark-texture.jpg" alt="" />
+        </div>
+        <div className="guide-vignette" aria-hidden="true" />
+        {/* Layer 2: Dead-Centered Subject Cutout in 3D Space */}
+        <div className="guide-layer guide-layer-subject">
+          <img src="/img/ram-subject-deadcenter.png" alt="" />
+        </div>
+      </div>
+    </Reveal>
+  )
+}
+
 export default function Home() {
   return (
     <>
@@ -27,51 +81,109 @@ export default function Home() {
           <svg viewBox="0 0 1600 1100" preserveAspectRatio="xMidYMax slice">
             <defs>
               <linearGradient id="skyHero" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%"   stopColor="#0b1610"/>
-                <stop offset="68%"  stopColor="#122a1c"/>
-                <stop offset="88%"  stopColor="#5c3f22"/>
-                <stop offset="100%" stopColor="#0b1610"/>
+                <stop offset="0%" stopColor="#0b1610" />
+                <stop offset="68%" stopColor="#122a1c" />
+                <stop offset="88%" stopColor="#5c3f22" />
+                <stop offset="100%" stopColor="#0b1610" />
               </linearGradient>
               <radialGradient id="glowHero" cx="50%" cy="97%" r="26%">
-                <stop offset="0%"   stopColor="#d69a5c" stopOpacity="0.75"/>
-                <stop offset="55%"  stopColor="#8a5527" stopOpacity="0.28"/>
-                <stop offset="100%" stopColor="#8a5527" stopOpacity="0"/>
+                <stop offset="0%" stopColor="#d69a5c" stopOpacity="0.75" />
+                <stop offset="55%" stopColor="#8a5527" stopOpacity="0.28" />
+                <stop offset="100%" stopColor="#8a5527" stopOpacity="0" />
               </radialGradient>
             </defs>
-            <rect width="1600" height="1100" fill="url(#skyHero)"/>
+            <rect width="1600" height="1100" fill="url(#skyHero)" />
             <g opacity="0.65">
-              <circle cx="140"  cy="90"  r="1.4" fill="#f5ecd8"/><circle cx="320"  cy="140" r="1"   fill="#f5ecd8"/>
-              <circle cx="480"  cy="70"  r="1.3" fill="#f5ecd8"/><circle cx="650"  cy="130" r="1"   fill="#f5ecd8"/>
-              <circle cx="820"  cy="60"  r="1.2" fill="#f5ecd8"/><circle cx="980"  cy="140" r="1"   fill="#f5ecd8"/>
-              <circle cx="1140" cy="80"  r="1.4" fill="#f5ecd8"/><circle cx="1300" cy="150" r="1"   fill="#f5ecd8"/>
-              <circle cx="1460" cy="90"  r="1.2" fill="#f5ecd8"/><circle cx="60"   cy="220" r="1"   fill="#f5ecd8"/>
-              <circle cx="200"  cy="180" r="0.9" fill="#f5ecd8"/><circle cx="760"  cy="110" r="1.1" fill="#f5ecd8"/>
-              <circle cx="1050" cy="55"  r="1"   fill="#f5ecd8"/><circle cx="1380" cy="200" r="0.8" fill="#f5ecd8"/>
+              <circle cx="140" cy="90" r="1.4" fill="#f5ecd8" /><circle cx="320" cy="140" r="1" fill="#f5ecd8" />
+              <circle cx="480" cy="70" r="1.3" fill="#f5ecd8" /><circle cx="650" cy="130" r="1" fill="#f5ecd8" />
+              <circle cx="820" cy="60" r="1.2" fill="#f5ecd8" /><circle cx="980" cy="140" r="1" fill="#f5ecd8" />
+              <circle cx="1140" cy="80" r="1.4" fill="#f5ecd8" /><circle cx="1300" cy="150" r="1" fill="#f5ecd8" />
+              <circle cx="1460" cy="90" r="1.2" fill="#f5ecd8" /><circle cx="60" cy="220" r="1" fill="#f5ecd8" />
+              <circle cx="200" cy="180" r="0.9" fill="#f5ecd8" /><circle cx="760" cy="110" r="1.1" fill="#f5ecd8" />
+              <circle cx="1050" cy="55" r="1" fill="#f5ecd8" /><circle cx="1380" cy="200" r="0.8" fill="#f5ecd8" />
             </g>
             {/* Big ambient glow — fully inside viewBox now */}
-            <ellipse cx="800" cy="1060" rx="320" ry="90" fill="url(#glowHero)"/>
+            <ellipse cx="800" cy="1060" rx="320" ry="90" fill="url(#glowHero)" />
             <polygon className="ridge-far"
               points="0,900 120,875 220,895 340,865 450,890 570,860 690,885 810,858 930,888 1050,862 1170,890 1290,865 1410,892 1530,870 1600,888 1600,1100 0,1100"
-              fill="#8a5527" opacity="0.25"/>
+              fill="#8a5527" opacity="0.25" />
             <polygon className="ridge-mid"
               points="0,930 130,908 240,925 360,900 470,922 590,895 700,920 820,898 940,924 1060,902 1180,926 1300,905 1420,928 1540,910 1600,922 1600,1100 0,1100"
-              fill="#4a3420" opacity="0.5"/>
+              fill="#4a3420" opacity="0.5" />
             {/* Jagged treeline — extended to 1100 bottom */}
             <path d="M0,962 L55,942 L80,962 L125,932 L160,962 L200,938 L235,962 L280,928 L315,962 L360,940 L395,962 L440,922 L475,962 L520,936 L555,962 L600,924 L635,962 L675,938 L710,962 L755,918 L790,962 L835,936 L870,962 L915,924 L950,962 L995,938 L1030,962 L1075,924 L1110,962 L1155,938 L1190,962 L1235,920 L1270,962 L1315,936 L1350,962 L1395,924 L1430,962 L1475,938 L1510,962 L1555,928 L1600,962 L1600,1100 L0,1100 Z"
-              fill="#0b1610"/>
-            {/* Fire base glow — pushed down for breathing room */}
-            <ellipse cx="800" cy="1034" rx="46"  ry="15" fill="#d69a5c" opacity="0.9"/>
-            <ellipse cx="800" cy="1034" rx="140" ry="46" fill="#8a5527" opacity="0.22"/>
-            {/* Flame */}
-            <path className="flame"
-              d="M800 982 C 785 1006, 789 1022, 800 1030 C 811 1022, 815 1004, 800 982 Z"
-              fill="#f5ecd8" opacity="0.94"/>
-            {/* Embers */}
-            <circle className="ember ember-1" cx="789" cy="994" r="1.6" fill="#d69a5c"/>
-            <circle className="ember ember-2" cx="808" cy="988" r="1.3" fill="#f5ecd8"/>
-            <circle className="ember ember-3" cx="796" cy="1000" r="1.4" fill="#d69a5c"/>
-            <circle className="ember ember-4" cx="813" cy="996" r="1.2" fill="#f5ecd8"/>
+              fill="#0b1610" />
+            {/* Campfire Group on ground level */}
+            <g transform="translate(0, 10)">
+              {/* Campfire Base Glow */}
+              <ellipse cx="800" cy="1038" rx="160" ry="46" fill="#8a5527" opacity="0.3" />
+              <ellipse cx="800" cy="1038" rx="65" ry="18" fill="#d69a5c" opacity="0.8" />
+              <ellipse cx="800" cy="1038" rx="35" ry="10" fill="#f5ecd8" opacity="0.45" />
+
+              {/* Campfire Pit Stones */}
+              <circle cx="742" cy="1040" r="7" fill="#1c2d20" />
+              <circle cx="756" cy="1046" r="8" fill="#253a2a" />
+              <circle cx="844" cy="1046" r="8" fill="#253a2a" />
+              <circle cx="858" cy="1040" r="7" fill="#1c2d20" />
+
+              {/* Crossed Campfire Wooden Logs */}
+              <line x1="748" y1="1048" x2="852" y2="1024" stroke="#2b1a0d" strokeWidth="12" strokeLinecap="round" />
+              <line x1="752" y1="1047" x2="848" y2="1025" stroke="#4a301a" strokeWidth="6" strokeLinecap="round" />
+              <line x1="852" y1="1048" x2="748" y2="1024" stroke="#24150a" strokeWidth="12" strokeLinecap="round" />
+              <line x1="848" y1="1047" x2="752" y2="1025" stroke="#422915" strokeWidth="6" strokeLinecap="round" />
+              <line x1="765" y1="1038" x2="835" y2="1038" stroke="#362010" strokeWidth="10" strokeLinecap="round" />
+              <line x1="768" y1="1038" x2="832" y2="1038" stroke="#5a381c" strokeWidth="4" strokeLinecap="round" />
+
+              {/* Rising Smoke Wisps */}
+              <g opacity="0.7">
+                <path className="smoke-wisp smoke-1" d="M790 960 Q775 920 795 870 T785 810" fill="none" stroke="#d69a5c" strokeWidth="3.5" strokeLinecap="round" />
+                <path className="smoke-wisp smoke-2" d="M810 955 Q825 915 805 865 T815 800" fill="none" stroke="#f5ecd8" strokeWidth="3" strokeLinecap="round" />
+                <path className="smoke-wisp smoke-3" d="M800 965 Q790 930 810 885 T795 830" fill="none" stroke="#cdbe9c" strokeWidth="2.5" strokeLinecap="round" />
+              </g>
+
+              {/* Layered Flickering Campfire Flames */}
+              <path className="flame-outer"
+                d="M800 935 C 760 978, 764 1028, 800 1036 C 836 1028, 840 978, 800 935 Z"
+                fill="#b3703a" opacity="0.88" />
+              <path className="flame-mid-2"
+                d="M790 950 C 765 985, 770 1026, 796 1034 C 825 1026, 825 985, 790 950 Z"
+                fill="#c98246" opacity="0.9" />
+              <path className="flame-mid"
+                d="M800 952 C 772 985, 775 1026, 800 1034 C 825 1026, 828 985, 800 952 Z"
+                fill="#d69a5c" opacity="0.95" />
+              <path className="flame-inner"
+                d="M800 974 C 784 998, 786 1024, 800 1030 C 814 1024, 816 998, 800 974 Z"
+                fill="#f5ecd8" opacity="0.98" />
+              <path className="flame-core"
+                d="M800 994 C 790 1008, 791 1022, 800 1026 C 809 1022, 810 1008, 800 994 Z"
+                fill="#ffffff" opacity="0.95" />
+
+              {/* Fire Sparks & Floating Embers */}
+              <circle className="fire-spark spark-1" cx="790" cy="955" r="2.2" fill="#f5ecd8" />
+              <circle className="fire-spark spark-2" cx="812" cy="948" r="1.8" fill="#d69a5c" />
+              <circle className="fire-spark spark-3" cx="798" cy="936" r="2.0" fill="#f5ecd8" />
+              <circle className="fire-spark spark-4" cx="818" cy="962" r="1.5" fill="#d69a5c" />
+              <circle className="fire-spark spark-5" cx="784" cy="968" r="1.6" fill="#f5ecd8" />
+            </g>
           </svg>
+        </div>
+
+        {/* Ambient hero sparkles */}
+        <div className="hero-sparkles-container" aria-hidden="true">
+          {Array.from({ length: 30 }).map((_, i) => (
+            <span
+              key={i}
+              className="hero-ambient-sparkle"
+              style={{
+                left: `${(i * 31 + 7) % 96}%`,
+                bottom: `${(i * 17 + 10) % 85}%`,
+                width: `${(i % 3) * 2 + 3}px`,
+                height: `${(i % 3) * 2 + 3}px`,
+                animationDuration: `${3.5 + (i % 5) * 1.8}s`,
+                animationDelay: `${(i % 7) * 0.6}s`
+              }}
+            />
+          ))}
         </div>
 
         <svg className="hero-stamp" viewBox="0 0 200 200" aria-hidden="true">
@@ -93,7 +205,7 @@ export default function Home() {
           <Reveal as="h1" className="hero-title" delay={1}>STRANGER<br />FOUNDERS</Reveal>
           <Reveal className="hero-tagline script" delay={2}>Meet Strangers. Build Legacies.</Reveal>
           <Reveal className="hero-actions" delay={3}>
-            <Link to="/apply"    className="btn btn-primary">Request an Invitation <span className="arw">→</span></Link>
+            <Link to="/apply" className="btn btn-primary">Request an Invitation <span className="arw">→</span></Link>
             <Link to="/partners" className="btn btn-ghost">Become a Partner</Link>
           </Reveal>
           <div className="scroll-cue"><span>Scroll</span><span className="line" /></div>
@@ -104,34 +216,34 @@ export default function Home() {
       <section className="feature-strip-section">
         <div className="strip-torn-edge" aria-hidden="true">
           <svg viewBox="0 0 1440 24" preserveAspectRatio="none">
-            <path d="M0,24 L0,8 Q30,18 60,6 T120,16 T180,5 T240,18 T300,7 T360,17 T420,4 T480,16 T540,6 T600,18 T660,8 T720,17 T780,5 T840,16 T900,6 T960,18 T1020,7 T1080,17 T1140,5 T1200,16 T1260,7 T1320,18 T1380,6 T1440,15 L1440,24 Z" fill="var(--forest-950)"/>
+            <path d="M0,24 L0,8 Q30,18 60,6 T120,16 T180,5 T240,18 T300,7 T360,17 T420,4 T480,16 T540,6 T600,18 T660,8 T720,17 T780,5 T840,16 T900,6 T960,18 T1020,7 T1080,17 T1140,5 T1200,16 T1260,7 T1320,18 T1380,6 T1440,15 L1440,24 Z" fill="var(--forest-950)" />
           </svg>
         </div>
         <div className="container">
           <Reveal className="feature-strip-grid">
             {[
               {
-                icon: <HiOutlineUserGroup size={42} />,
+                icon: <TbUsers size={42} strokeWidth={1.2} />,
                 t1: 'MEET',
                 t2: 'STRANGERS'
               },
               {
-                icon: <TbMountain size={42} />,
+                icon: <TbMountain size={42} strokeWidth={1.2} />,
                 t1: 'STEP OUT OF',
                 t2: 'YOUR COMFORT ZONE'
               },
               {
-                icon: <HiOutlineChatBubbleLeftRight size={42} />,
+                icon: <TbMessages size={42} strokeWidth={1.2} />,
                 t1: 'SHARE STORIES &',
                 t2: 'BUSINESS INSIGHTS'
               },
               {
-                icon: <TbWalk size={42} />,
+                icon: <TbWalk size={42} strokeWidth={1.2} />,
                 t1: 'FUN ACTIVITIES &',
                 t2: 'LEARNING'
               },
               {
-                icon: <FaHandshake size={38} />,
+                icon: <PiHandshakeThin size={46} />,
                 t1: 'BUILD CONNECTIONS.',
                 t2: 'CREATE LEGACIES.'
               }
@@ -155,11 +267,11 @@ export default function Home() {
             <Reveal className="story-copy">
               <span className="story-eyebrow"><span className="story-eyebrow-line" />THE STORY</span>
               <h2 className="story-title">Why Stranger Founders exists</h2>
-              <p className="story-unlike">
-                Unlike conferences.<br />
-                Unlike networking events.<br />
-                Unlike podcasts.
-              </p>
+              <div className="story-unlike">
+                <span>Unlike conferences.</span>
+                <span>Unlike networking events.</span>
+                <span>Unlike podcasts.</span>
+              </div>
               <p className="story-body">
                 We bring strangers together in forests, farms, mountains and
                 nature — away from stages, away from noise, away from business cards.
@@ -169,9 +281,9 @@ export default function Home() {
                 business. Learn from each other. Build lifelong relationships.
                 Everything is filmed cinematically.
               </p>
-              <p className="story-quote">
+              <blockquote className="story-quote">
                 "Participants arrive as strangers. They leave as Stranger Founders."
-              </p>
+              </blockquote>
             </Reveal>
             <Reveal className="story-visual" delay={1}>
               <img src="/STORY.png" alt="Why Stranger Founders Exists" className="story-img" />
@@ -188,102 +300,43 @@ export default function Home() {
             <h2 className="diff-title">We traded the familiar for the real</h2>
           </Reveal>
           <Reveal delay={1}>
-            <div className="diff-rows">
+            <div className="diff-card-stack">
               {[
                 ['Conference Rooms', 'Forests'],
-                ['Networking',       'Experiences'],
-                ['Speeches',         'Conversations'],
-                ['Business Cards',   'Relationships'],
-                ['Audiences',        'Communities'],
+                ['Networking', 'Experiences'],
+                ['Speeches', 'Conversations'],
+                ['Business Cards', 'Relationships'],
+                ['Audiences', 'Communities'],
               ].map(([from, to]) => (
-                <div className="diff-row" key={from}>
-                  <span className="diff-from">{from}</span>
-                  <span className="diff-arrow">→</span>
-                  <span className="diff-to">{to}</span>
+                <div className="diff-card" key={from}>
+                  <div className="diff-card-left">
+                    <span className="diff-from-badge">{from}</span>
+                  </div>
+                  <div className="diff-card-center">
+                    <span className="diff-arrow-badge">→</span>
+                  </div>
+                  <div className="diff-card-right">
+                    <span className="diff-to-badge">
+                      <span className="diff-live-dot" aria-hidden="true" />
+                      {to}
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>
           </Reveal>
           <Reveal delay={2}>
             <p className="diff-footer-label">COMPARED TO THE USUAL FORMATS</p>
-            <div className="compared-grid">
+            <div className="compared-pills-grid">
               {[
-                {
-                  label: 'Podcast',
-                  icon: (
-                    <svg viewBox="0 0 64 64" fill="currentColor">
-                      {/* Outer concentric ring */}
-                      <circle cx="32" cy="24" r="19" fill="none" stroke="currentColor" strokeWidth="2.2" />
-                      {/* Inner concentric ring */}
-                      <circle cx="32" cy="24" r="13.5" fill="none" stroke="currentColor" strokeWidth="2" />
-                      {/* Mic capsule */}
-                      <rect x="26.5" y="15" width="11" height="18" rx="5.5" fill="currentColor" />
-                      <circle cx="32" cy="22" r="1.3" fill="var(--forest-925)" />
-                      <circle cx="32" cy="26" r="1.5" fill="var(--forest-925)" />
-                      {/* U-Bracket */}
-                      <path d="M22.5 23 v4 a9.5 9.5 0 0 0 19 0 v-4" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-                      {/* Stem */}
-                      <line x1="32" y1="36" x2="32" y2="43" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" />
-                      {/* Base foot */}
-                      <rect x="23" y="43" width="18" height="3" rx="1.5" />
-                    </svg>
-                  )
-                },
-                {
-                  label: 'Conference',
-                  icon: (
-                    <svg viewBox="0 0 64 64" fill="currentColor">
-                      {/* Left flexible mic */}
-                      <path d="M26 23 C24 16, 29 13, 27 9" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
-                      <circle cx="27" cy="7.5" r="2.8" />
-                      {/* Right flexible mic */}
-                      <path d="M38 23 C40 16, 35 13, 37 9" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
-                      <circle cx="37" cy="7.5" r="2.8" />
-                      {/* Slanted desktop podium */}
-                      <polygon points="12,23 52,23 45,33 19,33" />
-                      {/* Pedestal neck */}
-                      <rect x="23" y="33" width="18" height="12" />
-                      {/* Base plate */}
-                      <rect x="18" y="45" width="28" height="4" rx="1" />
-                    </svg>
-                  )
-                },
-                {
-                  label: 'Networking Event',
-                  icon: (
-                    <svg viewBox="0 0 64 64" fill="currentColor">
-                      {/* Central Globe */}
-                      <circle cx="32" cy="32" r="14" fill="currentColor" />
-                      {/* Globe Grid lines */}
-                      <circle cx="32" cy="32" r="14" fill="none" stroke="var(--forest-925)" strokeWidth="1.8" />
-                      <line x1="18" y1="32" x2="46" y2="32" stroke="var(--forest-925)" strokeWidth="1.5" />
-                      <path d="M19 25 Q32 28 45 25" fill="none" stroke="var(--forest-925)" strokeWidth="1.4" />
-                      <path d="M19 39 Q32 36 45 39" fill="none" stroke="var(--forest-925)" strokeWidth="1.4" />
-                      <ellipse cx="32" cy="32" rx="7" ry="14" fill="none" stroke="var(--forest-925)" strokeWidth="1.4" />
-                      <line x1="32" y1="18" x2="32" y2="46" stroke="var(--forest-925)" strokeWidth="1.4" />
-
-                      {/* 4 Outer Arc Segments */}
-                      <path d="M17 17 A 21 21 0 0 1 47 17" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-                      <path d="M17 47 A 21 21 0 0 0 47 47" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-                      <path d="M17 17 A 21 21 0 0 0 17 47" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-                      <path d="M47 17 A 21 21 0 0 1 47 47" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-
-                      {/* 4 Cardinal Node Dots */}
-                      <circle cx="32" cy="9" r="3" />
-                      <circle cx="32" cy="55" r="3" />
-                      <circle cx="9" cy="32" r="3" />
-                      <circle cx="55" cy="32" r="3" />
-                    </svg>
-                  )
-                },
-                {
-                  label: 'Retreat',
-                  icon: <GiPartyPopper size={68} />
-                }
+                { label: 'Podcast', icon: <TbMicrophone size={18} strokeWidth={1.5} /> },
+                { label: 'Conference', icon: <TbBuildingSkyscraper size={18} strokeWidth={1.5} /> },
+                { label: 'Networking Event', icon: <TbUsersGroup size={18} strokeWidth={1.5} /> },
+                { label: 'Retreat', icon: <TbTent size={18} strokeWidth={1.5} /> }
               ].map(({ icon, label }) => (
-                <div className="compared-card" key={label}>
-                  <div className="compared-icon">{icon}</div>
-                  <span className="compared-label">{label}</span>
+                <div className="compared-pill-item" key={label}>
+                  <div className="compared-pill-icon">{icon}</div>
+                  <span className="compared-pill-label">{label}</span>
                 </div>
               ))}
             </div>
@@ -320,7 +373,7 @@ export default function Home() {
       <section className="journey-section" id="experience">
         <div className="container">
           <Reveal className="journey-head">
-            <span className="eyebrow">One Night. Six Chapters.</span>
+            <span className="eyebrow">An Immersive Journey. Six Chapters.</span>
             <h2 className="h-lg" style={{ marginTop: 18 }}>
               The arc of an invitation.
             </h2>
@@ -350,10 +403,7 @@ export default function Home() {
       <section className="section-pad" id="guide" style={{ background: 'var(--forest-925)' }}>
         <div className="container">
           <div className="guide-grid">
-            <Reveal className="guide-photo">
-              <span className="frame-ix">The Guide</span>
-              <img src="/img/ram.png" alt="Ram Prayaga, the guide of Stranger Founders" />
-            </Reveal>
+            <GuidePhoto3D />
             <div>
               <Reveal><span className="eyebrow">Not a host — a guide</span></Reveal>
               <Reveal as="h2" className="h-xl" delay={1} style={{ margin: '16px 0 6px' }}>Ram Prayaga</Reveal>
@@ -366,7 +416,7 @@ export default function Home() {
               </Reveal>
               <Reveal delay={3} style={{ marginTop: 28 }}>
                 <blockquote className="guide-quote">
-                  "He isn't the host.<br/>He's the guide who brings strangers together."
+                  "He isn't the host.<br />He's the guide who brings strangers together."
                 </blockquote>
               </Reveal>
             </div>
@@ -376,9 +426,23 @@ export default function Home() {
 
       {/* ===================== PULL QUOTE ===================== */}
       <section className="pull-quote-section">
-        <div className="container narrow">
+        <div className="container">
           <Reveal>
-            <p className="pull-quote">
+            <p 
+              className="pull-quote"
+              onMouseMove={(e) => {
+                const el = e.currentTarget
+                const rect = el.getBoundingClientRect()
+                const x = e.clientX - rect.left
+                const y = e.clientY - rect.top
+                el.style.setProperty('--tx', `${x}px`)
+                el.style.setProperty('--ty', `${y}px`)
+                el.classList.add('active')
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.classList.remove('active')
+              }}
+            >
               "Every founder should dream<br />of receiving an invitation."
             </p>
           </Reveal>
@@ -400,7 +464,7 @@ export default function Home() {
                 <span className="copper">9 August</span>.
               </p>
               <div style={{ marginTop: 28, display: 'flex', gap: 14, flexWrap: 'wrap' }}>
-                <Link to="/apply"     className="btn btn-primary">Request an Invitation <span className="arw">→</span></Link>
+                <Link to="/apply" className="btn btn-primary">Request an Invitation <span className="arw">→</span></Link>
                 <Link to="/season-01" className="btn btn-ghost">Explore Season 01</Link>
               </div>
             </Reveal>
