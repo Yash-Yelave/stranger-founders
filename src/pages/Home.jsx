@@ -328,7 +328,7 @@ export default function Home() {
         <div className="container">
           <div className="story-grid">
             <Reveal className="story-copy">
-              <span className="story-eyebrow"><span className="story-eyebrow-line" />THE STORY</span>
+              <span className="story-eyebrow">THE STORY</span>
               <h2 className="story-title">Why Stranger Founders exists</h2>
               <div className="story-unlike">
                 <span>Unlike conferences.</span>
@@ -359,7 +359,7 @@ export default function Home() {
       <section className="diff-section">
         <div className="container diff-inner">
           <Reveal>
-            <p className="diff-eyebrow"><span className="diff-eyebrow-line" />WHY DIFFERENT</p>
+            <p className="diff-eyebrow">WHY DIFFERENT</p>
             <h2 className="diff-title">We traded the familiar for the real</h2>
           </Reveal>
           <Reveal delay={1}>
