@@ -76,14 +76,14 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 section { position: relative; }
 .section-pad { padding: clamp(56px, 8vw, 110px) 0; }
-.section-pad-sm { padding: clamp(40px, 6vw, 78px) 0; }
+.section-pad-sm { padding: clamp(56px, 8vw, 100px) 0; }
 
 .rule { height: 1px; background: var(--forest-line); border: 0; width: 100%; }
 
 /* ---------- Type ---------------------------------------------------------- */
 .eyebrow {
   font-family: var(--sans);
-  font-size: 0.76rem; font-weight: 700;
+  font-size: 0.86rem; font-weight: 700;
   letter-spacing: 0.28em; text-transform: uppercase;
   color: var(--copper-light);
   display: block;
@@ -551,6 +551,60 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
   margin: 0 auto;
   padding: 10px 0;
   max-width: 20ch;
+  background: radial-gradient(
+    circle calc(var(--torch-r, 0px) * 0.62) at var(--tx, 50%) var(--ty, 50%),
+    #ffffff 0%,
+    #fff8e8 20%,
+    #f5ecd8 40%,
+    #d69a5c 60%,
+    rgba(214, 154, 92, 0.3) 80%,
+    rgba(245, 236, 216, 0.22) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  will-change: background, filter;
+  transition: filter 0.3s var(--ease);
+}
+
+/* Manifesto split layout */
+.manifesto-section {
+  background: var(--forest-925);
+  padding: clamp(64px, 9vw, 120px) 0;
+  border-top: 1px solid var(--forest-line-soft);
+  border-bottom: 1px solid var(--forest-line-soft);
+}
+.manifesto-layout {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: clamp(48px, 6vw, 96px);
+  align-items: center;
+}
+.manifesto-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-right: 1px solid var(--forest-line-soft);
+  padding-right: clamp(32px, 4vw, 64px);
+}
+.manifesto-right {
+  display: flex;
+  align-items: center;
+}
+
+.manifesto-quote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 450;
+  font-size: clamp(2rem, 4.2vw, 3.6rem);
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
+  margin: 0;
+  max-width: 42ch;
+  text-align: left;
   background: radial-gradient(
     circle calc(var(--torch-r, 0px) * 0.62) at var(--tx, 50%) var(--ty, 50%),
     #ffffff 0%,

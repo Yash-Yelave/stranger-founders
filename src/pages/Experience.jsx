@@ -1,6 +1,70 @@
+import { useRef, useEffect } from 'react'
 import Reveal from '../components/Reveal.jsx'
 import CtaBand from '../components/CtaBand.jsx'
 import { journey } from '../data/content.js'
+
+function ManifestoQuote() {
+  const quoteRef = useRef(null)
+  const coordsRef = useRef({ x: 0, y: 0 })
+  const radiusRef = useRef(0)
+  const targetRadiusRef = useRef(0)
+  const animationFrameRef = useRef(null)
+
+  useEffect(() => {
+    const el = quoteRef.current
+    if (!el) return
+
+    const update = () => {
+      // Lerp radius
+      radiusRef.current += (targetRadiusRef.current - radiusRef.current) * 0.08
+      
+      // Update element styles
+      el.style.setProperty('--tx', `${coordsRef.current.x}px`)
+      el.style.setProperty('--ty', `${coordsRef.current.y}px`)
+      el.style.setProperty('--torch-r', `${radiusRef.current}px`)
+      
+      // Calculate drop-shadow filter based on current radius ratio
+      const glowIntensity = radiusRef.current / 350
+      el.style.filter = `drop-shadow(0 0 ${glowIntensity * 20}px rgba(214, 154, 92, ${glowIntensity * 0.7})) drop-shadow(0 0 ${glowIntensity * 40}px rgba(245, 236, 216, ${glowIntensity * 0.45}))`
+
+      animationFrameRef.current = requestAnimationFrame(update)
+    }
+
+    animationFrameRef.current = requestAnimationFrame(update)
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current)
+      }
+    }
+  }, [])
+
+  const handleMouseMove = (e) => {
+    const el = quoteRef.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    coordsRef.current = {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    }
+    targetRadiusRef.current = 350
+  }
+
+  const handleMouseLeave = () => {
+    targetRadiusRef.current = 0
+  }
+
+  return (
+    <p 
+      ref={quoteRef}
+      className="manifesto-quote"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      "We believe every stranger carries an opportunity. That the best conversations happen away from stages. That a fire, a forest and four honest founders can do what a thousand business cards never will."
+    </p>
+  )
+}
 
 export default function Experience() {
   return (
@@ -46,15 +110,14 @@ export default function Experience() {
       </section>
 
       {/* Manifesto */}
-      <section className="section-pad-sm" style={{ background: 'var(--forest-925)' }}>
-        <div className="container narrow statement" style={{ textAlign: 'center' }}>
-          <Reveal><span className="eyebrow center plain">The SF Manifesto</span></Reveal>
-          <Reveal delay={1} style={{ marginTop: 28 }}>
-            <p>
-              We believe every stranger carries an opportunity. That the best conversations
-              happen away from stages. That a fire, a forest and four honest founders can do
-              what a thousand business cards never will.
-            </p>
+      <section className="manifesto-section">
+        <div className="container manifesto-layout">
+          <Reveal className="manifesto-left">
+            <span className="eyebrow">The SF</span>
+            <span className="eyebrow">Manifesto</span>
+          </Reveal>
+          <Reveal delay={1} className="manifesto-right">
+            <ManifestoQuote />
           </Reveal>
         </div>
       </section>
