@@ -54,7 +54,7 @@ export default function CinematicIntroOverlay() {
     // Preload & transition to DOOR_LOCKED
     const preloadTimer = setTimeout(() => {
       transitionTo(INTRO_STATES.DOOR_LOCKED)
-    }, 400)
+    }, 100)
 
     return () => clearTimeout(preloadTimer)
   }, [pathname, transitionTo])

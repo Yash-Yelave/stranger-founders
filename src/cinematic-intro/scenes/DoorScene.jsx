@@ -10,15 +10,33 @@ export default function DoorScene({ currentState, onTransition }) {
   const [keyDragging, setKeyDragging] = useState(false)
   const [keyPos, setKeyPos] = useState({ x: 0, y: 0 })
   const [keyInserted, setKeyInserted] = useState(false)
-  const [cameraAtTop, setCameraAtTop] = useState(true)
 
   const lockRef = useRef(null)
   const keyRef = useRef(null)
   const isTouchRef = useRef(false)
   const insertedRef = useRef(false)
+  const keyPosRef = useRef({ x: 0, y: 0 })
 
   // Secret key box index (box index 1 of 3)
   const KEY_BOX_INDEX = 1
+
+  // Keep ref synced with keyPos state
+  useEffect(() => {
+    keyPosRef.current = keyPos
+  }, [keyPos])
+
+  // Reset insertion flags whenever scene is in pre-insertion states
+  useEffect(() => {
+    if (
+      currentState === INTRO_STATES.INITIALIZING ||
+      currentState === INTRO_STATES.DOOR_LOCKED ||
+      currentState === INTRO_STATES.SEARCHING_FOR_KEY ||
+      currentState === INTRO_STATES.KEY_FOUND
+    ) {
+      insertedRef.current = false
+      setKeyInserted(false)
+    }
+  }, [currentState])
 
   // Handle scroll exploration between Scene 1 (door) and Scene 2 (boxes)
   useEffect(() => {
@@ -32,7 +50,6 @@ export default function DoorScene({ currentState, onTransition }) {
       let next = 0
       setScrollY((prev) => {
         next = Math.max(0, Math.min(window.innerHeight, prev + e.deltaY * INTRO_CONFIG.SCROLL_SENSITIVITY))
-        setCameraAtTop(next === 0)
         return next
       })
 
@@ -53,9 +70,8 @@ export default function DoorScene({ currentState, onTransition }) {
     if (insertedRef.current) return
     insertedRef.current = true
 
-    // Ensure camera is locked at top
+    // Ensure camera track is at top
     setScrollY(0)
-    setCameraAtTop(true)
 
     setKeyDragging(false)
     setKeyInserted(true)
@@ -86,13 +102,12 @@ export default function DoorScene({ currentState, onTransition }) {
       onTransition(INTRO_STATES.KEY_FOUND)
 
       // Initial key position
-      setKeyPos({ x: window.innerWidth / 2, y: window.innerHeight * 0.5 })
+      const initialPos = { x: window.innerWidth / 2, y: window.innerHeight * 0.55 }
+      setKeyPos(initialPos)
+      keyPosRef.current = initialPos
 
-      // Instantly begin smooth camera return to Scene 1 (door container at top)
+      // Smoothly return camera to Scene 1 (door container at top)
       setScrollY(0)
-      setTimeout(() => {
-        setCameraAtTop(true)
-      }, 600)
     }
   }
 
@@ -116,7 +131,7 @@ export default function DoorScene({ currentState, onTransition }) {
     }
   }
 
-  // Continuous pointer move tracking whenever key is found
+  // Continuous pointer move listener to update key position
   useEffect(() => {
     if (!keyFound || insertedRef.current) return
 
@@ -132,22 +147,9 @@ export default function DoorScene({ currentState, onTransition }) {
         isTouchRef.current = true
       }
 
-      setKeyPos({ x: clientX, y: clientY })
-
-      // Check proximity to lock center ONLY when camera is returned to top (scrollY === 0)
-      if (lockRef.current && (scrollY === 0 || cameraAtTop)) {
-        const lockRect = lockRef.current.getBoundingClientRect()
-        const lockCenter = {
-          x: lockRect.left + lockRect.width / 2,
-          y: lockRect.top + lockRect.height / 2
-        }
-
-        const radius = isTouchRef.current ? 100 : 80
-
-        if (isWithinProximity({ x: clientX, y: clientY }, lockCenter, radius)) {
-          triggerUnlockAndOpenSequence(lockCenter.x, lockCenter.y)
-        }
-      }
+      const newPos = { x: clientX, y: clientY }
+      setKeyPos(newPos)
+      keyPosRef.current = newPos
     }
 
     window.addEventListener('pointermove', handlePointerMove)
@@ -157,8 +159,39 @@ export default function DoorScene({ currentState, onTransition }) {
       window.removeEventListener('pointermove', handlePointerMove)
       window.removeEventListener('touchmove', handlePointerMove)
     }
-  }, [cameraAtTop, keyFound, scrollY, triggerUnlockAndOpenSequence])
+  }, [keyFound])
 
+  // Continuous animation frame loop to detect proximity even when mouse is stationary
+  useEffect(() => {
+    if (!keyFound || insertedRef.current) return
+
+    let animId
+    const checkProximityLoop = () => {
+      if (insertedRef.current) return
+
+      if (lockRef.current) {
+        const lockRect = lockRef.current.getBoundingClientRect()
+        const lockCenter = {
+          x: lockRect.left + lockRect.width / 2,
+          y: lockRect.top + lockRect.height / 2
+        }
+
+        const radius = isTouchRef.current ? 120 : 95
+
+        if (isWithinProximity(keyPosRef.current, lockCenter, radius)) {
+          triggerUnlockAndOpenSequence(lockCenter.x, lockCenter.y)
+          return
+        }
+      }
+
+      animId = requestAnimationFrame(checkProximityLoop)
+    }
+
+    animId = requestAnimationFrame(checkProximityLoop)
+    return () => cancelAnimationFrame(animId)
+  }, [keyFound, triggerUnlockAndOpenSequence])
+
+  // ENTERING_DARKNESS walk-through transition to dark website
   useEffect(() => {
     if (currentState === INTRO_STATES.ENTERING_DARKNESS) {
       const timer = setTimeout(() => {

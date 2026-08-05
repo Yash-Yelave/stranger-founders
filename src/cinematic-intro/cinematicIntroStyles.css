@@ -99,7 +99,7 @@
   border-radius: 120px 120px 0 0;
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), inset 0 0 30px rgba(0, 0, 0, 0.8);
   overflow: hidden;
-  background: #09130d;
+  background: #000000;
   transition: overflow 0.3s;
 }
 
@@ -114,19 +114,6 @@
   display: flex;
   perspective: 1000px;
   perspective-origin: center center;
-}
-
-/* Interior Golden Glow when Door Opens */
-.door-interior-glow {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 60%, rgba(214, 154, 92, 0.6) 0%, rgba(179, 112, 58, 0.2) 50%, #000000 100%);
-  opacity: 0;
-  transition: opacity 1.2s ease-in;
-  pointer-events: none;
-}
-.door-frame.open .door-interior-glow {
-  opacity: 1;
 }
 
 .door-wing {
