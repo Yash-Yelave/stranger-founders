@@ -4,6 +4,7 @@ import Nav from './components/Nav.jsx'
 import Footer from './components/Footer.jsx'
 import Grain from './components/Grain.jsx'
 import SiteEffects from './components/SiteEffects.jsx'
+import CinematicIntroOverlay from './cinematic-intro/CinematicIntroOverlay.jsx'
 import Home from './pages/Home.jsx'
 import Experience from './pages/Experience.jsx'
 import Season from './pages/Season.jsx'
@@ -20,6 +21,9 @@ function ScrollToTop() {
 export default function App() {
   return (
     <>
+      {/* Cinematic Interactive Introduction Overlay (Homepage only) */}
+      <CinematicIntroOverlay />
+
       {/* Scroll progress bar */}
       <div id="scrollProgress" className="scroll-progress" aria-hidden="true" />
 
