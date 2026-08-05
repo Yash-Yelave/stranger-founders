@@ -177,7 +177,6 @@ export default function CinematicIntroOverlay() {
   ].includes(currentState)
 
   const isDarknessTransitionActive = [
-    INTRO_STATES.ENTERING_DARKNESS,
     INTRO_STATES.DISTANT_LIGHT,
     INTRO_STATES.LIGHT_APPROACHING,
     INTRO_STATES.WHITE_FLASH,

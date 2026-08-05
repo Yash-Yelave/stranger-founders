@@ -146,6 +146,16 @@ export default function DoorScene({ currentState, onTransition }) {
     }
   }, [triggerUnlockAndOpenSequence, keyFound])
 
+  useEffect(() => {
+    if (currentState === INTRO_STATES.ENTERING_DARKNESS) {
+      const timer = setTimeout(() => {
+        onTransition(INTRO_STATES.DISTANT_LIGHT)
+      }, INTRO_CONFIG.CAMERA_WALK_THROUGH_DURATION)
+
+      return () => clearTimeout(timer)
+    }
+  }, [currentState, onTransition])
+
   const isUnlocked = [
     INTRO_STATES.KEY_INSERTED,
     INTRO_STATES.DOOR_UNLOCKING,
