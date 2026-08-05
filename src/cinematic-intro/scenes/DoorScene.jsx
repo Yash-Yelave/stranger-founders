@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { INTRO_STATES } from '../IntroStateMachine'
 import { INTRO_CONFIG } from '../introConfig'
 import { isWithinProximity } from '../hooks/useProximityDetection'
@@ -9,17 +9,23 @@ export default function DoorScene({ currentState, onTransition }) {
   const [keyFound, setKeyFound] = useState(false)
   const [keyDragging, setKeyDragging] = useState(false)
   const [keyPos, setKeyPos] = useState({ x: 0, y: 0 })
+  const [keyInserted, setKeyInserted] = useState(false)
 
   const lockRef = useRef(null)
   const keyRef = useRef(null)
   const isTouchRef = useRef(false)
+  const insertedRef = useRef(false)
 
   // Secret key box index (box index 1 of 3)
   const KEY_BOX_INDEX = 1
 
   // Handle scroll exploration to transition between Scene 1 and Scene 2
   useEffect(() => {
-    if (currentState !== INTRO_STATES.DOOR_LOCKED && currentState !== INTRO_STATES.SCROLLING_TO_BOXES && currentState !== INTRO_STATES.SEARCHING_FOR_KEY) return
+    if (
+      currentState !== INTRO_STATES.DOOR_LOCKED &&
+      currentState !== INTRO_STATES.SCROLLING_TO_BOXES &&
+      currentState !== INTRO_STATES.SEARCHING_FOR_KEY
+    ) return
 
     const handleWheel = (e) => {
       setScrollY((prev) => {
@@ -46,18 +52,66 @@ export default function DoorScene({ currentState, onTransition }) {
       onTransition(INTRO_STATES.KEY_FOUND)
       // Initial position for key near the open box
       setKeyPos({ x: window.innerWidth / 2, y: window.innerHeight * 0.65 })
+
+      // Smoothly return camera to door in Scene 1 so the door is front & center!
+      setTimeout(() => {
+        setScrollY(0)
+      }, 500)
     }
   }
 
   // Pointer drag for key
   const handleKeyPointerDown = (e) => {
-    if (!keyFound) return
+    if (!keyFound || insertedRef.current) return
     setKeyDragging(true)
     onTransition(INTRO_STATES.KEY_DRAGGING)
   }
 
+  // Check key insertion and door sequence
+  const handleMoveKey = useCallback((clientX, clientY) => {
+    if (insertedRef.current) return
+
+    setKeyPos({ x: clientX, y: clientY })
+
+    // Check proximity to lock
+    if (lockRef.current) {
+      const lockRect = lockRef.current.getBoundingClientRect()
+      const lockCenter = {
+        x: lockRect.left + lockRect.width / 2,
+        y: lockRect.top + lockRect.height / 2
+      }
+
+      const radius = isTouchRef.current
+        ? INTRO_CONFIG.KEY_LOCK_MOBILE_RADIUS
+        : INTRO_CONFIG.KEY_LOCK_PROXIMITY_RADIUS
+
+      if (isWithinProximity({ x: clientX, y: clientY }, lockCenter, radius)) {
+        insertedRef.current = true
+        setKeyDragging(false)
+        setKeyInserted(true)
+        setKeyPos({ x: lockCenter.x, y: lockCenter.y })
+        onTransition(INTRO_STATES.KEY_INSERTED)
+
+        // Step 1: Animate lock opening
+        setTimeout(() => {
+          onTransition(INTRO_STATES.DOOR_UNLOCKING)
+        }, 500)
+
+        // Step 2: Animate door wings opening
+        setTimeout(() => {
+          onTransition(INTRO_STATES.DOOR_OPENING)
+        }, 500 + INTRO_CONFIG.DOOR_UNLOCK_DURATION)
+
+        // Step 3: Transition to darkness
+        setTimeout(() => {
+          onTransition(INTRO_STATES.ENTERING_DARKNESS)
+        }, 500 + INTRO_CONFIG.DOOR_UNLOCK_DURATION + INTRO_CONFIG.DOOR_OPEN_DURATION)
+      }
+    }
+  }, [onTransition])
+
   useEffect(() => {
-    if (!keyDragging) return
+    if (!keyDragging || insertedRef.current) return
 
     const handlePointerMove = (e) => {
       let clientX = e.clientX
@@ -69,38 +123,7 @@ export default function DoorScene({ currentState, onTransition }) {
         isTouchRef.current = true
       }
 
-      setKeyPos({ x: clientX, y: clientY })
-
-      // Check proximity to lock
-      if (lockRef.current) {
-        const lockRect = lockRef.current.getBoundingClientRect()
-        const lockCenter = {
-          x: lockRect.left + lockRect.width / 2,
-          y: lockRect.top + lockRect.height / 2
-        }
-
-        const radius = isTouchRef.current ? INTRO_CONFIG.KEY_LOCK_MOBILE_RADIUS : INTRO_CONFIG.KEY_LOCK_PROXIMITY_RADIUS
-
-        if (isWithinProximity({ x: clientX, y: clientY }, lockCenter, radius)) {
-          // Snap key into lock!
-          setKeyDragging(false)
-          setKeyPos({ x: lockCenter.x, y: lockCenter.y })
-          onTransition(INTRO_STATES.KEY_INSERTED)
-
-          // Animate unlock -> open door sequence
-          setTimeout(() => {
-            onTransition(INTRO_STATES.DOOR_UNLOCKING)
-          }, 300)
-
-          setTimeout(() => {
-            onTransition(INTRO_STATES.DOOR_OPENING)
-          }, 300 + INTRO_CONFIG.DOOR_UNLOCK_DURATION)
-
-          setTimeout(() => {
-            onTransition(INTRO_STATES.ENTERING_DARKNESS)
-          }, 300 + INTRO_CONFIG.DOOR_UNLOCK_DURATION + INTRO_CONFIG.DOOR_OPEN_DURATION)
-        }
-      }
+      handleMoveKey(clientX, clientY)
     }
 
     const handlePointerUp = () => {
@@ -120,7 +143,7 @@ export default function DoorScene({ currentState, onTransition }) {
       window.removeEventListener('pointerup', handlePointerUp)
       window.removeEventListener('touchend', handlePointerUp)
     }
-  }, [keyDragging, onTransition])
+  }, [handleMoveKey, keyDragging])
 
   const isUnlocked = [
     INTRO_STATES.KEY_INSERTED,
@@ -144,7 +167,7 @@ export default function DoorScene({ currentState, onTransition }) {
       >
         {/* Scene 1: The Large Closed Door */}
         <div className="door-container">
-          <div className="door-frame">
+          <div className={`door-frame ${isDoorOpen ? 'open' : ''}`}>
             <div className="door-wings-wrapper">
               <div className={`door-wing left ${isDoorOpen ? 'open' : ''}`}>
                 <div className="door-wing-texture" />
@@ -205,10 +228,12 @@ export default function DoorScene({ currentState, onTransition }) {
       {keyFound && (
         <div
           ref={keyRef}
-          className={`draggable-key ${keyDragging ? 'dragging' : ''}`}
+          className={`draggable-key ${keyDragging ? 'dragging' : ''} ${keyInserted ? 'inserted' : ''}`}
           style={{
             left: `${keyPos.x - 28}px`,
-            top: `${keyPos.y - 28}px`
+            top: `${keyPos.y - 28}px`,
+            transition: keyInserted ? 'all 0.4s ease-out' : 'none',
+            transform: keyInserted ? 'scale(0.85) rotate(90deg)' : undefined
           }}
           onPointerDown={handleKeyPointerDown}
           onTouchStart={handleKeyPointerDown}
