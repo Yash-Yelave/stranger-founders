@@ -44,76 +44,71 @@ export default function DoorScene({ currentState, onTransition }) {
     return () => window.removeEventListener('wheel', handleWheel)
   }, [currentState, keyFound, onTransition])
 
+  // Execute sequence when key is inserted into lock
+  const triggerUnlockAndOpenSequence = useCallback((targetX, targetY) => {
+    if (insertedRef.current) return
+    insertedRef.current = true
+
+    setKeyDragging(false)
+    setKeyInserted(true)
+    setKeyPos({ x: targetX, y: targetY })
+    onTransition(INTRO_STATES.KEY_INSERTED)
+
+    // 1. Turn key & unlock shackle
+    setTimeout(() => {
+      onTransition(INTRO_STATES.DOOR_UNLOCKING)
+    }, 400)
+
+    // 2. Swing open 3D door wings
+    setTimeout(() => {
+      onTransition(INTRO_STATES.DOOR_OPENING)
+    }, 400 + INTRO_CONFIG.DOOR_UNLOCK_DURATION)
+
+    // 3. Walk through doorway into darkness
+    setTimeout(() => {
+      onTransition(INTRO_STATES.ENTERING_DARKNESS)
+    }, 400 + INTRO_CONFIG.DOOR_UNLOCK_DURATION + INTRO_CONFIG.DOOR_OPEN_DURATION)
+  }, [onTransition])
+
   // Handle box click to discover key
   const handleBoxClick = (index) => {
     setOpenBoxIndex(index)
     if (index === KEY_BOX_INDEX && !keyFound) {
       setKeyFound(true)
       onTransition(INTRO_STATES.KEY_FOUND)
-      // Initial position for key near the open box
+      // Initial position for key near bottom center
       setKeyPos({ x: window.innerWidth / 2, y: window.innerHeight * 0.65 })
 
       // Smoothly return camera to door in Scene 1 so the door is front & center!
       setTimeout(() => {
         setScrollY(0)
-      }, 500)
+      }, 400)
     }
   }
 
   // Pointer drag for key
-  const handleKeyPointerDown = (e) => {
+  const handleKeyPointerDown = () => {
     if (!keyFound || insertedRef.current) return
     setKeyDragging(true)
     onTransition(INTRO_STATES.KEY_DRAGGING)
   }
 
-  // Check key insertion and door sequence
-  const handleMoveKey = useCallback((clientX, clientY) => {
-    if (insertedRef.current) return
-
-    setKeyPos({ x: clientX, y: clientY })
-
-    // Check proximity to lock
+  // Lock click fallback (allows direct click on lock when key is found)
+  const handleLockClick = () => {
+    if (!keyFound || insertedRef.current) return
     if (lockRef.current) {
       const lockRect = lockRef.current.getBoundingClientRect()
-      const lockCenter = {
-        x: lockRect.left + lockRect.width / 2,
-        y: lockRect.top + lockRect.height / 2
-      }
-
-      const radius = isTouchRef.current
-        ? INTRO_CONFIG.KEY_LOCK_MOBILE_RADIUS
-        : INTRO_CONFIG.KEY_LOCK_PROXIMITY_RADIUS
-
-      if (isWithinProximity({ x: clientX, y: clientY }, lockCenter, radius)) {
-        insertedRef.current = true
-        setKeyDragging(false)
-        setKeyInserted(true)
-        setKeyPos({ x: lockCenter.x, y: lockCenter.y })
-        onTransition(INTRO_STATES.KEY_INSERTED)
-
-        // Step 1: Animate lock opening
-        setTimeout(() => {
-          onTransition(INTRO_STATES.DOOR_UNLOCKING)
-        }, 500)
-
-        // Step 2: Animate door wings opening
-        setTimeout(() => {
-          onTransition(INTRO_STATES.DOOR_OPENING)
-        }, 500 + INTRO_CONFIG.DOOR_UNLOCK_DURATION)
-
-        // Step 3: Transition to darkness
-        setTimeout(() => {
-          onTransition(INTRO_STATES.ENTERING_DARKNESS)
-        }, 500 + INTRO_CONFIG.DOOR_UNLOCK_DURATION + INTRO_CONFIG.DOOR_OPEN_DURATION)
-      }
+      triggerUnlockAndOpenSequence(lockRect.left + lockRect.width / 2, lockRect.top + lockRect.height / 2)
     }
-  }, [onTransition])
+  }
 
+  // Continuous pointer move tracking whenever key is found
   useEffect(() => {
-    if (!keyDragging || insertedRef.current) return
+    if (!keyFound || insertedRef.current) return
 
     const handlePointerMove = (e) => {
+      if (insertedRef.current) return
+
       let clientX = e.clientX
       let clientY = e.clientY
 
@@ -123,27 +118,33 @@ export default function DoorScene({ currentState, onTransition }) {
         isTouchRef.current = true
       }
 
-      handleMoveKey(clientX, clientY)
-    }
+      setKeyPos({ x: clientX, y: clientY })
 
-    const handlePointerUp = () => {
-      if (keyDragging) {
-        setKeyDragging(false)
+      // Check proximity to lock center
+      if (lockRef.current) {
+        const lockRect = lockRef.current.getBoundingClientRect()
+        const lockCenter = {
+          x: lockRect.left + lockRect.width / 2,
+          y: lockRect.top + lockRect.height / 2
+        }
+
+        // Generous activation radius for effortless interaction
+        const radius = isTouchRef.current ? 110 : 90
+
+        if (isWithinProximity({ x: clientX, y: clientY }, lockCenter, radius)) {
+          triggerUnlockAndOpenSequence(lockCenter.x, lockCenter.y)
+        }
       }
     }
 
     window.addEventListener('pointermove', handlePointerMove)
     window.addEventListener('touchmove', handlePointerMove)
-    window.addEventListener('pointerup', handlePointerUp)
-    window.addEventListener('touchend', handlePointerUp)
 
     return () => {
       window.removeEventListener('pointermove', handlePointerMove)
       window.removeEventListener('touchmove', handlePointerMove)
-      window.removeEventListener('pointerup', handlePointerUp)
-      window.removeEventListener('touchend', handlePointerUp)
     }
-  }, [handleMoveKey, keyDragging])
+  }, [handleUnlockSequence: triggerUnlockAndOpenSequence, keyFound])
 
   const isUnlocked = [
     INTRO_STATES.KEY_INSERTED,
@@ -181,6 +182,8 @@ export default function DoorScene({ currentState, onTransition }) {
             <div
               ref={lockRef}
               className={`lock-assembly ${isUnlocked ? 'unlocked' : ''}`}
+              onClick={handleLockClick}
+              style={{ cursor: keyFound && !keyInserted ? 'pointer' : 'default' }}
             >
               <div className="lock-shackle" />
               <div className="lock-plate">
@@ -201,7 +204,7 @@ export default function DoorScene({ currentState, onTransition }) {
         {/* Scene 2: Chamber of Wooden Boxes */}
         <div className="boxes-chamber">
           <h2 className="chamber-title">
-            {keyFound ? 'Carry the key up to the door lock' : 'Search the boxes for the key'}
+            {keyFound ? 'Bring the key to the lock' : 'Search the boxes for the key'}
           </h2>
 
           <div className="boxes-grid">
@@ -232,6 +235,7 @@ export default function DoorScene({ currentState, onTransition }) {
           style={{
             left: `${keyPos.x - 28}px`,
             top: `${keyPos.y - 28}px`,
+            pointerEvents: 'none',
             transition: keyInserted ? 'all 0.4s ease-out' : 'none',
             transform: keyInserted ? 'scale(0.85) rotate(90deg)' : undefined
           }}
