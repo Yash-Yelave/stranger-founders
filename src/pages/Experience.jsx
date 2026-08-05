@@ -61,7 +61,7 @@ function ManifestoQuote() {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      "We believe every stranger carries an opportunity. That the best conversations happen away from stages. That a fire, a forest and four honest founders can do what a thousand business cards never will."
+      "We believe every stranger carries an opportunity. That the best conversations happen away from stages. Nature and four honest founders can do what a thousand business cards never will."
     </p>
   )
 }

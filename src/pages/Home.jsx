@@ -13,7 +13,7 @@ const homeFaqs = [
   { q: 'How do I get in?', a: 'By invitation or application. Curated founders are invited directly; others apply and are individually reviewed before an invitation is extended. There is no open sign-up.' },
   { q: 'Is this a networking event?', a: "No. It's an immersive founder experience — no stage, no pitching, no business cards. Only four people, one fire, and real conversations that go somewhere." },
   { q: 'How many founders per gathering?', a: "Four. Small by design — it's the only number where genuine relationships actually form, not just exchanges of details." },
-  { q: 'Where does it happen?', a: 'At nature venues across India — forests, farms and mountains, away from stages and noise. Exact locations are shared with confirmed founders only.' },
+  { q: 'Where does it happen?', a: 'At nature venues across India — nature, farms and mountains, away from stages and noise. Exact locations are shared with confirmed founders only.' },
   { q: 'Can my brand partner with Stranger Founders?', a: 'Yes — selectively. We work only with brands genuinely aligned with founders and creator communities. Start a conversation on the Partners page.' },
 ]
 
@@ -168,7 +168,7 @@ const mediaItems = [
   },
   {
     category: 'Walks',
-    title: 'The Forest Walk',
+    title: 'The Nature Walk',
     id: 'AwxRgXAqqec'
   },
   {
@@ -479,8 +479,8 @@ export default function Home() {
                 <span>Unlike podcasts.</span>
               </div>
               <p className="story-body">
-                We bring strangers together in forests, farms, mountains and
-                nature — away from stages, away from noise, away from business cards.
+                We bring strangers together in nature, farms and
+                mountains — away from stages, away from noise, away from business cards.
               </p>
               <p className="story-body">
                 Founders participate in challenges. Share stories. Discuss
@@ -508,7 +508,7 @@ export default function Home() {
           <Reveal delay={1}>
             <div className="diff-card-stack">
               {[
-                ['Conference Rooms', 'Forests'],
+                ['Conference Rooms', 'Nature'],
                 ['Networking', 'Experiences'],
                 ['Speeches', 'Conversations'],
                 ['Business Cards', 'Relationships'],

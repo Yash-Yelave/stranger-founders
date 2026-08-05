@@ -2,7 +2,7 @@
 
 export const journey = [
   { t: 'The Invitation', d: 'It begins quietly. No open sign-ups — a curated founder receives a single line: “You’ve been invited.”' },
-  { t: 'The Arrival', d: 'Four strangers reach a venue in the wild. No badges, no schedule on a screen — only the sound of the forest.' },
+  { t: 'The Arrival', d: 'Four strangers reach a venue in the wild. No badges, no schedule on a screen — only the sound of nature.' },
   { t: 'Founder Activities', d: 'Challenges built to pull everyone out of their comfort zone — where real character shows up faster than any pitch.' },
   { t: 'The Conversations', d: 'Guided by Ram Prayaga: candid business, money and craft — the tactics founders rarely share on a stage.' },
   { t: 'Experience', d: 'Ideas that could only have been born here. Partnerships, trades and creative bets between former strangers.' },
@@ -10,7 +10,7 @@ export const journey = [
 ]
 
 export const trades = [
-  ['Conference Rooms', 'Forests'],
+  ['Conference Rooms', 'Nature'],
   ['Networking', 'Experiences'],
   ['Speeches', 'Conversations'],
   ['Business Cards', 'Relationships'],
@@ -54,7 +54,7 @@ export const founderFaqs = [
   { q: 'How do I join?', a: 'By invitation or application. Curated founders are invited directly; others apply and are reviewed by the team before an invitation is extended.' },
   { q: 'Can anyone attend?', a: 'No. There is no audience and no general admission. Every founder in the room is individually curated.' },
   { q: 'Is this a networking event?', a: 'No. It’s an immersive founder experience. No stage, no pitching, no business cards — only real conversations, challenges and collaboration.' },
-  { q: 'Where does it happen?', a: 'At nature venues across India — forests, farms and mountains, away from stages and noise. Exact locations are shared with confirmed founders.' },
+  { q: 'Where does it happen?', a: 'At nature venues across India — nature, farms and mountains, away from stages and noise. Exact locations are shared with confirmed founders.' },
   { q: 'How many founders take part?', a: 'Four founders per experience. Small by design — it’s the only way genuine relationships form.' },
   { q: 'Can I nominate someone?', a: 'Yes. If you know a founder who belongs at the fire, you can nominate them through the application form.' },
 ]
