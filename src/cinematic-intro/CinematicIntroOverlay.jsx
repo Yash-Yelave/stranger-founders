@@ -172,7 +172,8 @@ export default function CinematicIntroOverlay() {
     INTRO_STATES.KEY_DRAGGING,
     INTRO_STATES.KEY_INSERTED,
     INTRO_STATES.DOOR_UNLOCKING,
-    INTRO_STATES.DOOR_OPENING
+    INTRO_STATES.DOOR_OPENING,
+    INTRO_STATES.ENTERING_DARKNESS
   ].includes(currentState)
 
   const isDarknessTransitionActive = [
@@ -181,6 +182,12 @@ export default function CinematicIntroOverlay() {
     INTRO_STATES.LIGHT_APPROACHING,
     INTRO_STATES.WHITE_FLASH,
     INTRO_STATES.RETURN_TO_DARKNESS
+  ].includes(currentState)
+
+  const isSolidBlackActive = [
+    INTRO_STATES.RETURN_TO_DARKNESS,
+    INTRO_STATES.TORCH_AVAILABLE,
+    INTRO_STATES.TORCH_IGNITION
   ].includes(currentState)
 
   return (
@@ -208,6 +215,11 @@ export default function CinematicIntroOverlay() {
           onTransition={transitionTo}
           isReducedMotion={isReducedMotion}
         />
+      )}
+
+      {/* Full Pitch Black Layer (Before Flambeau Ignition) */}
+      {isSolidBlackActive && (
+        <div className="solid-black-layer" />
       )}
 
       {/* Scene 6: Right Stationary Burning Torch */}

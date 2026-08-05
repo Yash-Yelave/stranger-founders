@@ -144,7 +144,7 @@ export default function DoorScene({ currentState, onTransition }) {
       window.removeEventListener('pointermove', handlePointerMove)
       window.removeEventListener('touchmove', handlePointerMove)
     }
-  }, [handleUnlockSequence: triggerUnlockAndOpenSequence, keyFound])
+  }, [triggerUnlockAndOpenSequence, keyFound])
 
   const isUnlocked = [
     INTRO_STATES.KEY_INSERTED,
@@ -158,6 +158,8 @@ export default function DoorScene({ currentState, onTransition }) {
     INTRO_STATES.ENTERING_DARKNESS
   ].includes(currentState)
 
+  const isZoomingIn = currentState === INTRO_STATES.ENTERING_DARKNESS
+
   return (
     <div className="door-scene-viewport">
       <div
@@ -167,7 +169,7 @@ export default function DoorScene({ currentState, onTransition }) {
         }}
       >
         {/* Scene 1: The Large Closed Door */}
-        <div className="door-container">
+        <div className={`door-container ${isZoomingIn ? 'zooming-in' : ''}`}>
           <div className={`door-frame ${isDoorOpen ? 'open' : ''}`}>
             <div className="door-wings-wrapper">
               <div className={`door-wing left ${isDoorOpen ? 'open' : ''}`}>

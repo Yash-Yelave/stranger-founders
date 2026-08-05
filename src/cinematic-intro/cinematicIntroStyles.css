@@ -70,6 +70,23 @@
   align-items: center;
   justify-content: center;
   background: radial-gradient(circle at 50% 40%, #102117 0%, #060b08 70%);
+  transition: transform 1.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 1.2s ease-in;
+  transform-origin: center center;
+}
+
+.door-container.zooming-in {
+  transform: scale(3.8) translateY(5%);
+  opacity: 0;
+}
+
+/* Pitch Black Background Layer (Before Flambeau Ignition) */
+.solid-black-layer {
+  position: absolute;
+  inset: 0;
+  background: #000000;
+  z-index: 10;
+  pointer-events: none;
+  transition: opacity 0.8s ease-out;
 }
 
 /* Door Frame & Wings */
