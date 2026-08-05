@@ -181,12 +181,15 @@ export default function DoorScene({ currentState, onTransition }) {
         {/* Scene 1: The Large Closed Door */}
         <div className={`door-container ${isZoomingIn ? 'zooming-in' : ''}`}>
           <div className={`door-frame ${isDoorOpen ? 'open' : ''}`}>
+            <div className="door-interior-glow" />
             <div className="door-wings-wrapper">
               <div className={`door-wing left ${isDoorOpen ? 'open' : ''}`}>
                 <div className="door-wing-texture" />
+                <div className="door-handle" />
               </div>
               <div className={`door-wing right ${isDoorOpen ? 'open' : ''}`}>
                 <div className="door-wing-texture" />
+                <div className="door-handle" />
               </div>
             </div>
 
@@ -247,7 +250,6 @@ export default function DoorScene({ currentState, onTransition }) {
           style={{
             left: `${keyPos.x - 28}px`,
             top: `${keyPos.y - 28}px`,
-            pointerEvents: 'none',
             transition: keyInserted ? 'all 0.4s ease-out' : 'none',
             transform: keyInserted ? 'scale(0.85) rotate(90deg)' : undefined
           }}
