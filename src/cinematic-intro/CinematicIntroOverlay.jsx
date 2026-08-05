@@ -212,7 +212,11 @@ export default function CinematicIntroOverlay() {
       )}
 
       {/* Scene 6: Right Stationary Burning Torch */}
-      {currentState === INTRO_STATES.TORCH_AVAILABLE && (
+      {[
+        INTRO_STATES.TORCH_AVAILABLE,
+        INTRO_STATES.TORCH_IGNITION,
+        INTRO_STATES.TORCH_LIT
+      ].includes(currentState) && (
         <StationaryTorch torchPosRef={stationaryTorchPosRef} />
       )}
 
@@ -234,6 +238,7 @@ export default function CinematicIntroOverlay() {
           campfirePos={campfirePos}
           currentState={currentState}
           progress={ignitionProgress}
+          lerpPosRef={lerpPosRef}
         />
       )}
 

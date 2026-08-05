@@ -24,13 +24,13 @@ export default function StationaryTorch({ torchPosRef }) {
         <div
           style={{
             position: 'absolute',
-            top: '-20px',
-            width: '120px',
-            height: '120px',
+            top: '-30px',
+            width: '160px',
+            height: '160px',
             borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(214,154,92,0.4) 0%, rgba(179,112,58,0.1) 60%, transparent 100%)',
+            background: 'radial-gradient(circle, rgba(255,183,0,0.6) 0%, rgba(255,85,0,0.25) 50%, transparent 80%)',
             pointerEvents: 'none',
-            filter: 'blur(10px)'
+            filter: 'blur(12px)'
           }}
         />
       </div>
