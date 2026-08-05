@@ -4,7 +4,7 @@ import { INTRO_STATES, canTransition } from './IntroStateMachine'
 import { INTRO_CONFIG } from './introConfig'
 import { usePointerTracking } from './hooks/usePointerTracking'
 import { useCampfireTargetPosition } from './hooks/useCampfireTargetPosition'
-import { useProximityDetection, isWithinProximity } from './hooks/useProximityDetection'
+import { isWithinProximity, getDistance } from './hooks/useProximityDetection'
 import { useReducedMotion } from './hooks/useReducedMotion'
 
 import DoorScene from './scenes/DoorScene'
