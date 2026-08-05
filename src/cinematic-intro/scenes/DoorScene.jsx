@@ -10,6 +10,7 @@ export default function DoorScene({ currentState, onTransition }) {
   const [keyDragging, setKeyDragging] = useState(false)
   const [keyPos, setKeyPos] = useState({ x: 0, y: 0 })
   const [keyInserted, setKeyInserted] = useState(false)
+  const [cameraAtTop, setCameraAtTop] = useState(true)
 
   const lockRef = useRef(null)
   const keyRef = useRef(null)
@@ -19,7 +20,7 @@ export default function DoorScene({ currentState, onTransition }) {
   // Secret key box index (box index 1 of 3)
   const KEY_BOX_INDEX = 1
 
-  // Handle scroll exploration to transition between Scene 1 and Scene 2
+  // Handle scroll exploration between Scene 1 (door) and Scene 2 (boxes)
   useEffect(() => {
     if (
       currentState !== INTRO_STATES.DOOR_LOCKED &&
@@ -36,6 +37,7 @@ export default function DoorScene({ currentState, onTransition }) {
         if (next >= window.innerHeight * 0.8 && currentState !== INTRO_STATES.SEARCHING_FOR_KEY && !keyFound) {
           onTransition(INTRO_STATES.SEARCHING_FOR_KEY)
         }
+        setCameraAtTop(next === 0)
         return next
       })
     }
@@ -49,25 +51,29 @@ export default function DoorScene({ currentState, onTransition }) {
     if (insertedRef.current) return
     insertedRef.current = true
 
+    // Ensure camera is locked at top
+    setScrollY(0)
+    setCameraAtTop(true)
+
     setKeyDragging(false)
     setKeyInserted(true)
     setKeyPos({ x: targetX, y: targetY })
     onTransition(INTRO_STATES.KEY_INSERTED)
 
-    // 1. Turn key & unlock shackle
+    // 1. Turn key in keyhole & unlock shackle
     setTimeout(() => {
       onTransition(INTRO_STATES.DOOR_UNLOCKING)
-    }, 400)
+    }, 450)
 
-    // 2. Swing open 3D door wings
+    // 2. Swing open 3D door wings wide
     setTimeout(() => {
       onTransition(INTRO_STATES.DOOR_OPENING)
-    }, 400 + INTRO_CONFIG.DOOR_UNLOCK_DURATION)
+    }, 450 + INTRO_CONFIG.DOOR_UNLOCK_DURATION)
 
-    // 3. Walk through doorway into darkness
+    // 3. Zoom camera through doorway into darkness
     setTimeout(() => {
       onTransition(INTRO_STATES.ENTERING_DARKNESS)
-    }, 400 + INTRO_CONFIG.DOOR_UNLOCK_DURATION + INTRO_CONFIG.DOOR_OPEN_DURATION)
+    }, 450 + INTRO_CONFIG.DOOR_UNLOCK_DURATION + INTRO_CONFIG.DOOR_OPEN_DURATION)
   }, [onTransition])
 
   // Handle box click to discover key
@@ -76,13 +82,15 @@ export default function DoorScene({ currentState, onTransition }) {
     if (index === KEY_BOX_INDEX && !keyFound) {
       setKeyFound(true)
       onTransition(INTRO_STATES.KEY_FOUND)
-      // Initial position for key near bottom center
-      setKeyPos({ x: window.innerWidth / 2, y: window.innerHeight * 0.65 })
 
-      // Smoothly return camera to door in Scene 1 so the door is front & center!
+      // Initial key position
+      setKeyPos({ x: window.innerWidth / 2, y: window.innerHeight * 0.5 })
+
+      // Instantly begin smooth camera return to Scene 1 (door container at top)
+      setScrollY(0)
       setTimeout(() => {
-        setScrollY(0)
-      }, 400)
+        setCameraAtTop(true)
+      }, 600)
     }
   }
 
@@ -93,12 +101,16 @@ export default function DoorScene({ currentState, onTransition }) {
     onTransition(INTRO_STATES.KEY_DRAGGING)
   }
 
-  // Lock click fallback (allows direct click on lock when key is found)
+  // Lock click fallback (allows direct tap/click on lock when key is found)
   const handleLockClick = () => {
     if (!keyFound || insertedRef.current) return
+    setScrollY(0)
     if (lockRef.current) {
       const lockRect = lockRef.current.getBoundingClientRect()
-      triggerUnlockAndOpenSequence(lockRect.left + lockRect.width / 2, lockRect.top + lockRect.height / 2)
+      triggerUnlockAndOpenSequence(
+        lockRect.left + lockRect.width / 2,
+        lockRect.top + lockRect.height / 2
+      )
     }
   }
 
@@ -120,16 +132,15 @@ export default function DoorScene({ currentState, onTransition }) {
 
       setKeyPos({ x: clientX, y: clientY })
 
-      // Check proximity to lock center
-      if (lockRef.current) {
+      // Check proximity to lock center ONLY when camera is returned to top (scrollY === 0)
+      if (lockRef.current && (scrollY === 0 || cameraAtTop)) {
         const lockRect = lockRef.current.getBoundingClientRect()
         const lockCenter = {
           x: lockRect.left + lockRect.width / 2,
           y: lockRect.top + lockRect.height / 2
         }
 
-        // Generous activation radius for effortless interaction
-        const radius = isTouchRef.current ? 110 : 90
+        const radius = isTouchRef.current ? 100 : 80
 
         if (isWithinProximity({ x: clientX, y: clientY }, lockCenter, radius)) {
           triggerUnlockAndOpenSequence(lockCenter.x, lockCenter.y)
@@ -144,17 +155,7 @@ export default function DoorScene({ currentState, onTransition }) {
       window.removeEventListener('pointermove', handlePointerMove)
       window.removeEventListener('touchmove', handlePointerMove)
     }
-  }, [triggerUnlockAndOpenSequence, keyFound])
-
-  useEffect(() => {
-    if (currentState === INTRO_STATES.ENTERING_DARKNESS) {
-      const timer = setTimeout(() => {
-        onTransition(INTRO_STATES.DISTANT_LIGHT)
-      }, INTRO_CONFIG.CAMERA_WALK_THROUGH_DURATION)
-
-      return () => clearTimeout(timer)
-    }
-  }, [currentState, onTransition])
+  }, [cameraAtTop, keyFound, scrollY, triggerUnlockAndOpenSequence])
 
   const isUnlocked = [
     INTRO_STATES.KEY_INSERTED,
