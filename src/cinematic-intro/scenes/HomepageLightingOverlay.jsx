@@ -52,7 +52,7 @@ export default function HomepageLightingOverlay({
           className="homepage-darkness-mask"
           style={{
             opacity: isIlluminating ? 0 : 0.98,
-            transition: isIlluminating ? 'opacity 2.2s cubic-bezier(0.25, 1, 0.5, 1)' : 'opacity 0.3s ease-out'
+            transition: isIlluminating ? 'opacity 4.5s cubic-bezier(0.16, 1, 0.3, 1)' : 'opacity 0.3s ease-out'
           }}
         />
       )}
