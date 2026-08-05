@@ -1478,8 +1478,8 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
 .compared-pills-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
-  max-width: 760px;
+  gap: 12px;
+  max-width: 880px;
   margin: 0 auto;
 }
 
@@ -1488,7 +1488,8 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 12px 18px;
+  padding: 10px 16px;
+  min-height: 50px;
   background: rgba(16, 33, 23, 0.45);
   border: 1px solid var(--forest-line-soft);
   border-radius: 40px;
@@ -1504,8 +1505,8 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
 }
 
 .compared-pill-icon {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: rgba(245, 236, 216, 0.05);
   border: 1px solid rgba(245, 236, 216, 0.1);
@@ -1525,10 +1526,12 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
 
 .compared-pill-label {
   font-family: var(--sans);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 500;
-  letter-spacing: 0.04em;
+  line-height: 1;
+  letter-spacing: 0.02em;
   color: var(--cream-dim);
+  white-space: nowrap;
   transition: color 0.3s var(--ease);
 }
 
@@ -1536,7 +1539,7 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
   color: var(--cream);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 860px) {
   .compared-pills-grid {
     grid-template-columns: repeat(2, 1fr);
   }
