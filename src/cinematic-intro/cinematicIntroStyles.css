@@ -462,15 +462,7 @@
   animation: spinSlow 2s linear infinite;
 }
 
-/* Final Illumination Layer */
-.final-illumination-wave {
-  position: fixed;
-  z-index: 40;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(245, 236, 216, 0.95) 0%, rgba(214, 154, 92, 0.6) 40%, transparent 80%);
-  pointer-events: none;
-  will-change: transform, opacity;
-}
+
 
 /* Skip Button Control */
 .intro-skip-btn {

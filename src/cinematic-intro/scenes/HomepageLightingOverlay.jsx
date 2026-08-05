@@ -5,24 +5,22 @@ import { INTRO_CONFIG } from '../introConfig'
 export default function HomepageLightingOverlay({
   currentState,
   lerpPosRef,
-  campfirePos,
-  isTouch,
-  isReducedMotion
+  isTouch
 }) {
   const maskRef = useRef(null)
-  const waveRef = useRef(null)
 
-  const isTorchLit = [
+  const isTorchActive = [
     INTRO_STATES.TORCH_LIT,
     INTRO_STATES.SEARCHING_FOR_CAMPFIRE,
-    INTRO_STATES.CAMPFIRE_IGNITING
+    INTRO_STATES.CAMPFIRE_IGNITING,
+    INTRO_STATES.HOMEPAGE_ILLUMINATING
   ].includes(currentState)
 
   const isIlluminating = currentState === INTRO_STATES.HOMEPAGE_ILLUMINATING
 
   // Spotlight radial mask following burning cursor torch
   useEffect(() => {
-    if (!isTorchLit) return
+    if (!isTorchActive || isIlluminating) return
 
     let animId = null
     const radius = isTouch
@@ -43,49 +41,21 @@ export default function HomepageLightingOverlay({
 
     animId = requestAnimationFrame(updateSpotlightMask)
     return () => cancelAnimationFrame(animId)
-  }, [isTorchLit, isTouch, lerpPosRef])
+  }, [isIlluminating, isTorchActive, isTouch, lerpPosRef])
 
   return (
     <>
-      {/* Dark Spotlight Mask Layer above Homepage */}
-      {isTorchLit && (
+      {/* Dark Spotlight Mask Layer dissolving smoothly to reveal original website colors */}
+      {isTorchActive && (
         <div
           ref={maskRef}
           className="homepage-darkness-mask"
-          style={{ opacity: 0.98 }}
-        />
-      )}
-
-      {/* Expanding Illumination Wave from Campfire */}
-      {isIlluminating && (
-        <div
-          ref={waveRef}
-          className="final-illumination-wave"
           style={{
-            left: `${campfirePos.x}px`,
-            top: `${campfirePos.y}px`,
-            width: '10px',
-            height: '10px',
-            animation: `expandWave ${isReducedMotion ? 1.2 : 2.5}s cubic-bezier(0.16, 1, 0.3, 1) forwards`
+            opacity: isIlluminating ? 0 : 0.98,
+            transition: isIlluminating ? 'opacity 2.2s cubic-bezier(0.25, 1, 0.5, 1)' : 'opacity 0.3s ease-out'
           }}
         />
       )}
-
-      <style>{`
-        @keyframes expandWave {
-          0% {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-          }
-          70% {
-            opacity: 0.8;
-          }
-          100% {
-            transform: translate(-50%, -50%) scale(400);
-            opacity: 0;
-          }
-        }
-      `}</style>
     </>
   )
 }
