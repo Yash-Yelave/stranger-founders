@@ -169,6 +169,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: opacity 0.5s ease-out;
+}
+
+.door-frame.open .lock-assembly {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .lock-plate {

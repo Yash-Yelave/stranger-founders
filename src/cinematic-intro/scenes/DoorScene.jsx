@@ -25,16 +25,14 @@ export default function DoorScene({ currentState, onTransition }) {
     keyPosRef.current = keyPos
   }, [keyPos])
 
-  // Reset insertion flags whenever scene is in pre-insertion states
+  // Reset insertion flags ONLY when initializing or in closed door state
   useEffect(() => {
-    if (
-      currentState === INTRO_STATES.INITIALIZING ||
-      currentState === INTRO_STATES.DOOR_LOCKED ||
-      currentState === INTRO_STATES.SEARCHING_FOR_KEY ||
-      currentState === INTRO_STATES.KEY_FOUND
-    ) {
+    if (currentState === INTRO_STATES.INITIALIZING || currentState === INTRO_STATES.DOOR_LOCKED) {
       insertedRef.current = false
       setKeyInserted(false)
+      setKeyFound(false)
+      setOpenBoxIndex(null)
+      setScrollY(0)
     }
   }, [currentState])
 
@@ -70,12 +68,23 @@ export default function DoorScene({ currentState, onTransition }) {
     if (insertedRef.current) return
     insertedRef.current = true
 
-    // Ensure camera track is at top
+    // Lock camera track at top
     setScrollY(0)
 
     setKeyDragging(false)
     setKeyInserted(true)
-    setKeyPos({ x: targetX, y: targetY })
+
+    // Calculate lock center coordinates
+    let snapX = targetX
+    let snapY = targetY
+
+    if ((!snapX || !snapY) && lockRef.current) {
+      const lockRect = lockRef.current.getBoundingClientRect()
+      snapX = lockRect.left + lockRect.width / 2
+      snapY = lockRect.top + lockRect.height / 2
+    }
+
+    setKeyPos({ x: snapX || window.innerWidth / 2, y: snapY || window.innerHeight * 0.45 })
     onTransition(INTRO_STATES.KEY_INSERTED)
 
     // 1. Turn key in keyhole & unlock shackle
@@ -101,24 +110,19 @@ export default function DoorScene({ currentState, onTransition }) {
       setKeyFound(true)
       onTransition(INTRO_STATES.KEY_FOUND)
 
-      // Initial key position
-      const initialPos = { x: window.innerWidth / 2, y: window.innerHeight * 0.55 }
+      // Start key position near bottom center (where box was)
+      const initialPos = { x: window.innerWidth / 2, y: window.innerHeight * 0.7 }
       setKeyPos(initialPos)
       keyPosRef.current = initialPos
 
       // Smoothly return camera to Scene 1 (door container at top)
-      setScrollY(0)
+      setTimeout(() => {
+        setScrollY(0)
+      }, 300)
     }
   }
 
-  // Pointer drag for key
-  const handleKeyPointerDown = () => {
-    if (!keyFound || insertedRef.current) return
-    setKeyDragging(true)
-    onTransition(INTRO_STATES.KEY_DRAGGING)
-  }
-
-  // Lock click fallback (allows direct tap/click on lock when key is found)
+  // Lock click fallback (allows direct click/tap on lock plate when holding key)
   const handleLockClick = () => {
     if (!keyFound || insertedRef.current) return
     setScrollY(0)
@@ -129,6 +133,14 @@ export default function DoorScene({ currentState, onTransition }) {
         lockRect.top + lockRect.height / 2
       )
     }
+  }
+
+  // Pointer drag for key
+  const handleKeyPointerDown = (e) => {
+    if (!keyFound || insertedRef.current) return
+    e.stopPropagation()
+    setKeyDragging(true)
+    onTransition(INTRO_STATES.KEY_DRAGGING)
   }
 
   // Continuous pointer move listener to update key position
@@ -161,7 +173,7 @@ export default function DoorScene({ currentState, onTransition }) {
     }
   }, [keyFound])
 
-  // Continuous animation frame loop to detect proximity even when mouse is stationary
+  // Continuous 60FPS animation frame loop to detect proximity when key touches lock
   useEffect(() => {
     if (!keyFound || insertedRef.current) return
 
@@ -176,7 +188,8 @@ export default function DoorScene({ currentState, onTransition }) {
           y: lockRect.top + lockRect.height / 2
         }
 
-        const radius = isTouchRef.current ? 120 : 95
+        // Precise proximity radius (75px desktop / 95px mobile)
+        const radius = isTouchRef.current ? 95 : 75
 
         if (isWithinProximity(keyPosRef.current, lockCenter, radius)) {
           triggerUnlockAndOpenSequence(lockCenter.x, lockCenter.y)
@@ -227,7 +240,6 @@ export default function DoorScene({ currentState, onTransition }) {
         {/* Scene 1: The Large Closed Door */}
         <div className={`door-container ${isZoomingIn ? 'zooming-in' : ''}`}>
           <div className={`door-frame ${isDoorOpen ? 'open' : ''}`}>
-            <div className="door-interior-glow" />
             <div className="door-wings-wrapper">
               <div className={`door-wing left ${isDoorOpen ? 'open' : ''}`}>
                 <div className="door-wing-texture" />
@@ -303,7 +315,7 @@ export default function DoorScene({ currentState, onTransition }) {
           onTouchStart={handleKeyPointerDown}
           tabIndex={0}
           role="button"
-          aria-label="Golden Key - Drag to Lock"
+          aria-label="Golden Key - Drag or Tap to Lock"
         >
           <svg viewBox="0 0 64 64" width="56" height="56">
             <circle cx="20" cy="20" r="14" fill="none" stroke="#d69a5c" strokeWidth="4" />

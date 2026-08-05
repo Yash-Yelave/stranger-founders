@@ -48,13 +48,19 @@ export default function CinematicIntroOverlay() {
   useEffect(() => {
     if (pathname !== '/') return
 
+    // Prevent automatic browser scroll restoration on refresh/reload
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual'
+    }
+    window.scrollTo(0, 0)
+
     // Prevent body scroll during initial scenes
     document.body.style.overflow = 'hidden'
 
     // Preload & transition to DOOR_LOCKED
     const preloadTimer = setTimeout(() => {
       transitionTo(INTRO_STATES.DOOR_LOCKED)
-    }, 100)
+    }, 50)
 
     return () => clearTimeout(preloadTimer)
   }, [pathname, transitionTo])
