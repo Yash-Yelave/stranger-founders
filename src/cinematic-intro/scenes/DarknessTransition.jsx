@@ -7,14 +7,6 @@ export default function DarknessTransition({ currentState, onTransition, isReduc
   const [lightOpacity, setLightOpacity] = useState(0.4)
 
   useEffect(() => {
-    if (currentState === INTRO_STATES.ENTERING_DARKNESS) {
-      const timer = setTimeout(() => {
-        onTransition(INTRO_STATES.DISTANT_LIGHT)
-      }, INTRO_CONFIG.CAMERA_WALK_THROUGH_DURATION)
-
-      return () => clearTimeout(timer)
-    }
-
     if (currentState === INTRO_STATES.DISTANT_LIGHT) {
       const timer = setTimeout(() => {
         onTransition(INTRO_STATES.LIGHT_APPROACHING)
