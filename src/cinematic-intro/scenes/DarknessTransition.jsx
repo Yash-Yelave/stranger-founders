@@ -3,16 +3,14 @@ import { INTRO_STATES } from '../IntroStateMachine'
 import { INTRO_CONFIG } from '../introConfig'
 
 export default function DarknessTransition({ currentState, onTransition, isReducedMotion }) {
-  const [lightScale, setLightScale] = useState(0.05)
-  const [lightOpacity, setLightOpacity] = useState(0.4)
+  const [lightScale, setLightScale] = useState(0.25)
+  const [lightOpacity, setLightOpacity] = useState(0.85)
 
   useEffect(() => {
     if (currentState === INTRO_STATES.DISTANT_LIGHT) {
-      const timer = setTimeout(() => {
-        onTransition(INTRO_STATES.LIGHT_APPROACHING)
-      }, 600)
-
-      return () => clearTimeout(timer)
+      // Instantly start light approach
+      onTransition(INTRO_STATES.LIGHT_APPROACHING)
+      return
     }
 
     if (currentState === INTRO_STATES.LIGHT_APPROACHING) {
@@ -26,9 +24,10 @@ export default function DarknessTransition({ currentState, onTransition, isReduc
         const elapsed = now - start
         const progress = Math.min(1, elapsed / duration)
 
-        // Ease in exponential light growth
-        const scale = 0.05 + Math.pow(progress, 3) * 35
-        const opacity = 0.4 + progress * 0.6
+        // Smooth cubic ease-in growth
+        const ease = progress * progress * progress
+        const scale = 0.25 + ease * 35
+        const opacity = 0.85 + progress * 0.15
 
         setLightScale(scale)
         setLightOpacity(opacity)
@@ -59,7 +58,7 @@ export default function DarknessTransition({ currentState, onTransition, isReduc
     if (currentState === INTRO_STATES.RETURN_TO_DARKNESS) {
       const timer = setTimeout(() => {
         onTransition(INTRO_STATES.TORCH_AVAILABLE)
-      }, 800)
+      }, 600)
 
       return () => clearTimeout(timer)
     }
@@ -74,17 +73,18 @@ export default function DarknessTransition({ currentState, onTransition, isReduc
 
   return (
     <div className="cinematic-layer darkness-scene">
-      {/* Approaching Distant Source of Light */}
+      {/* Prominent Approaching Distant Source of Light */}
       {isLightVisible && (
         <div
           className="distant-light-dot"
           style={{
-            width: '60px',
-            height: '60px',
+            width: '100px',
+            height: '100px',
             top: '50%',
             left: '50%',
             transform: `translate(-50%, -50%) scale(${lightScale})`,
-            opacity: lightOpacity
+            opacity: lightOpacity,
+            boxShadow: '0 0 60px #ffffff, 0 0 120px #f5ecd8, 0 0 200px #d69a5c, 0 0 350px rgba(179,112,58,0.7)'
           }}
         />
       )}
@@ -94,7 +94,7 @@ export default function DarknessTransition({ currentState, onTransition, isReduc
         <div
           className="white-flash-screen"
           style={{
-            opacity: isReducedMotion ? 0.4 : 1,
+            opacity: isReducedMotion ? 0.5 : 1,
             transition: 'opacity 0.6s ease-in-out'
           }}
         />

@@ -29,17 +29,19 @@ export default function DoorScene({ currentState, onTransition }) {
     ) return
 
     const handleWheel = (e) => {
+      let next = 0
       setScrollY((prev) => {
-        const next = Math.max(0, Math.min(window.innerHeight, prev + e.deltaY * INTRO_CONFIG.SCROLL_SENSITIVITY))
-        if (next > window.innerHeight * 0.4 && currentState === INTRO_STATES.DOOR_LOCKED) {
-          onTransition(INTRO_STATES.SCROLLING_TO_BOXES)
-        }
-        if (next >= window.innerHeight * 0.8 && currentState !== INTRO_STATES.SEARCHING_FOR_KEY && !keyFound) {
-          onTransition(INTRO_STATES.SEARCHING_FOR_KEY)
-        }
+        next = Math.max(0, Math.min(window.innerHeight, prev + e.deltaY * INTRO_CONFIG.SCROLL_SENSITIVITY))
         setCameraAtTop(next === 0)
         return next
       })
+
+      if (next > window.innerHeight * 0.4 && currentState === INTRO_STATES.DOOR_LOCKED) {
+        onTransition(INTRO_STATES.SCROLLING_TO_BOXES)
+      }
+      if (next >= window.innerHeight * 0.8 && currentState !== INTRO_STATES.SEARCHING_FOR_KEY && !keyFound) {
+        onTransition(INTRO_STATES.SEARCHING_FOR_KEY)
+      }
     }
 
     window.addEventListener('wheel', handleWheel, { passive: true })
@@ -157,6 +159,16 @@ export default function DoorScene({ currentState, onTransition }) {
     }
   }, [cameraAtTop, keyFound, scrollY, triggerUnlockAndOpenSequence])
 
+  useEffect(() => {
+    if (currentState === INTRO_STATES.ENTERING_DARKNESS) {
+      const timer = setTimeout(() => {
+        onTransition(INTRO_STATES.TORCH_AVAILABLE)
+      }, INTRO_CONFIG.CAMERA_WALK_THROUGH_DURATION)
+
+      return () => clearTimeout(timer)
+    }
+  }, [currentState, onTransition])
+
   const isUnlocked = [
     INTRO_STATES.KEY_INSERTED,
     INTRO_STATES.DOOR_UNLOCKING,
@@ -244,7 +256,7 @@ export default function DoorScene({ currentState, onTransition }) {
       </div>
 
       {/* Found Key Element */}
-      {keyFound && (
+      {keyFound && !isUnlocked && (
         <div
           ref={keyRef}
           className={`draggable-key ${keyDragging ? 'dragging' : ''} ${keyInserted ? 'inserted' : ''}`}

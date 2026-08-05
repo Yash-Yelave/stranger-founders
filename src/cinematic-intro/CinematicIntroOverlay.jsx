@@ -8,7 +8,6 @@ import { isWithinProximity, getDistance } from './hooks/useProximityDetection'
 import { useReducedMotion } from './hooks/useReducedMotion'
 
 import DoorScene from './scenes/DoorScene'
-import DarknessTransition from './scenes/DarknessTransition'
 import StationaryTorch from './scenes/StationaryTorch'
 import CursorTorch from './scenes/CursorTorch'
 import CampfireIgnition from './scenes/CampfireIgnition'
@@ -28,14 +27,16 @@ export default function CinematicIntroOverlay() {
   const campfirePos = useCampfireTargetPosition()
   const { lerpPosRef, velocityRef, isTouch } = usePointerTracking(currentState !== INTRO_STATES.INTRO_COMPLETED)
 
-  // State Transition Manager
+  // State Transition Manager (Async to prevent React setstate-in-render warnings)
   const transitionTo = useCallback((nextState) => {
-    setCurrentState((prev) => {
-      if (canTransition(prev, nextState)) {
-        return nextState
-      }
-      return prev
-    })
+    setTimeout(() => {
+      setCurrentState((prev) => {
+        if (canTransition(prev, nextState)) {
+          return nextState
+        }
+        return prev
+      })
+    }, 0)
   }, [])
 
   // Skip Intro Control (Accessibility)
@@ -176,15 +177,7 @@ export default function CinematicIntroOverlay() {
     INTRO_STATES.ENTERING_DARKNESS
   ].includes(currentState)
 
-  const isDarknessTransitionActive = [
-    INTRO_STATES.DISTANT_LIGHT,
-    INTRO_STATES.LIGHT_APPROACHING,
-    INTRO_STATES.WHITE_FLASH,
-    INTRO_STATES.RETURN_TO_DARKNESS
-  ].includes(currentState)
-
   const isSolidBlackActive = [
-    INTRO_STATES.RETURN_TO_DARKNESS,
     INTRO_STATES.TORCH_AVAILABLE,
     INTRO_STATES.TORCH_IGNITION
   ].includes(currentState)
@@ -205,15 +198,6 @@ export default function CinematicIntroOverlay() {
       {/* Scene 1 & 2: Locked Door & Key Search */}
       {isDoorSceneActive && (
         <DoorScene currentState={currentState} onTransition={transitionTo} />
-      )}
-
-      {/* Scene 3 & 4: Darkness Entry & Approaching Light */}
-      {isDarknessTransitionActive && (
-        <DarknessTransition
-          currentState={currentState}
-          onTransition={transitionTo}
-          isReducedMotion={isReducedMotion}
-        />
       )}
 
       {/* Full Pitch Black Layer (Before Flambeau Ignition) */}
