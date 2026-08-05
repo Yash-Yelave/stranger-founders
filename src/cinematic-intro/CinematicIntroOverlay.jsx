@@ -65,30 +65,58 @@ export default function CinematicIntroOverlay() {
     return () => clearTimeout(preloadTimer)
   }, [pathname, transitionTo])
 
+  const hasTorchIgnitedRef = useRef(false)
+
+  // Reset torch ignition ref on homepage mount
+  useEffect(() => {
+    if (pathname === '/') {
+      hasTorchIgnitedRef.current = false
+    }
+  }, [pathname])
+
   // Scene 6: Torch Ignition Proximity Handler (Cursor Torch -> Stationary Torch)
   useEffect(() => {
-    if (currentState !== INTRO_STATES.TORCH_AVAILABLE) return
+    if (currentState !== INTRO_STATES.TORCH_AVAILABLE || hasTorchIgnitedRef.current) return
 
     let animId = null
-    const radius = isTouch ? INTRO_CONFIG.TORCH_IGNITE_MOBILE_RADIUS : INTRO_CONFIG.TORCH_IGNITE_PROXIMITY_RADIUS
+    const radius = isTouch ? 110 : 90 // Generous activation area
 
     const checkTorchIgnition = () => {
+      if (hasTorchIgnitedRef.current) return
+
       if (lerpPosRef.current && stationaryTorchPosRef.current) {
         if (isWithinProximity(lerpPosRef.current, stationaryTorchPosRef.current, radius)) {
+          hasTorchIgnitedRef.current = true
+
+          // Immediately start ignition animation without delay
           transitionTo(INTRO_STATES.TORCH_IGNITION)
 
+          // Smooth 750ms flame transfer
           setTimeout(() => {
             transitionTo(INTRO_STATES.TORCH_LIT)
             transitionTo(INTRO_STATES.SEARCHING_FOR_CAMPFIRE)
-          }, 600)
+          }, 750)
+          return
         }
       }
-      animId = requestAnimationFrame(checkTorchIgnition)
+
+      if (!hasTorchIgnitedRef.current) {
+        animId = requestAnimationFrame(checkTorchIgnition)
+      }
     }
 
     animId = requestAnimationFrame(checkTorchIgnition)
     return () => cancelAnimationFrame(animId)
   }, [currentState, isTouch, lerpPosRef, transitionTo])
+
+  const hasIgnitedRef = useRef(false)
+
+  // Reset ignition guard on homepage mount
+  useEffect(() => {
+    if (pathname === '/') {
+      hasIgnitedRef.current = false
+    }
+  }, [pathname])
 
   // Scene 9: Campfire Ignition Proximity & Progressive Hold Handler
   useEffect(() => {
@@ -101,6 +129,8 @@ export default function CinematicIntroOverlay() {
     const radius = isTouch ? INTRO_CONFIG.CAMPFIRE_MOBILE_RADIUS : INTRO_CONFIG.CAMPFIRE_PROXIMITY_RADIUS
 
     const checkCampfireProximity = () => {
+      if (hasIgnitedRef.current) return
+
       if (lerpPosRef.current && campfirePos) {
         const isNear = isWithinProximity(lerpPosRef.current, campfirePos, radius)
 
@@ -110,11 +140,15 @@ export default function CinematicIntroOverlay() {
           }
 
           setIgnitionProgress((prev) => {
+            if (hasIgnitedRef.current) return 1
+
             const next = Math.min(1, prev + 0.025)
-            if (next >= 1) {
+            if (next >= 1 && !hasIgnitedRef.current) {
+              hasIgnitedRef.current = true
+
+              // Fire final transition sequence EXACTLY ONCE
               transitionTo(INTRO_STATES.CAMPFIRE_LIT)
 
-              // Trigger final illumination animation sequence
               setTimeout(() => {
                 transitionTo(INTRO_STATES.HOMEPAGE_ILLUMINATING)
               }, 400)
@@ -126,14 +160,18 @@ export default function CinematicIntroOverlay() {
             return next
           })
         } else {
-          if (currentState === INTRO_STATES.CAMPFIRE_IGNITING) {
-            transitionTo(INTRO_STATES.SEARCHING_FOR_CAMPFIRE)
+          if (!hasIgnitedRef.current) {
+            if (currentState === INTRO_STATES.CAMPFIRE_IGNITING) {
+              transitionTo(INTRO_STATES.SEARCHING_FOR_CAMPFIRE)
+            }
+            setIgnitionProgress((prev) => Math.max(0, prev - 0.04))
           }
-          setIgnitionProgress((prev) => Math.max(0, prev - 0.04))
         }
       }
 
-      animId = requestAnimationFrame(checkCampfireProximity)
+      if (!hasIgnitedRef.current) {
+        animId = requestAnimationFrame(checkCampfireProximity)
+      }
     }
 
     animId = requestAnimationFrame(checkCampfireProximity)
@@ -163,6 +201,7 @@ export default function CinematicIntroOverlay() {
   ].includes(currentState)
 
   const isTorchLit = [
+    INTRO_STATES.TORCH_IGNITION,
     INTRO_STATES.TORCH_LIT,
     INTRO_STATES.SEARCHING_FOR_CAMPFIRE,
     INTRO_STATES.CAMPFIRE_IGNITING,
@@ -217,7 +256,7 @@ export default function CinematicIntroOverlay() {
         INTRO_STATES.TORCH_IGNITION,
         INTRO_STATES.TORCH_LIT
       ].includes(currentState) && (
-        <StationaryTorch torchPosRef={stationaryTorchPosRef} />
+        <StationaryTorch torchPosRef={stationaryTorchPosRef} currentState={currentState} />
       )}
 
       {/* Scene 5 & 7: Handheld Flambeau Cursor */}
@@ -226,6 +265,7 @@ export default function CinematicIntroOverlay() {
           lerpPosRef={lerpPosRef}
           velocityRef={velocityRef}
           isLit={isTorchLit}
+          isIgniting={currentState === INTRO_STATES.TORCH_IGNITION}
           isTouch={isTouch}
         />
       )}

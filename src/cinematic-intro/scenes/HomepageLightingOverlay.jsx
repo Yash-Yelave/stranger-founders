@@ -9,6 +9,7 @@ export default function HomepageLightingOverlay({
   isTouch
 }) {
   const maskRef = useRef(null)
+  const startTimeRef = useRef(null)
 
   const isTorchActive = [
     INTRO_STATES.TORCH_LIT,
@@ -20,20 +21,19 @@ export default function HomepageLightingOverlay({
 
   const isIlluminating = currentState === INTRO_STATES.HOMEPAGE_ILLUMINATING
 
-  // Soft Radial Expansion Reveal Engine (5.0s ease-in-out from campfire outward)
+  // One-time continuous soft radial expansion reveal engine (6.0s ease-in-out)
   useEffect(() => {
     if (!isTorchActive) return
 
     let animId = null
-    let startTime = null
 
     const updateSpotlightMask = (timestamp) => {
       if (!maskRef.current) return
 
       if (isIlluminating) {
-        if (!startTime) startTime = timestamp
-        const elapsed = (timestamp - startTime) / 1000 // elapsed seconds
-        const totalDuration = 5.0 // 5.0 seconds smooth animation
+        if (!startTimeRef.current) startTimeRef.current = timestamp
+        const elapsed = (timestamp - startTimeRef.current) / 1000 // elapsed seconds
+        const totalDuration = 6.0 // 6.0 seconds continuous smooth reveal
 
         const rawProgress = Math.min(1, Math.max(0, elapsed / totalDuration))
 
@@ -77,7 +77,7 @@ export default function HomepageLightingOverlay({
 
   return (
     <>
-      {/* Dark Spotlight Mask Layer performing feathered soft radial expansion */}
+      {/* Dark Spotlight Mask Layer performing one-time continuous soft radial expansion */}
       {isTorchActive && (
         <div
           ref={maskRef}

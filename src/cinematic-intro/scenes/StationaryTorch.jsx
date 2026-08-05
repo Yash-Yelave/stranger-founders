@@ -1,7 +1,9 @@
 import React, { useRef } from 'react'
+import { INTRO_STATES } from '../IntroStateMachine'
 
-export default function StationaryTorch({ torchPosRef }) {
+export default function StationaryTorch({ torchPosRef, currentState }) {
   const containerRef = useRef(null)
+  const isIgniting = currentState === INTRO_STATES.TORCH_IGNITION
 
   // Pass container rect position back up via ref
   React.useEffect(() => {
@@ -15,10 +17,19 @@ export default function StationaryTorch({ torchPosRef }) {
   }, [torchPosRef])
 
   return (
-    <div className="stationary-torch-wrapper" ref={containerRef}>
+    <div className={`stationary-torch-wrapper ${isIgniting ? 'igniting-stretch' : ''}`} ref={containerRef}>
       <div className="flame-container">
         {/* Animated Burning Flame Core */}
-        <div className="flame-core-animated" />
+        <div className={`flame-core-animated ${isIgniting ? 'flame-stretching' : ''}`} />
+
+        {/* Transfer Sparks during Ignition */}
+        {isIgniting && (
+          <>
+            <div className="torch-spark-particle spark-1" />
+            <div className="torch-spark-particle spark-2" />
+            <div className="torch-spark-particle spark-3" />
+          </>
+        )}
 
         {/* Ambient Warm Flame Glow */}
         <div

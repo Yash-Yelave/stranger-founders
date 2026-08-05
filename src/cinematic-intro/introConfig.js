@@ -17,7 +17,7 @@ export const INTRO_CONFIG = {
   LIGHT_APPROACH_DURATION: 2800,      // Distant light approaching
   WHITE_FLASH_DURATION: 1800,         // White screen hold & transition back to dark
   CAMPFIRE_IGNITION_HOLD_TIME: 1500,  // Time torch must stay near campfire to ignite
-  HOMEPAGE_ILLUMINATION_DURATION: 5200,// 5.2s soft radial reveal from campfire outwards
+  HOMEPAGE_ILLUMINATION_DURATION: 6000,// 6.0s continuous smooth radial website illumination
 
   // Physics & Movement Tuning
   POINTER_SMOOTHING_FACTOR: 0.18,     // Lerp factor for cursor flambeau (0.1 = lazy, 0.3 = fast)

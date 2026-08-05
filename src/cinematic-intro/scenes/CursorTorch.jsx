@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function CursorTorch({ lerpPosRef, velocityRef, isLit, isTouch }) {
+export default function CursorTorch({ lerpPosRef, velocityRef, isLit, isIgniting, isTouch }) {
   const torchRef = React.useRef(null)
 
   React.useEffect(() => {
@@ -12,7 +12,6 @@ export default function CursorTorch({ lerpPosRef, velocityRef, isLit, isTouch })
         const y = lerpPosRef.current.y
         const angle = velocityRef.current ? velocityRef.current.angle : 0
 
-        // Position torch relative to cursor (offsetting slightly down & right on desktop)
         const offsetX = isTouch ? 0 : 8
         const offsetY = isTouch ? 0 : 10
 
@@ -28,9 +27,9 @@ export default function CursorTorch({ lerpPosRef, velocityRef, isLit, isTouch })
 
   return (
     <div className="cursor-flambeau-follower" ref={torchRef}>
-      {/* Active Flame Top (Only when lit) */}
+      {/* Active Flame Top (Only when lit or igniting) */}
       {isLit && (
-        <div className="flame-container" style={{ top: '-48px', left: '8px' }}>
+        <div className={`flame-container ${isIgniting ? 'flame-igniting-grow' : ''}`} style={{ top: '-48px', left: '8px' }}>
           <div className="flame-core-animated" />
           <div
             style={{
