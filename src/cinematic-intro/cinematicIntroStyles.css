@@ -426,12 +426,19 @@
    SCENE 7, 8, 9 & 10: HOMEPAGE SPOTLIGHT, OVERLAY CAMPFIRE & ILLUMINATION
    ========================================================================= */
 .homepage-darkness-mask {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  z-index: 10;
-  background: #000;
+  z-index: 1000;
+  background: #000000;
   pointer-events: none;
-  will-change: mask-image, -webkit-mask-image, opacity;
+  opacity: 0.98;
+  will-change: opacity;
+  transition: opacity 0.4s ease-out;
+}
+
+.homepage-darkness-mask.illuminating {
+  opacity: 0;
+  transition: opacity 8.0s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .overlay-campfire-target {
