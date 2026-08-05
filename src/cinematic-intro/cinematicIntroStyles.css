@@ -454,7 +454,7 @@
   100% { transform: translate(-35px, -20px) scale(0.2); opacity: 0; }
 }
 
-/* Cursor Flambeau Follower */
+/* Cursor Flambeau Follower (Small Handheld Flambeau) */
 .cursor-flambeau-follower {
   position: fixed;
   top: 0;
@@ -466,11 +466,68 @@
 
 .cursor-flambeau-torch {
   position: relative;
-  width: 16px;
+  width: 18px;
   height: 90px;
-  background: linear-gradient(180deg, #4a321f, #1f140a);
-  border-radius: 4px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.8);
+  background: linear-gradient(180deg, #5a3a22 0%, #3d2716 60%, #1a1008 100%);
+  border-radius: 4px 4px 6px 6px;
+  border: 1px solid rgba(214, 154, 92, 0.4);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.85);
+}
+
+.flambeau-cup-head {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 16px;
+  background: linear-gradient(180deg, #d69a5c 0%, #7a4e25 100%);
+  border-radius: 4px 4px 6px 6px;
+  border: 1px solid rgba(245, 236, 216, 0.5);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.flambeau-unlit-wick {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 10px;
+  background: #2b1b10;
+  border-radius: 3px 3px 0 0;
+  border: 1px solid rgba(214, 154, 92, 0.3);
+}
+
+.flambeau-flame-wrapper {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.flambeau-flame-core {
+  width: 20px;
+  height: 38px;
+  border-radius: 50% 50% 35% 35%;
+  background: radial-gradient(ellipse at 50% 85%, #ffffff 20%, #ffeaad 45%, #ff9800 75%, #e65100 100%);
+  box-shadow: 0 0 15px #ffb700, 0 0 30px rgba(255, 85, 0, 0.7);
+  animation: torchFlicker 0.12s infinite alternate ease-in-out;
+}
+
+.flambeau-soft-glow {
+  position: absolute;
+  top: -20px;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 183, 0, 0.4) 0%, rgba(255, 85, 0, 0.15) 50%, transparent 80%);
+  pointer-events: none;
+  filter: blur(8px);
 }
 
 /* =========================================================================

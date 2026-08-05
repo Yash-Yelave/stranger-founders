@@ -45,6 +45,7 @@ export default function DoorScene({ currentState, onTransition }) {
     ) return
 
     const handleWheel = (e) => {
+      if (insertedRef.current) return
       let next = 0
       setScrollY((prev) => {
         next = Math.max(0, Math.min(window.innerHeight, prev + e.deltaY * INTRO_CONFIG.SCROLL_SENSITIVITY))
@@ -68,11 +69,9 @@ export default function DoorScene({ currentState, onTransition }) {
     if (insertedRef.current) return
     insertedRef.current = true
 
-    // Lock camera track at top
+    // 1. Return camera track smoothly to the top (door position) and lock scrolling
     setScrollY(0)
-
     setKeyDragging(false)
-    setKeyInserted(true)
 
     // Calculate lock center coordinates
     let snapX = targetX
@@ -85,22 +84,27 @@ export default function DoorScene({ currentState, onTransition }) {
     }
 
     setKeyPos({ x: snapX || window.innerWidth / 2, y: snapY || window.innerHeight * 0.45 })
-    onTransition(INTRO_STATES.KEY_INSERTED)
 
-    // 1. Turn key in keyhole & unlock shackle
+    // Wait until camera scroll track smoothly settles at top (450ms)
     setTimeout(() => {
-      onTransition(INTRO_STATES.DOOR_UNLOCKING)
+      setKeyInserted(true)
+      onTransition(INTRO_STATES.KEY_INSERTED)
+
+      // 2. Turn key in keyhole & unlock shackle
+      setTimeout(() => {
+        onTransition(INTRO_STATES.DOOR_UNLOCKING)
+      }, 450)
+
+      // 3. Swing open 3D door wings wide inside full viewport
+      setTimeout(() => {
+        onTransition(INTRO_STATES.DOOR_OPENING)
+      }, 450 + INTRO_CONFIG.DOOR_UNLOCK_DURATION)
+
+      // 4. Zoom camera through doorway into darkness
+      setTimeout(() => {
+        onTransition(INTRO_STATES.ENTERING_DARKNESS)
+      }, 450 + INTRO_CONFIG.DOOR_UNLOCK_DURATION + INTRO_CONFIG.DOOR_OPEN_DURATION)
     }, 450)
-
-    // 2. Swing open 3D door wings wide
-    setTimeout(() => {
-      onTransition(INTRO_STATES.DOOR_OPENING)
-    }, 450 + INTRO_CONFIG.DOOR_UNLOCK_DURATION)
-
-    // 3. Zoom camera through doorway into darkness
-    setTimeout(() => {
-      onTransition(INTRO_STATES.ENTERING_DARKNESS)
-    }, 450 + INTRO_CONFIG.DOOR_UNLOCK_DURATION + INTRO_CONFIG.DOOR_OPEN_DURATION)
   }, [onTransition])
 
   // Handle box click to discover key
@@ -207,7 +211,15 @@ export default function DoorScene({ currentState, onTransition }) {
   // ENTERING_DARKNESS walk-through transition to dark website
   useEffect(() => {
     if (currentState === INTRO_STATES.ENTERING_DARKNESS) {
+      window.scrollTo(0, 0)
+      document.body.scrollTop = 0
+      document.documentElement.scrollTop = 0
+      setScrollY(0)
+
       const timer = setTimeout(() => {
+        window.scrollTo(0, 0)
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
         onTransition(INTRO_STATES.TORCH_AVAILABLE)
       }, INTRO_CONFIG.CAMERA_WALK_THROUGH_DURATION)
 

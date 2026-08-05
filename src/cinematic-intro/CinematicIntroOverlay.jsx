@@ -65,6 +65,22 @@ export default function CinematicIntroOverlay() {
     return () => clearTimeout(preloadTimer)
   }, [pathname, transitionTo])
 
+  // Force programmatic scroll reset to top (0,0) before torch scene starts
+  useEffect(() => {
+    if (
+      currentState === INTRO_STATES.ENTERING_DARKNESS ||
+      currentState === INTRO_STATES.TORCH_AVAILABLE
+    ) {
+      if ('scrollRestoration' in window.history) {
+        window.history.scrollRestoration = 'manual'
+      }
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+      document.body.scrollTop = 0
+      document.documentElement.scrollTop = 0
+      document.body.style.overflow = 'hidden'
+    }
+  }, [currentState])
+
   const hasTorchIgnitedRef = useRef(false)
 
   // Reset torch ignition ref on homepage mount

@@ -27,43 +27,37 @@ export default function CursorTorch({ lerpPosRef, velocityRef, isLit, isIgniting
 
   return (
     <div className="cursor-flambeau-follower" ref={torchRef}>
-      {/* Active Flame Top (Only when lit or igniting) */}
-      {isLit && (
-        <div className={`flame-container ${isIgniting ? 'flame-igniting-grow' : ''}`} style={{ top: '-48px', left: '8px' }}>
-          <div className="flame-core-animated" />
+      {/* Handheld Flambeau Torch Structure */}
+      <div className="cursor-flambeau-torch">
+        {/* Brass Torch Cup Head */}
+        <div className="flambeau-cup-head">
+          {/* Unlit Charcoal Wick (Visible when unlit) */}
           <div
+            className="flambeau-unlit-wick"
             style={{
-              position: 'absolute',
-              top: '-30px',
-              width: '140px',
-              height: '140px',
-              borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(245,236,216,0.6) 0%, rgba(214,154,92,0.3) 50%, transparent 80%)',
-              pointerEvents: 'none',
-              filter: 'blur(12px)'
+              opacity: isLit ? 0 : 1,
+              transition: 'opacity 0.4s ease-out'
             }}
           />
+
+          {/* Natural Controlled Flame & Glow (Smoothly scales & fades, no unmounting) */}
+          <div
+            className={`flambeau-flame-wrapper ${isIgniting ? 'flame-igniting-grow' : ''}`}
+            style={{
+              opacity: isLit ? 1 : 0,
+              transform: isLit ? (isIgniting ? undefined : 'scale(1)') : 'scale(0.2)',
+              transition: isIgniting ? 'none' : 'opacity 0.5s ease-out, transform 0.5s ease-out',
+              pointerEvents: 'none'
+            }}
+          >
+            {/* Controlled Smaller Flame Core */}
+            <div className="flambeau-flame-core" />
+
+            {/* Soft Warm Ambient Glow (Non-overpowering) */}
+            <div className="flambeau-soft-glow" />
+          </div>
         </div>
-      )}
-
-      {/* Unlit Tip (Only when NOT lit) */}
-      {!isLit && (
-        <div
-          style={{
-            position: 'absolute',
-            top: '-12px',
-            left: '3px',
-            width: '10px',
-            height: '14px',
-            background: '#2b1b10',
-            borderRadius: '4px 4px 0 0',
-            border: '1px solid rgba(214,154,92,0.2)'
-          }}
-        />
-      )}
-
-      {/* Flambeau Wooden Shaft */}
-      <div className="cursor-flambeau-torch" />
+      </div>
     </div>
   )
 }
