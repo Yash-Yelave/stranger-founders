@@ -11,7 +11,18 @@ export default function HomepageLightingOverlay({
   const maskRef = useRef(null)
   const startTimeRef = useRef(null)
 
-  const isTorchActive = [
+  const isDarknessActive = [
+    INTRO_STATES.TORCH_AVAILABLE,
+    INTRO_STATES.TORCH_IGNITION,
+    INTRO_STATES.TORCH_LIT,
+    INTRO_STATES.SEARCHING_FOR_CAMPFIRE,
+    INTRO_STATES.CAMPFIRE_IGNITING,
+    INTRO_STATES.CAMPFIRE_LIT,
+    INTRO_STATES.HOMEPAGE_ILLUMINATING
+  ].includes(currentState)
+
+  const isTorchLit = [
+    INTRO_STATES.TORCH_IGNITION,
     INTRO_STATES.TORCH_LIT,
     INTRO_STATES.SEARCHING_FOR_CAMPFIRE,
     INTRO_STATES.CAMPFIRE_IGNITING,
@@ -21,9 +32,9 @@ export default function HomepageLightingOverlay({
 
   const isIlluminating = currentState === INTRO_STATES.HOMEPAGE_ILLUMINATING
 
-  // One-time continuous soft radial expansion reveal engine (6.0s ease-in-out)
+  // Dark Mask & Spotlight Mask Animation Engine
   useEffect(() => {
-    if (!isTorchActive) return
+    if (!isDarknessActive) return
 
     let animId = null
 
@@ -45,19 +56,20 @@ export default function HomepageLightingOverlay({
         // Radius expands smoothly from 140px to 3800px
         const currentRadius = 140 + ease * 3660
 
-        // Darkness opacity reduces gradually from 0.98 to 0.0
-        const currentOpacity = 0.98 * (1 - ease)
+        // Darkness opacity reduces gradually from 1.0 to 0.0
+        const currentOpacity = 1.0 * (1 - ease)
 
         const cx = campfirePos ? campfirePos.x : window.innerWidth / 2
         const cy = campfirePos ? campfirePos.y : window.innerHeight * 0.75
 
-        // Feathered soft radial gradient (no harsh edges)
-        const darkMid = (0.85 * (1 - ease)).toFixed(3)
+        // Feathered soft radial gradient
+        const darkMid = (0.88 * (1 - ease)).toFixed(3)
         const maskStyle = `radial-gradient(circle ${currentRadius.toFixed(0)}px at ${cx.toFixed(0)}px ${cy.toFixed(0)}px, transparent 0%, transparent 45%, rgba(0,0,0,${darkMid}) 75%, rgba(0,0,0,${currentOpacity.toFixed(3)}) 100%)`
 
         maskRef.current.style.background = maskStyle
         maskRef.current.style.opacity = currentOpacity.toFixed(3)
-      } else if (lerpPosRef.current) {
+      } else if (isTorchLit && lerpPosRef.current) {
+        // Lit Cursor Torch: Open Spotlight Radius around lit flame cursor
         const x = lerpPosRef.current.x
         const y = lerpPosRef.current.y
         const radius = isTouch
@@ -66,6 +78,10 @@ export default function HomepageLightingOverlay({
 
         maskRef.current.style.background = `radial-gradient(circle ${radius}px at ${x}px ${y}px, transparent 0%, rgba(0,0,0,0.92) 80%, #000000 100%)`
         maskRef.current.style.opacity = '0.98'
+      } else {
+        // TORCH_AVAILABLE (Unlit Cursor Torch): Complete 100% Solid Pitch Dark Overlay
+        maskRef.current.style.background = '#000000'
+        maskRef.current.style.opacity = '1.0'
       }
 
       animId = requestAnimationFrame(updateSpotlightMask)
@@ -73,16 +89,19 @@ export default function HomepageLightingOverlay({
 
     animId = requestAnimationFrame(updateSpotlightMask)
     return () => cancelAnimationFrame(animId)
-  }, [campfirePos, isIlluminating, isTorchActive, isTouch, lerpPosRef])
+  }, [campfirePos, isDarknessActive, isIlluminating, isTorchLit, isTouch, lerpPosRef])
 
   return (
     <>
-      {/* Dark Spotlight Mask Layer performing one-time continuous soft radial expansion */}
-      {isTorchActive && (
+      {/* Dark Mask Layer active immediately from TORCH_AVAILABLE */}
+      {isDarknessActive && (
         <div
           ref={maskRef}
           className="homepage-darkness-mask"
-          style={{ opacity: 0.98 }}
+          style={{
+            background: '#000000',
+            opacity: 1.0
+          }}
         />
       )}
     </>

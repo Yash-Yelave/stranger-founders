@@ -39,297 +39,123 @@
 }
 
 /* =========================================================================
-   SCENE 1 & 2: THE LOCKED DOOR & KEY SEARCH
+   SCENE 1: WHITE / CREAM PERSPECTIVE TUNNEL INTRO
    ========================================================================= */
-.door-scene-viewport {
-  position: absolute;
-  inset: 0;
-  background: #060b08;
-  overflow: hidden;
-}
-
-.door-camera-track {
-  position: absolute;
-  width: 100%;
-  height: 200svh;
-  top: 0;
-  left: 0;
-  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-  will-change: transform;
-}
-
-/* Scene 1: Large Closed Door Container */
-.door-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100svh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: radial-gradient(circle at 50% 40%, #102117 0%, #060b08 70%);
-  transition: transform 1.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 1.2s ease-in;
-  transform-origin: center center;
-}
-
-.door-container.zooming-in {
-  transform: scale(3.8) translateY(5%);
-  opacity: 0;
-}
-
-/* Pitch Black Background Layer (Before Flambeau Ignition) */
-.solid-black-layer {
+/* =========================================================================
+   SCENE 1: 3D PERSPECTIVE TUNNEL & CHASE INTRO
+   ========================================================================= */
+.tunnel-scene-viewport {
   position: fixed;
   inset: 0;
-  background: #000000;
-  z-index: 100;
-  pointer-events: none;
-  transition: opacity 0.8s ease-out;
-}
-
-/* Door Frame & Wings */
-.door-frame {
-  position: relative;
-  width: min(340px, 80vw);
-  height: min(480px, 68svh);
-  border: 12px solid #1a2a1f;
-  border-bottom: none;
-  border-radius: 120px 120px 0 0;
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), inset 0 0 30px rgba(0, 0, 0, 0.8);
-  overflow: hidden;
-  background: #000000;
-  transition: overflow 0.3s;
-}
-
-.door-frame.open {
-  overflow: visible;
-}
-
-.door-wings-wrapper {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  perspective: 1000px;
-  perspective-origin: center center;
-}
-
-.door-wing {
-  flex: 1;
-  height: 100%;
-  background: linear-gradient(135deg, #1b3323 0%, #0e1b12 100%);
-  border: 2px solid rgba(214, 154, 92, 0.15);
-  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
-  position: relative;
-  transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1);
-  transform-origin: left center;
-  transform-style: preserve-3d;
-  z-index: 2;
-}
-.door-wing.right {
-  transform-origin: right center;
-}
-
-.door-wing-texture {
-  position: absolute;
-  inset: 0;
-  background-image: repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(0,0,0,0.25) 40px, rgba(0,0,0,0.25) 42px);
-  opacity: 0.8;
-}
-
-/* Door Handles */
-.door-handle {
-  position: absolute;
-  top: 55%;
-  width: 8px;
-  height: 36px;
-  background: #b3703a;
-  border-radius: 4px;
-  box-shadow: 0 0 10px rgba(179, 112, 58, 0.5);
-}
-.door-wing.left .door-handle { right: 12px; }
-.door-wing.right .door-handle { left: 12px; }
-
-.door-wing.left.open {
-  transform: rotateY(-115deg);
-}
-.door-wing.right.open {
-  transform: rotateY(115deg);
-}
-
-/* Lock Assembly */
-.lock-assembly {
-  position: absolute;
-  top: 55%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  width: 100vw;
+  height: 100svh;
   z-index: 10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: opacity 0.5s ease-out;
+  overflow: hidden;
+  will-change: background-color;
+  pointer-events: auto;
 }
 
-.door-frame.open .lock-assembly {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.lock-plate {
-  width: 64px;
-  height: 84px;
-  background: linear-gradient(145deg, #2b1f14, #18110b);
-  border: 2px solid #b3703a;
-  border-radius: 8px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px rgba(179, 112, 58, 0.3);
+.tunnel-3d-stage {
+  position: absolute;
+  inset: 0;
+  perspective: 1000px;
+  perspective-origin: 50% 50%;
+  transform-style: preserve-3d;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: relative;
 }
 
-.lock-shackle {
-  width: 36px;
-  height: 36px;
-  border: 5px solid #d69a5c;
-  border-bottom: none;
-  border-radius: 18px 18px 0 0;
-  margin-bottom: -6px;
-  transition: transform 0.6s ease-out;
-}
-.lock-assembly.unlocked .lock-shackle {
-  transform: translateY(-14px) rotate(-15deg);
-}
-
-.keyhole {
-  width: 14px;
-  height: 24px;
-  background: #000;
-  border-radius: 7px 7px 2px 2px;
-  position: relative;
-  box-shadow: inset 0 2px 5px rgba(0,0,0,0.9);
-}
-
-.lock-glow-ring {
+/* 3D Z-Layered Corridor Rings */
+.tunnel-corridor-ring {
   position: absolute;
-  inset: -12px;
-  border: 2px dashed rgba(214, 154, 92, 0.4);
+  width: 450px;
+  height: 450px;
   border-radius: 50%;
-  animation: spinSlow 12s linear infinite;
+  border: 1px dashed rgba(180, 165, 145, 0.4);
+  box-shadow: 0 0 40px rgba(180, 165, 145, 0.1);
   pointer-events: none;
+  will-change: transform, opacity;
 }
 
-/* Scroll Hint Indicator */
-.intro-scroll-hint {
+/* Flying Dust Particles */
+.tunnel-particles-layer {
   position: absolute;
-  bottom: 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.72rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: #cdbe9c;
-  opacity: 0.85;
-  animation: pulseGentle 2s ease-in-out infinite;
+  inset: 0;
+  pointer-events: none;
+  transform-style: preserve-3d;
 }
-.scroll-arrow-anim {
-  width: 16px;
-  height: 16px;
-  border-right: 2px solid #d69a5c;
-  border-bottom: 2px solid #d69a5c;
-  transform: rotate(45deg);
-  animation: bounceDown 1.5s ease-in-out infinite;
-}
-
-/* Scene 2: Boxes Exploration Chamber */
-.boxes-chamber {
+.tunnel-particle {
   position: absolute;
-  top: 100svh;
-  left: 0;
-  width: 100%;
-  height: 100svh;
-  background: radial-gradient(circle at 50% 50%, #0d1b13 0%, #040806 80%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(180, 160, 130, 0.5);
+  box-shadow: 0 0 10px rgba(180, 160, 130, 0.4);
 }
+.particle-1 { top: 30%; left: 25%; }
+.particle-2 { top: 75%; left: 70%; }
+.particle-3 { top: 40%; left: 80%; }
+.particle-4 { top: 80%; left: 20%; }
+.particle-5 { top: 20%; left: 65%; }
 
-.chamber-title {
-  font-family: var(--serif, Georgia, serif);
-  font-size: clamp(1.2rem, 3vw, 1.8rem);
-  color: #f5ecd8;
-  margin-bottom: 32px;
+/* Scene 1: "Are you a stranger?" Opening Title (Centered In-Place Growth) */
+.stranger-title-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center center;
   text-align: center;
-  letter-spacing: 0.05em;
-}
-
-.boxes-grid {
-  display: flex;
-  gap: min(24px, 4vw);
-  flex-wrap: wrap;
-  justify-content: center;
-  max-width: 600px;
-}
-
-.wooden-box {
-  width: min(130px, 28vw);
-  height: min(130px, 28vw);
-  background: linear-gradient(135deg, #1b2e21, #0f1c13);
-  border: 1px solid rgba(214, 154, 92, 0.25);
-  border-radius: 8px;
-  box-shadow: 0 12px 25px rgba(0,0,0,0.6);
+  width: min(90%, 650px);
+  will-change: transform, opacity;
+  pointer-events: none;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  position: relative;
-  transition: transform 0.25s var(--ease), border-color 0.25s;
-}
-.wooden-box:hover {
-  transform: translateY(-4px) scale(1.03);
-  border-color: #d69a5c;
 }
 
-.box-lid {
-  font-size: 2rem;
-  color: #d69a5c;
-  transition: transform 0.4s var(--ease);
-}
-.wooden-box.open .box-lid {
-  transform: translateY(-10px) rotate(-15deg);
-}
-
-.box-label {
-  font-size: 0.65rem;
-  letter-spacing: 0.15em;
-  color: #cdbe9c;
-  margin-top: 8px;
-  text-transform: uppercase;
+.stranger-title-text {
+  font-family: var(--serif, Georgia, serif);
+  font-size: clamp(2.2rem, 6vw, 4.2rem);
+  font-weight: 400;
+  color: #1a1714;
+  letter-spacing: 0.04em;
+  margin: 0;
+  line-height: 1.15;
+  white-space: nowrap;
 }
 
-/* Key Component */
-.draggable-key {
-  position: fixed;
-  z-index: 100;
-  width: 56px;
-  height: 56px;
-  cursor: grab;
-  touch-action: none;
-  user-select: none;
-  filter: drop-shadow(0 0 14px rgba(214, 154, 92, 0.9));
-  transition: transform 0.15s ease-out;
+.scroll-pulse-hint {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.draggable-key.dragging {
-  cursor: grabbing;
-  transform: scale(1.18);
+
+.scroll-pulse-arrow {
+  width: 14px;
+  height: 14px;
+  border-right: 2px solid #736452;
+  border-bottom: 2px solid #736452;
+  transform: rotate(45deg);
+  animation: pulseArrow 1.8s ease-in-out infinite;
+}
+
+@keyframes pulseArrow {
+  0% { transform: rotate(45deg) translate(0, 0); opacity: 0.4; }
+  50% { transform: rotate(45deg) translate(4px, 4px); opacity: 1; }
+  100% { transform: rotate(45deg) translate(0, 0); opacity: 0.4; }
+}
+
+/* Vector SVG Layer for Smooth Anti-Aliased Black Circle */
+.tunnel-svg-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 15;
 }
 
 /* =========================================================================

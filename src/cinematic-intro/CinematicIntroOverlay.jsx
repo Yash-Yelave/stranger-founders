@@ -7,7 +7,7 @@ import { useCampfireTargetPosition } from './hooks/useCampfireTargetPosition'
 import { isWithinProximity, getDistance } from './hooks/useProximityDetection'
 import { useReducedMotion } from './hooks/useReducedMotion'
 
-import DoorScene from './scenes/DoorScene'
+import TunnelScene from './scenes/TunnelScene'
 import StationaryTorch from './scenes/StationaryTorch'
 import CursorTorch from './scenes/CursorTorch'
 import CampfireIgnition from './scenes/CampfireIgnition'
@@ -57,27 +57,29 @@ export default function CinematicIntroOverlay() {
     // Prevent body scroll during initial scenes
     document.body.style.overflow = 'hidden'
 
-    // Preload & transition to DOOR_LOCKED
+    // Preload & transition to TEXT_STRANGER
     const preloadTimer = setTimeout(() => {
-      transitionTo(INTRO_STATES.DOOR_LOCKED)
+      transitionTo(INTRO_STATES.TEXT_STRANGER)
     }, 50)
 
     return () => clearTimeout(preloadTimer)
   }, [pathname, transitionTo])
 
-  // Force programmatic scroll reset to top (0,0) before torch scene starts
+  // Force programmatic scroll reset to top (0,0) before torch scene starts, then unlock webpage scroll
   useEffect(() => {
-    if (
-      currentState === INTRO_STATES.ENTERING_DARKNESS ||
-      currentState === INTRO_STATES.TORCH_AVAILABLE
-    ) {
+    if (currentState === INTRO_STATES.TRANSITIONING_TO_DARKNESS) {
       if ('scrollRestoration' in window.history) {
         window.history.scrollRestoration = 'manual'
       }
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
       document.body.scrollTop = 0
       document.documentElement.scrollTop = 0
-      document.body.style.overflow = 'hidden'
+    }
+
+    if (currentState === INTRO_STATES.TORCH_AVAILABLE) {
+      // Immediately unlock body & document scroll for dark homepage exploration
+      document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
     }
   }, [currentState])
 
@@ -225,17 +227,12 @@ export default function CinematicIntroOverlay() {
     INTRO_STATES.HOMEPAGE_ILLUMINATING
   ].includes(currentState)
 
-  const isDoorSceneActive = [
+  const isTunnelSceneActive = [
     INTRO_STATES.INITIALIZING,
-    INTRO_STATES.DOOR_LOCKED,
-    INTRO_STATES.SCROLLING_TO_BOXES,
-    INTRO_STATES.SEARCHING_FOR_KEY,
-    INTRO_STATES.KEY_FOUND,
-    INTRO_STATES.KEY_DRAGGING,
-    INTRO_STATES.KEY_INSERTED,
-    INTRO_STATES.DOOR_UNLOCKING,
-    INTRO_STATES.DOOR_OPENING,
-    INTRO_STATES.ENTERING_DARKNESS
+    INTRO_STATES.TEXT_STRANGER,
+    INTRO_STATES.TEXT_FOLLOW_ME,
+    INTRO_STATES.TUNNEL_SCROLLING,
+    INTRO_STATES.TRANSITIONING_TO_DARKNESS
   ].includes(currentState)
 
   const isSolidBlackActive = [
@@ -256,9 +253,9 @@ export default function CinematicIntroOverlay() {
         Skip Intro ✕
       </button>
 
-      {/* Scene 1 & 2: Locked Door & Key Search */}
-      {isDoorSceneActive && (
-        <DoorScene currentState={currentState} onTransition={transitionTo} />
+      {/* Opening Scene: White/Cream Perspective Tunnel ("Are you a stranger? -> Follow me") */}
+      {isTunnelSceneActive && (
+        <TunnelScene currentState={currentState} onTransition={transitionTo} />
       )}
 
       {/* Full Pitch Black Layer (Before Flambeau Ignition) */}
