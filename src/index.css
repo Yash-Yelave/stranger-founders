@@ -1336,212 +1336,334 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
 }
 
 /* =========================================================================
-   WHY DIFFERENT SECTION
+   WHY DIFFERENT SECTION (REDESIGNED MATRIX & BENTO GRID)
    ========================================================================= */
 .diff-section {
   background: var(--forest-925);
   padding: clamp(72px, 10vw, 120px) 0;
   border-top: 1px solid var(--forest-line-soft);
+  position: relative;
+  overflow: hidden;
 }
 .diff-inner {
-  max-width: 840px;
+  max-width: 1040px;
   margin: 0 auto;
   text-align: center;
 }
 .diff-eyebrow {
   font-family: var(--sans);
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.28em;
   color: var(--copper-light);
   text-transform: uppercase;
-  margin-bottom: 22px;
+  margin-bottom: 16px;
   display: block;
 }
 .diff-title {
   font-family: var(--serif);
   font-style: italic;
   font-weight: 400;
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-size: clamp(1.8rem, 3.8vw, 2.8rem);
   color: var(--cream);
   line-height: 1.18;
-  margin-bottom: 40px;
+  margin-bottom: 36px;
   text-align: center;
 }
-.diff-card-stack {
-  max-width: 640px;
-  margin: 0 auto 52px;
+
+/* Compared To Usual Formats Header Bar */
+.compared-formats-bar {
+  margin-bottom: 48px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-}
-.diff-card {
-  display: grid;
-  grid-template-columns: 1fr 44px 1fr;
   align-items: center;
-  padding: 16px 22px;
-  background: rgba(16, 33, 23, 0.65);
-  border: 1px solid var(--forest-line-soft);
-  border-radius: 6px;
-  backdrop-filter: blur(8px);
-  transition: transform 0.35s var(--ease), border-color 0.35s var(--ease), box-shadow 0.35s var(--ease), background 0.35s var(--ease);
+  gap: 16px;
 }
-.diff-card:hover {
+.compared-bar-label {
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  color: var(--cream-faint);
+  text-transform: uppercase;
+}
+.compared-pills-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  max-width: 800px;
+}
+.compared-pill-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 30px;
+  background: rgba(16, 33, 23, 0.55);
+  border: 1px solid var(--forest-line-soft);
+  backdrop-filter: blur(8px);
+  transition: transform 0.3s var(--ease), border-color 0.3s var(--ease), background 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+.compared-pill-item:hover {
   transform: translateY(-2px);
   background: rgba(23, 52, 35, 0.85);
   border-color: rgba(214, 154, 92, 0.4);
-  box-shadow: 0 10px 28px -10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(214, 154, 92, 0.12);
+  box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.4), 0 0 15px rgba(214, 154, 92, 0.15);
 }
-.diff-card-left {
+.compared-pill-icon {
+  color: var(--copper-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.compared-pill-label {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--cream-dim);
+  letter-spacing: 0.03em;
+}
+
+/* Paradigm Shift Comparison Matrix */
+.diff-matrix-wrapper {
+  max-width: 900px;
+  margin: 0 auto 72px;
+  background: rgba(16, 33, 23, 0.4);
+  border: 1px solid var(--forest-line-soft);
+  border-radius: 12px;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.6);
+}
+.diff-matrix-header {
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr;
+  align-items: center;
+  padding: 18px 28px;
+  background: rgba(10, 22, 15, 0.7);
+  border-bottom: 1px solid var(--forest-line-soft);
+}
+.diff-header-col {
+  display: flex;
+  align-items: center;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.diff-header-col.traditional {
+  justify-content: flex-end;
+  color: var(--cream-faint);
+  gap: 10px;
+}
+.diff-header-col.divider {
+  justify-content: center;
+  color: var(--copper-light);
+  font-weight: 800;
+  font-size: 0.75rem;
+}
+.diff-header-col.sf-way {
+  justify-content: flex-start;
+  color: var(--cream);
+  gap: 10px;
+}
+.diff-dot-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.traditional-dot {
+  background: rgba(255, 100, 100, 0.5);
+  box-shadow: 0 0 6px rgba(255, 100, 100, 0.3);
+}
+.sf-dot {
+  background: var(--copper-light);
+  box-shadow: 0 0 10px var(--copper-light);
+  animation: pulseGlow 2s infinite alternate;
+}
+
+.diff-matrix-body {
+  display: flex;
+  flex-direction: column;
+}
+.diff-matrix-row {
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr;
+  align-items: center;
+  padding: 18px 28px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  transition: background 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+.diff-matrix-row:last-child {
+  border-bottom: none;
+}
+.diff-matrix-row:hover {
+  background: rgba(23, 52, 35, 0.55);
+}
+
+.diff-row-cell.from-cell {
   text-align: right;
 }
-.diff-from-badge {
+.diff-from-text {
   font-family: var(--serif);
-  font-size: 0.95rem;
-  font-weight: 400;
+  font-size: 1.05rem;
   color: var(--cream-faint);
   text-decoration: line-through;
-  text-decoration-color: rgba(214, 154, 92, 0.45);
+  text-decoration-color: rgba(214, 154, 92, 0.4);
   transition: color 0.3s var(--ease);
 }
-.diff-card-center {
+.diff-matrix-row:hover .diff-from-text {
+  color: rgba(245, 236, 216, 0.5);
+}
+
+.diff-row-cell.arrow-cell {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.diff-arrow-badge {
-  width: 30px;
-  height: 30px;
+.diff-arrow-icon {
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: rgba(214, 154, 92, 0.1);
-  border: 1px solid rgba(214, 154, 92, 0.22);
+  border: 1px solid rgba(214, 154, 92, 0.2);
   color: var(--copper-light);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.85rem;
   font-weight: 700;
-  transition: transform 0.35s var(--ease), background 0.35s var(--ease), border-color 0.35s var(--ease), color 0.35s var(--ease);
+  transition: transform 0.3s var(--ease), background 0.3s var(--ease), border-color 0.3s var(--ease);
 }
-.diff-card:hover .diff-arrow-badge {
+.diff-matrix-row:hover .diff-arrow-icon {
   transform: translateX(3px);
-  background: rgba(214, 154, 92, 0.22);
+  background: rgba(214, 154, 92, 0.25);
   border-color: var(--copper);
-  color: var(--cream);
 }
-.diff-card-right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+
+.diff-row-cell.to-cell {
+  text-align: left;
 }
-.diff-to-badge {
+.diff-to-text {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   font-family: var(--serif);
-  font-size: 1.08rem;
+  font-size: 1.15rem;
   font-weight: 400;
   color: var(--cream);
-  letter-spacing: 0.01em;
   transition: color 0.3s var(--ease), transform 0.3s var(--ease);
 }
-.diff-card:hover .diff-to-badge {
+.diff-matrix-row:hover .diff-to-text {
   color: var(--copper-light);
   transform: translateX(4px);
 }
-.diff-live-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--copper-light);
-  box-shadow: 0 0 8px var(--copper-light);
-  display: inline-block;
-  opacity: 0.6;
-  transition: transform 0.3s var(--ease), opacity 0.3s var(--ease);
-}
-.diff-card:hover .diff-live-dot {
-  opacity: 1;
-  transform: scale(1.4);
-}
-.diff-footer-label {
+
+/* Rules of the Fire Bento Grid */
+.fire-rules-container {
   margin-top: 64px;
-  margin-bottom: 24px;
+}
+.fire-rules-head {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.fire-rules-label {
   font-family: var(--sans);
-  font-size: 0.76rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.26em;
   color: var(--copper-light);
   text-transform: uppercase;
-  text-align: center;
+  display: block;
+  margin-bottom: 8px;
 }
-
-.compared-pills-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  max-width: 880px;
-  margin: 0 auto;
-}
-
-.compared-pill-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 10px 16px;
-  min-height: 50px;
-  background: rgba(16, 33, 23, 0.45);
-  border: 1px solid var(--forest-line-soft);
-  border-radius: 40px;
-  backdrop-filter: blur(8px);
-  transition: transform 0.3s var(--ease), border-color 0.3s var(--ease), background 0.3s var(--ease), box-shadow 0.3s var(--ease);
-}
-
-.compared-pill-item:hover {
-  transform: translateY(-2px);
-  background: rgba(23, 52, 35, 0.7);
-  border-color: rgba(214, 154, 92, 0.35);
-  box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.4), 0 0 15px rgba(214, 154, 92, 0.1);
-}
-
-.compared-pill-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: rgba(245, 236, 216, 0.05);
-  border: 1px solid rgba(245, 236, 216, 0.1);
-  color: var(--cream-dim);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: color 0.3s var(--ease), border-color 0.3s var(--ease), background 0.3s var(--ease);
-}
-
-.compared-pill-item:hover .compared-pill-icon {
-  color: var(--copper-light);
-  border-color: rgba(214, 154, 92, 0.35);
-  background: rgba(214, 154, 92, 0.12);
-}
-
-.compared-pill-label {
-  font-family: var(--sans);
-  font-size: 0.8rem;
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: 0.02em;
-  color: var(--cream-dim);
-  white-space: nowrap;
-  transition: color 0.3s var(--ease);
-}
-
-.compared-pill-item:hover .compared-pill-label {
+.fire-rules-sub {
+  font-family: var(--serif);
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 400;
+  font-style: italic;
   color: var(--cream);
 }
+.fire-rules-bento {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.fire-rule-card {
+  padding: 24px 20px;
+  background: rgba(16, 33, 23, 0.45);
+  border: 1px solid var(--forest-line-soft);
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+  text-align: left;
+  transition: transform 0.35s var(--ease), border-color 0.35s var(--ease), background 0.35s var(--ease), box-shadow 0.35s var(--ease);
+  display: flex;
+  flex-direction: column;
+}
+.fire-rule-card:hover {
+  transform: translateY(-4px);
+  background: rgba(23, 52, 35, 0.75);
+  border-color: rgba(214, 154, 92, 0.4);
+  box-shadow: 0 14px 30px -10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(214, 154, 92, 0.12);
+}
+.fire-rule-num {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: var(--copper-light);
+  margin-bottom: 12px;
+  display: inline-block;
+  opacity: 0.9;
+}
+.fire-rule-title {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--cream);
+  margin-bottom: 8px;
+}
+.fire-rule-desc {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  color: var(--cream-dim);
+  line-height: 1.5;
+  margin: 0;
+}
 
-@media (max-width: 860px) {
-  .compared-pills-grid {
+@media (max-width: 768px) {
+  .diff-matrix-header {
+    display: none;
+  }
+  .diff-matrix-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 16px 20px;
+    text-align: center;
+  }
+  .diff-row-cell.from-cell, .diff-row-cell.to-cell {
+    text-align: center;
+    justify-content: center;
+  }
+  .diff-arrow-icon {
+    transform: rotate(90deg);
+  }
+  .diff-matrix-row:hover .diff-arrow-icon {
+    transform: rotate(90deg) translateY(3px);
+  }
+  .fire-rules-bento {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .fire-rules-bento {
+    grid-template-columns: 1fr;
   }
 }
 @media (max-width: 480px) {

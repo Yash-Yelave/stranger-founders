@@ -502,49 +502,95 @@ export default function Home() {
       <section className="diff-section">
         <div className="container diff-inner">
           <Reveal>
-            <p className="diff-eyebrow">WHY DIFFERENT</p>
+            <span className="diff-eyebrow">WHY DIFFERENT</span>
             <h2 className="diff-title">We traded the familiar for the real</h2>
           </Reveal>
+
+          {/* Compared to Usual Formats Pills */}
           <Reveal delay={1}>
-            <div className="diff-card-stack">
-              {[
-                ['Conference Rooms', 'Nature'],
-                ['Networking', 'Experiences'],
-                ['Speeches', 'Conversations'],
-                ['Business Cards', 'Relationships'],
-                ['Audiences', 'Communities'],
-              ].map(([from, to]) => (
-                <div className="diff-card" key={from}>
-                  <div className="diff-card-left">
-                    <span className="diff-from-badge">{from}</span>
+            <div className="compared-formats-bar">
+              <span className="compared-bar-label">COMPARED TO THE USUAL FORMATS:</span>
+              <div className="compared-pills-row">
+                {[
+                  { label: 'Podcast', icon: <TbMicrophone size={16} strokeWidth={1.5} /> },
+                  { label: 'Conference', icon: <TbBuildingSkyscraper size={16} strokeWidth={1.5} /> },
+                  { label: 'Networking Event', icon: <TbUsersGroup size={16} strokeWidth={1.5} /> },
+                  { label: 'Retreat', icon: <TbTent size={16} strokeWidth={1.5} /> }
+                ].map(({ icon, label }) => (
+                  <div className="compared-pill-item" key={label}>
+                    <div className="compared-pill-icon">{icon}</div>
+                    <span className="compared-pill-label">{label}</span>
                   </div>
-                  <div className="diff-card-center">
-                    <span className="diff-arrow-badge">→</span>
-                  </div>
-                  <div className="diff-card-right">
-                    <span className="diff-to-badge">
-                      <span className="diff-live-dot" aria-hidden="true" />
-                      {to}
-                    </span>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </Reveal>
+
+          {/* Paradigm Shift Comparison Matrix */}
           <Reveal delay={2}>
-            <p className="diff-footer-label">COMPARED TO THE USUAL FORMATS</p>
-            <div className="compared-pills-grid">
-              {[
-                { label: 'Podcast', icon: <TbMicrophone size={18} strokeWidth={1.5} /> },
-                { label: 'Conference', icon: <TbBuildingSkyscraper size={18} strokeWidth={1.5} /> },
-                { label: 'Networking Event', icon: <TbUsersGroup size={18} strokeWidth={1.5} /> },
-                { label: 'Retreat', icon: <TbTent size={18} strokeWidth={1.5} /> }
-              ].map(({ icon, label }) => (
-                <div className="compared-pill-item" key={label}>
-                  <div className="compared-pill-icon">{icon}</div>
-                  <span className="compared-pill-label">{label}</span>
+            <div className="diff-matrix-wrapper">
+              <div className="diff-matrix-header">
+                <div className="diff-header-col traditional">
+                  <span className="diff-dot-indicator traditional-dot" />
+                  <span>THE TRADITIONAL FORMAT</span>
                 </div>
-              ))}
+                <div className="diff-header-col divider">
+                  <span>VS</span>
+                </div>
+                <div className="diff-header-col sf-way">
+                  <span className="diff-dot-indicator sf-dot" />
+                  <span>THE STRANGER FOUNDERS WAY</span>
+                </div>
+              </div>
+
+              <div className="diff-matrix-body">
+                {[
+                  ['Conference Rooms', 'Nature'],
+                  ['Networking', 'Experiences'],
+                  ['Speeches', 'Conversations'],
+                  ['Business Cards', 'Relationships'],
+                  ['Audiences', 'Communities']
+                ].map(([from, to]) => (
+                  <div className="diff-matrix-row" key={from}>
+                    <div className="diff-row-cell from-cell">
+                      <span className="diff-from-text">{from}</span>
+                    </div>
+                    <div className="diff-row-cell arrow-cell">
+                      <span className="diff-arrow-icon">→</span>
+                    </div>
+                    <div className="diff-row-cell to-cell">
+                      <span className="diff-to-text">
+                        <span className="diff-live-dot" aria-hidden="true" />
+                        {to}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+
+          {/* The Rules of the Fire Bento Grid */}
+          <Reveal delay={3}>
+            <div className="fire-rules-container">
+              <div className="fire-rules-head">
+                <span className="fire-rules-label">THE RULES OF THE FIRE</span>
+                <h3 className="fire-rules-sub">Nothing like anything you've been to before</h3>
+              </div>
+              <div className="fire-rules-bento">
+                {[
+                  { num: '01', title: 'No Audience', desc: 'Only the three others at the fire.' },
+                  { num: '02', title: 'No Stage', desc: 'Everyone sits at the same height.' },
+                  { num: '03', title: 'No Pitching', desc: 'Leave the deck at home.' },
+                  { num: '04', title: 'Only This', desc: 'Real conversations. Captured. Never scripted.' }
+                ].map(({ num, title, desc }) => (
+                  <div className="fire-rule-card" key={num}>
+                    <span className="fire-rule-num">{num}</span>
+                    <h4 className="fire-rule-title">{title}</h4>
+                    <p className="fire-rule-desc">{desc}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </Reveal>
         </div>
