@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import Nav from './components/Nav.jsx'
 import Footer from './components/Footer.jsx'
@@ -42,6 +42,7 @@ export default function App() {
       <main>
         <Routes>
           <Route path="/"           element={<Home />} />
+          <Route path="/lander"     element={<Navigate to="/" replace />} />
           <Route path="/experience" element={<Experience />} />
           <Route path="/season-01"  element={<Season />} />
           <Route path="/partners"   element={<Partners />} />
