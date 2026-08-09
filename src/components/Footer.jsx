@@ -1,15 +1,15 @@
 import { Link } from 'react-router-dom'
-import { LogoMark } from './Logo.jsx'
+import Logo from './Logo.jsx'
 
 export default function Footer() {
   return (
     <footer className="footer">
       <div className="container">
         <div className="footer-top">
-          <div>
-            <LogoMark size={44} />
+          <div className="footer-brand">
+            <Logo />
             <p className="footer-tag">Meet Strangers. Build Legacies.</p>
-            <p className="muted" style={{ maxWidth: '34ch', fontSize: 15 }}>
+            <p className="muted" style={{ maxWidth: '34ch', fontSize: 15, marginTop: 12 }}>
               An invite-only founder experience. Four strangers, one fire, and the
               conversations that outlast the season.
             </p>
