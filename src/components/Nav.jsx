@@ -5,7 +5,6 @@ import Logo from './Logo.jsx'
 const links = [
   { to: '/experience', label: 'The Experience' },
   { to: '/season-01', label: 'Season 01' },
-  { to: '/partners', label: 'Partners' },
 ]
 
 export default function Nav() {
