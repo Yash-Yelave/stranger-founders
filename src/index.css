@@ -2523,3 +2523,58 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
     padding: 0 16px;
   }
 }
+
+/* =========================================================================
+   CUSTOM FORM GRIDS (Creator Application)
+   ========================================================================= */
+.radio-grid, .checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.radio-card, .checkbox-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 14px 18px;
+  background: var(--forest-900);
+  border: 1px solid var(--forest-line-soft);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  color: var(--cream-dim);
+  font-size: 0.95rem;
+}
+
+.radio-card:hover, .checkbox-card:hover {
+  background: var(--forest-800);
+  border-color: var(--forest-line);
+}
+
+.radio-card.selected, .checkbox-card.selected {
+  background: var(--copper-dark);
+  border-color: var(--copper);
+  color: var(--cream);
+}
+
+.radio-card input, .checkbox-card input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.radio-grid.cols-3, .checkbox-grid.cols-3 {
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+.field.other-input {
+  margin-top: 12px;
+  animation: fadeIn 0.4s var(--ease);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -1,147 +1,250 @@
 import { useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
 import Reveal from '../components/Reveal.jsx'
-import Faq from '../components/Faq.jsx'
 import Seal from '../components/Seal.jsx'
-import { founderFaqs } from '../data/content.js'
 
 export default function Apply() {
-  const [params] = useSearchParams()
-  const initial = params.get('type') === 'partner' ? 'partner' : 'founder'
-  const [mode, setMode] = useState(initial)
   const [sent, setSent] = useState(false)
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    handle: '',
+    contentType: '',
+    contentTypeOther: '',
+    buildingBusiness: '',
+    businessDesc: '',
+    revenue: '',
+    timeCreating: '',
+    story: '',
+    hardestPart: '',
+    biggestStruggle: '',
+    threeYears: '',
+    expecting: [],
+    expectingOther: '',
+    whyInvited: '',
+    declaration: false
+  })
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target
+    if (type === 'checkbox' && name !== 'declaration') {
+      // Handle the 'expecting' array
+      setFormData((prev) => {
+        const list = prev.expecting
+        if (checked) return { ...prev, expecting: [...list, value] }
+        return { ...prev, expecting: list.filter((item) => item !== value) }
+      })
+    } else if (type === 'checkbox' && name === 'declaration') {
+      setFormData((prev) => ({ ...prev, [name]: checked }))
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }))
+    }
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // No backend wired yet — capture intent and confirm. Hook to email / CRM on launch.
+    // No backend wired yet — capture intent and confirm.
     setSent(true)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
+
+  const contentTypes = ['Comedy', 'Lifestyle', 'Business', 'Education', 'Tech / AI', 'Fitness', 'Finance', 'Storytelling', 'Other']
+  const businessTypes = ['Personal brand', 'Product / Brand', 'Agency', 'Community', 'Startup', 'Course / Education', 'Not yet']
+  const revenueOptions = ['₹0–10,000', '₹10,000–50,000', '₹50,000–2L', '₹2L–10L', '₹10L+']
+  const timeOptions = ['< 6 months', '6–12 months', '1–2 years', '2–5 years', '5+ years']
+  const expectations = ['Clarity', 'Growth', 'Networking', 'Business opportunities', 'Accountability', 'Collaborations', 'Learning from other founders', 'Personal transformation', 'Other']
 
   return (
     <>
       <section className="page-hero">
         <div className="container narrow">
-          <Reveal><span className="eyebrow">You’ve been invited to apply</span></Reveal>
+          <Reveal><span className="eyebrow">Creator Application</span></Reveal>
           <Reveal as="h1" className="display" delay={1}>
-            {mode === 'partner' ? 'Partner with us.' : 'Request an invitation.'}
+            Stranger Founder
           </Reveal>
-          <Reveal as="p" className="lead muted" delay={2}>
-            {mode === 'partner'
-              ? 'Tell us about your brand. We work with a small number of aligned partners each season and will follow up personally.'
-              : 'Every founder in the room is curated. Tell us who you are — if it’s a fit, an invitation follows. You can also nominate a founder who belongs at the fire.'}
+          <Reveal as="p" className="lead muted" delay={2} style={{ maxWidth: '60ch' }}>
+            This is not a casting form. It is a founder and creator evaluation. Follower count does not decide selection. Story, ambition, honesty, business potential, and transformation value do.
           </Reveal>
-
-          {!sent && (
-            <Reveal className="apply-toggle" delay={3} style={{ display: 'flex', gap: 10, marginTop: 30 }}>
-              <button className={`btn ${mode === 'founder' ? 'btn-primary' : 'btn-ghost'}`}
-                      onClick={() => setMode('founder')} type="button">I’m a founder</button>
-              <button className={`btn ${mode === 'partner' ? 'btn-primary' : 'btn-ghost'}`}
-                      onClick={() => setMode('partner')} type="button">I’m a brand</button>
-            </Reveal>
-          )}
         </div>
       </section>
 
-      <section className="section-pad-sm" style={{ paddingTop: 8 }}>
+      <section className="section-pad-sm" style={{ paddingTop: 8, paddingBottom: 100 }}>
         <div className="container narrow">
           {sent ? (
             <Reveal className="form-success">
-              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 8 }}>
+              <div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
                 <Seal size={104} />
               </div>
-              <h3>Your request is in.</h3>
+              <h3>Your application is in.</h3>
               <p className="lead muted" style={{ maxWidth: '46ch', margin: '0 auto' }}>
-                {mode === 'partner'
-                  ? 'Thank you — the team will reach out with the season deck and available formats.'
-                  : 'Thank you. Every request is read by the team. If there’s a seat with your name on it, you’ll hear from us.'}
+                Thank you. Every application is reviewed carefully. If there’s a seat with your name on it, you’ll hear from us soon.
               </p>
               <p className="script" style={{ fontSize: '1.6rem', marginTop: 22 }}>See you with the next strangers.</p>
             </Reveal>
           ) : (
             <form onSubmit={handleSubmit}>
               <div className="form-grid">
-                <div className="field">
-                  <label htmlFor="name">Full name</label>
-                  <input id="name" name="name" required placeholder="Your name" />
-                </div>
-                <div className="field">
-                  <label htmlFor="email">Email</label>
-                  <input id="email" name="email" type="email" required placeholder="you@company.com" />
+                
+                {/* 1. Full Name */}
+                <div className="field full">
+                  <label htmlFor="name">1. Full Name *</label>
+                  <input id="name" name="name" required placeholder="Your full name" value={formData.name} onChange={handleChange} />
                 </div>
 
-                {mode === 'founder' ? (
-                  <>
-                    <div className="field">
-                      <label htmlFor="company">Company / handle</label>
-                      <input id="company" name="company" placeholder="What you build / @handle" />
+                {/* 2. Email Address */}
+                <div className="field">
+                  <label htmlFor="email">2. Email Address *</label>
+                  <input id="email" name="email" type="email" required placeholder="you@example.com" value={formData.email} onChange={handleChange} />
+                </div>
+
+                {/* 3. Phone Number */}
+                <div className="field">
+                  <label htmlFor="phone">3. Phone Number / WhatsApp *</label>
+                  <input id="phone" name="phone" type="tel" required placeholder="+91..." value={formData.phone} onChange={handleChange} />
+                </div>
+
+                {/* 4. Handle */}
+                <div className="field full">
+                  <label htmlFor="handle">4. Instagram / YouTube Handle *</label>
+                  <input id="handle" name="handle" required placeholder="@username or Channel URL" value={formData.handle} onChange={handleChange} />
+                </div>
+
+                {/* 5. Content Type */}
+                <div className="field full" style={{ marginTop: '16px' }}>
+                  <label>5. What type of content do you create? *</label>
+                  <div className="radio-grid cols-3">
+                    {contentTypes.map(type => (
+                      <label key={type} className={`radio-card ${formData.contentType === type ? 'selected' : ''}`}>
+                        <input type="radio" name="contentType" value={type} required onChange={handleChange} checked={formData.contentType === type} />
+                        {type}
+                      </label>
+                    ))}
+                  </div>
+                  {formData.contentType === 'Other' && (
+                    <div className="field other-input">
+                      <input name="contentTypeOther" required placeholder="Please specify" value={formData.contentTypeOther} onChange={handleChange} />
                     </div>
-                    <div className="field">
-                      <label htmlFor="role">You are</label>
-                      <select id="role" name="role" defaultValue="">
-                        <option value="" disabled>Select one</option>
-                        <option>Creator Founder</option>
-                        <option>Startup Founder</option>
-                        <option>Business Owner</option>
-                        <option>Investor</option>
-                        <option>Brand / Community Leader</option>
-                        <option>Nominating someone else</option>
-                      </select>
+                  )}
+                </div>
+
+                {/* 6. Building a business */}
+                <div className="field full" style={{ marginTop: '16px' }}>
+                  <label>6. Are you building a business beyond content? *</label>
+                  <div className="radio-grid cols-3">
+                    {businessTypes.map(type => (
+                      <label key={type} className={`radio-card ${formData.buildingBusiness === type ? 'selected' : ''}`}>
+                        <input type="radio" name="buildingBusiness" value={type} required onChange={handleChange} checked={formData.buildingBusiness === type} />
+                        {type}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 7. What business */}
+                <div className="field full">
+                  <label htmlFor="businessDesc">7. What business are you building? (1–2 lines) *</label>
+                  <textarea id="businessDesc" name="businessDesc" required placeholder="Describe your business..." rows="2" value={formData.businessDesc} onChange={handleChange}></textarea>
+                </div>
+
+                {/* 8. Revenue */}
+                <div className="field full" style={{ marginTop: '16px' }}>
+                  <label>8. What is your current monthly revenue? (Content + business combined) *</label>
+                  <div className="radio-grid">
+                    {revenueOptions.map(opt => (
+                      <label key={opt} className={`radio-card ${formData.revenue === opt ? 'selected' : ''}`}>
+                        <input type="radio" name="revenue" value={opt} required onChange={handleChange} checked={formData.revenue === opt} />
+                        {opt}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 9. Time creating */}
+                <div className="field full" style={{ marginTop: '16px' }}>
+                  <label>9. How long have you been creating content? *</label>
+                  <div className="radio-grid">
+                    {timeOptions.map(opt => (
+                      <label key={opt} className={`radio-card ${formData.timeCreating === opt ? 'selected' : ''}`}>
+                        <input type="radio" name="timeCreating" value={opt} required onChange={handleChange} checked={formData.timeCreating === opt} />
+                        {opt}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 10. Story */}
+                <div className="field full">
+                  <label htmlFor="story">10. Tell us your story in 4–5 lines. *</label>
+                  <textarea id="story" name="story" required placeholder="Your journey so far..." rows="4" value={formData.story} onChange={handleChange}></textarea>
+                </div>
+
+                {/* 11. Hardest part */}
+                <div className="field full">
+                  <label htmlFor="hardestPart">11. What is the hardest part of your life or the moment that changed you forever? *</label>
+                  <textarea id="hardestPart" name="hardestPart" required placeholder="Be honest and raw..." rows="4" value={formData.hardestPart} onChange={handleChange}></textarea>
+                </div>
+
+                {/* 12. Biggest struggle */}
+                <div className="field full">
+                  <label htmlFor="biggestStruggle">12. What is the biggest struggle you’re facing right now? *</label>
+                  <textarea id="biggestStruggle" name="biggestStruggle" required placeholder="Business, personal, or creative..." rows="3" value={formData.biggestStruggle} onChange={handleChange}></textarea>
+                </div>
+
+                {/* 13. 3 years */}
+                <div className="field full">
+                  <label htmlFor="threeYears">13. Where do you see yourself in the next 3 years? *</label>
+                  <textarea id="threeYears" name="threeYears" required placeholder="Your ultimate vision..." rows="3" value={formData.threeYears} onChange={handleChange}></textarea>
+                </div>
+
+                {/* 14. Expectations */}
+                <div className="field full" style={{ marginTop: '16px' }}>
+                  <label>14. What are you expecting from the Stranger Founder community? *</label>
+                  <div className="checkbox-grid cols-3">
+                    {expectations.map(opt => {
+                      const isChecked = formData.expecting.includes(opt)
+                      return (
+                        <label key={opt} className={`checkbox-card ${isChecked ? 'selected' : ''}`}>
+                          <input type="checkbox" name="expecting" value={opt} onChange={handleChange} checked={isChecked} />
+                          {opt}
+                        </label>
+                      )
+                    })}
+                  </div>
+                  {formData.expecting.includes('Other') && (
+                    <div className="field other-input">
+                      <input name="expectingOther" required placeholder="Please specify" value={formData.expectingOther} onChange={handleChange} />
                     </div>
-                    <div className="field full">
-                      <label htmlFor="story">Why the fire? (or who are you nominating?)</label>
-                      <textarea id="story" name="story" placeholder="Tell us your story, what you’re building, or the founder you want to nominate." />
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="field">
-                      <label htmlFor="brand">Brand</label>
-                      <input id="brand" name="brand" required placeholder="Brand name" />
-                    </div>
-                    <div className="field">
-                      <label htmlFor="ptype">Partnership interest</label>
-                      <select id="ptype" name="ptype" defaultValue="">
-                        <option value="" disabled>Select one</option>
-                        <option>Experience Partner</option>
-                        <option>Venue Partner</option>
-                        <option>Gifting Partner</option>
-                        <option>Production Partner</option>
-                        <option>Knowledge Partner</option>
-                        <option>Media Partner</option>
-                        <option>Not sure yet</option>
-                      </select>
-                    </div>
-                    <div className="field full">
-                      <label htmlFor="goals">What are you hoping to build?</label>
-                      <textarea id="goals" name="goals" placeholder="Tell us about your brand and what a partnership would look like for you." />
-                    </div>
-                  </>
-                )}
+                  )}
+                </div>
+
+                {/* 15. Why invited */}
+                <div className="field full">
+                  <label htmlFor="whyInvited">15. Why should you be invited to Stranger Founder? (Optional)</label>
+                  <textarea id="whyInvited" name="whyInvited" placeholder="Make your final case..." rows="3" value={formData.whyInvited} onChange={handleChange}></textarea>
+                </div>
+
+                {/* Declaration */}
+                <div className="field full" style={{ marginTop: '20px', marginBottom: '20px' }}>
+                  <label className="checkbox-card" style={{ background: 'transparent', borderColor: 'transparent', padding: '10px 0', cursor: 'pointer', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                    <input type="checkbox" name="declaration" required onChange={handleChange} checked={formData.declaration} style={{ position: 'relative', opacity: 1, width: '20px', height: '20px', marginTop: '4px', accentColor: 'var(--copper)' }} />
+                    <span style={{ fontSize: '0.95rem', lineHeight: '1.5', color: 'var(--cream)' }}>
+                      <strong>Declaration:</strong> I confirm that the information provided is accurate, and I understand that submitting this form does not guarantee selection for Stranger Founder. *
+                    </span>
+                  </label>
+                </div>
+
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginTop: 26, flexWrap: 'wrap' }}>
-                <button type="submit" className="btn btn-primary">
-                  {mode === 'partner' ? 'Send partnership request' : 'Send my request'} <span className="arw">→</span>
+                <button type="submit" className="btn btn-primary" disabled={!formData.declaration}>
+                  Request My Invitation <span className="arw">→</span>
                 </button>
-                <p className="form-note">Invite-only. We read every message and reply personally.</p>
+                <p className="form-note">Invite-only. We read every application carefully.</p>
               </div>
             </form>
           )}
         </div>
       </section>
-
-      {mode === 'founder' && !sent && (
-        <section className="section-pad-sm" style={{ background: 'var(--forest-925)' }}>
-          <div className="container narrow">
-            <Reveal className="block-head" style={{ marginBottom: 20 }}>
-              <span className="eyebrow">Founder questions</span>
-              <h2 className="h-md" style={{ marginTop: 18 }}>Before you apply</h2>
-            </Reveal>
-            <Faq items={founderFaqs} />
-          </div>
-        </section>
-      )}
     </>
   )
 }
