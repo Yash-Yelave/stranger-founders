@@ -65,9 +65,12 @@ export default function CinematicIntroOverlay() {
     return () => clearTimeout(preloadTimer)
   }, [pathname, transitionTo])
 
-  // Force programmatic scroll reset to top (0,0) before torch scene starts, then unlock webpage scroll
+  // Force programmatic scroll reset to top hero section (0,0) before torch scene starts & lock body scroll throughout intro
   useEffect(() => {
-    if (currentState === INTRO_STATES.TRANSITIONING_TO_DARKNESS) {
+    if (
+      currentState === INTRO_STATES.TRANSITIONING_TO_DARKNESS ||
+      currentState === INTRO_STATES.TORCH_AVAILABLE
+    ) {
       if ('scrollRestoration' in window.history) {
         window.history.scrollRestoration = 'manual'
       }
@@ -76,10 +79,9 @@ export default function CinematicIntroOverlay() {
       document.documentElement.scrollTop = 0
     }
 
-    if (currentState === INTRO_STATES.TORCH_AVAILABLE) {
-      // Immediately unlock body & document scroll for dark homepage exploration
-      document.body.style.overflow = ''
-      document.documentElement.style.overflow = ''
+    if (currentState !== INTRO_STATES.INTRO_COMPLETED) {
+      document.body.style.overflow = 'hidden'
+      document.documentElement.style.overflow = 'hidden'
     }
   }, [currentState])
 
@@ -200,6 +202,7 @@ export default function CinematicIntroOverlay() {
   useEffect(() => {
     if (currentState === INTRO_STATES.INTRO_COMPLETED) {
       document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
       document.body.style.cursor = ''
     }
   }, [currentState])
