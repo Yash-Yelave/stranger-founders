@@ -60,7 +60,7 @@ export default function Apply() {
         <div className="container narrow">
           <Reveal><span className="eyebrow">Creator Application</span></Reveal>
           <Reveal as="h1" className="display" delay={1}>
-            Stranger Founder
+            Become a stranger founder
           </Reveal>
           <Reveal as="p" className="lead muted" delay={2} style={{ maxWidth: '60ch' }}>
             This is not a casting form. It is a founder and creator evaluation. Follower count does not decide selection. Story, ambition, honesty, business potential, and transformation value do.
