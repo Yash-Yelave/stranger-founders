@@ -32,8 +32,8 @@ export default function CampfireDirectionArrow({ campfirePos, lerpPosRef, curren
         const angleRad = Math.atan2(dy, dx)
         const angleDeg = (angleRad * 180) / Math.PI
 
-        // Offset distance (~34px away from cursor torch center along pointing vector)
-        const offsetDist = 34
+        // Offset distance (~40px away from cursor torch center along pointing vector)
+        const offsetDist = 40
         const arrowX = cursorX + Math.cos(angleRad) * offsetDist
         const arrowY = cursorY + Math.sin(angleRad) * offsetDist
 
@@ -82,19 +82,19 @@ export default function CampfireDirectionArrow({ campfirePos, lerpPosRef, curren
       className="cursor-campfire-arrow"
       aria-hidden="true"
     >
-      {/* Small 22px warm amber/gold arrow pointing right by default, rotated via CSS transform */}
+      {/* Warm amber/gold arrow with elongated tail pointing right by default, rotated via CSS transform */}
       <svg
-        width="22"
+        width="32"
         height="22"
-        viewBox="0 0 24 24"
+        viewBox="0 0 34 24"
         fill="none"
         stroke="#d69a5c"
-        strokeWidth="2.4"
+        strokeWidth="2.2"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        <path d="M5 12h14" />
-        <path d="M12 5l7 7-7 7" />
+        <path d="M2 12h29" />
+        <path d="M22 5l9 7-9 7" />
       </svg>
     </div>
   )
