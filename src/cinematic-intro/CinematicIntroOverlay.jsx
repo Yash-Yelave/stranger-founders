@@ -12,6 +12,7 @@ import StationaryTorch from './scenes/StationaryTorch'
 import CursorTorch from './scenes/CursorTorch'
 import CampfireIgnition from './scenes/CampfireIgnition'
 import HomepageLightingOverlay from './scenes/HomepageLightingOverlay'
+import CampfireDirectionArrow from './scenes/CampfireDirectionArrow'
 
 import './cinematicIntroStyles.css'
 
@@ -65,7 +66,7 @@ export default function CinematicIntroOverlay() {
     return () => clearTimeout(preloadTimer)
   }, [pathname, transitionTo])
 
-  // Force programmatic scroll reset to top hero section (0,0) before torch scene starts & lock body scroll throughout intro
+  // Force programmatic scroll reset to top hero section (0,0) before torch scene starts & unlock webpage scroll during torch exploration
   useEffect(() => {
     if (
       currentState === INTRO_STATES.TRANSITIONING_TO_DARKNESS ||
@@ -79,9 +80,20 @@ export default function CinematicIntroOverlay() {
       document.documentElement.scrollTop = 0
     }
 
-    if (currentState !== INTRO_STATES.INTRO_COMPLETED) {
+    const lockedStates = [
+      INTRO_STATES.INITIALIZING,
+      INTRO_STATES.TEXT_STRANGER,
+      INTRO_STATES.TEXT_FOLLOW_ME,
+      INTRO_STATES.TUNNEL_SCROLLING,
+      INTRO_STATES.TRANSITIONING_TO_DARKNESS
+    ]
+
+    if (lockedStates.includes(currentState)) {
       document.body.style.overflow = 'hidden'
       document.documentElement.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
     }
   }, [currentState])
 
@@ -297,6 +309,14 @@ export default function CinematicIntroOverlay() {
           lerpPosRef={lerpPosRef}
         />
       )}
+
+      {/* Cursor-Attached Directional Campfire Arrow */}
+      <CampfireDirectionArrow
+        campfirePos={campfirePos}
+        lerpPosRef={lerpPosRef}
+        currentState={currentState}
+        isTorchLit={isTorchLit}
+      />
 
       {/* Scene 7 & 10: Dark Spotlight Mask & Illumination Wave */}
       <HomepageLightingOverlay
