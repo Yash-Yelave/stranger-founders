@@ -11,10 +11,9 @@
   z-index: 999999;
   overflow: hidden;
   user-select: none;
-  touch-action: none;
   font-family: var(--sans, 'Manrope', system-ui, sans-serif);
   color: var(--cream, #f5ecd8);
-  pointer-events: auto;
+  pointer-events: none;
 }
 
 /* Hide default cursor during intro on desktop */
@@ -455,6 +454,7 @@
   top: 24px;
   right: 24px;
   z-index: 1000000;
+  pointer-events: auto;
   background: rgba(12, 23, 16, 0.7);
   border: 1px solid rgba(245, 236, 216, 0.2);
   color: rgba(245, 236, 216, 0.7);
