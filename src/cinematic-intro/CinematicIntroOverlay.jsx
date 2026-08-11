@@ -18,7 +18,14 @@ import './cinematicIntroStyles.css'
 
 export default function CinematicIntroOverlay() {
   const { pathname } = useLocation()
-  const [currentState, setCurrentState] = useState(INTRO_STATES.INITIALIZING)
+  const [currentState, setCurrentState] = useState(() => {
+    try {
+      if (typeof window !== 'undefined' && sessionStorage.getItem('sf_from_other_page') === 'true') {
+        return INTRO_STATES.INTRO_COMPLETED
+      }
+    } catch (e) {}
+    return INTRO_STATES.INITIALIZING
+  })
   const [ignitionProgress, setIgnitionProgress] = useState(0)
 
   const stationaryTorchPosRef = useRef({ x: 0, y: 0 })
@@ -47,7 +54,26 @@ export default function CinematicIntroOverlay() {
 
   // Initialize intro on mounting homepage
   useEffect(() => {
-    if (pathname !== '/') return
+    if (pathname !== '/') {
+      try {
+        sessionStorage.setItem('sf_from_other_page', 'true')
+      } catch (e) {}
+      return
+    }
+
+    try {
+      if (sessionStorage.getItem('sf_from_other_page') === 'true') {
+        sessionStorage.removeItem('sf_from_other_page')
+        setCurrentState(INTRO_STATES.INTRO_COMPLETED)
+        document.body.style.overflow = ''
+        document.documentElement.style.overflow = ''
+        document.body.style.cursor = ''
+        return
+      }
+    } catch (e) {}
+
+    // Reset state for homepage load / reload
+    setCurrentState(INTRO_STATES.INITIALIZING)
 
     // Prevent automatic browser scroll restoration on refresh/reload
     if ('scrollRestoration' in window.history) {
