@@ -68,6 +68,12 @@ export default function CinematicIntroOverlay() {
 
   // Force programmatic scroll reset to top hero section (0,0) before torch scene starts & unlock webpage scroll during torch exploration
   useEffect(() => {
+    if (pathname !== '/') {
+      document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
+      return
+    }
+
     if (
       currentState === INTRO_STATES.TRANSITIONING_TO_DARKNESS ||
       currentState === INTRO_STATES.TORCH_AVAILABLE
@@ -95,7 +101,7 @@ export default function CinematicIntroOverlay() {
       document.body.style.overflow = ''
       document.documentElement.style.overflow = ''
     }
-  }, [currentState])
+  }, [currentState, pathname])
 
   const hasTorchIgnitedRef = useRef(false)
 
@@ -210,14 +216,14 @@ export default function CinematicIntroOverlay() {
     return () => cancelAnimationFrame(animId)
   }, [campfirePos, currentState, isReducedMotion, isTouch, lerpPosRef, transitionTo])
 
-  // Complete Teardown & Cleanup Strategy when intro finishes
+  // Complete Teardown & Cleanup Strategy when intro finishes or on non-homepage route
   useEffect(() => {
-    if (currentState === INTRO_STATES.INTRO_COMPLETED) {
+    if (currentState === INTRO_STATES.INTRO_COMPLETED || pathname !== '/') {
       document.body.style.overflow = ''
       document.documentElement.style.overflow = ''
       document.body.style.cursor = ''
     }
-  }, [currentState])
+  }, [currentState, pathname])
 
   // Only render on homepage route and while intro is active
   if (pathname !== '/' || currentState === INTRO_STATES.INTRO_COMPLETED) {
