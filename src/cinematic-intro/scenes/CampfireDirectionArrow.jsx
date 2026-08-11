@@ -32,14 +32,14 @@ export default function CampfireDirectionArrow({ campfirePos, lerpPosRef, curren
         const angleRad = Math.atan2(dy, dx)
         const angleDeg = (angleRad * 180) / Math.PI
 
-        // Offset distance (~40px away from cursor torch center along pointing vector)
-        const offsetDist = 40
+        // Offset distance (~68px away from cursor torch center along pointing vector)
+        const offsetDist = 68
         const arrowX = cursorX + Math.cos(angleRad) * offsetDist
         const arrowY = cursorY + Math.sin(angleRad) * offsetDist
 
-        // Distance proximity fade out (smoothly fades when within 160px of campfire)
-        const minDistance = 90
-        const maxFadeDistance = 250
+        // Distance proximity fade out (smoothly fades when within proximity of campfire)
+        const minDistance = 110
+        const maxFadeDistance = 280
         let opacity = 1
 
         if (distance < minDistance) {
