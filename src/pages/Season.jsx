@@ -2,10 +2,11 @@ import { Link } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import Reveal from '../components/Reveal.jsx'
 import CtaBand from '../components/CtaBand.jsx'
+import FounderConstellation from '../components/FounderConstellation.jsx'
 import { episodes, audience } from '../data/content.js'
 
 /* ── Animated stat number ─────────────────────────────────────── */
-function AnimatedStat({ target, label, suffix = '' }) {
+function AnimatedStat({ target, label, suffix = '', onMouseEnter, onMouseLeave }) {
   const [count, setCount] = useState(0)
   const ref = useRef(null)
   const started = useRef(false)
@@ -33,7 +34,12 @@ function AnimatedStat({ target, label, suffix = '' }) {
   }, [target])
 
   return (
-    <div className="s1-stat" ref={ref}>
+    <div
+      className="s1-stat"
+      ref={ref}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       <span className="s1-stat-num">{count}{suffix}</span>
       <span className="s1-stat-label">{label}</span>
     </div>
@@ -89,6 +95,8 @@ const EMBERS = Array.from({ length: 14 }, (_, i) => ({
 }))
 
 export default function Season() {
+  const [hoveredStat, setHoveredStat] = useState(null)
+
   return (
     <>
       {/* ── SEASON HERO ─────────────────────────────────────────── */}
@@ -141,70 +149,31 @@ export default function Season() {
               </Reveal>
             </div>
 
-            {/* Right: animated stats ring */}
-            <div className="s1-hero-visual" aria-hidden="true">
-              {/* Glowing fire SVG */}
-              <div className="s1-fire-ring">
-                <svg className="s1-ring-svg" viewBox="0 0 220 220">
-                  {/* Outer arcs */}
-                  <circle cx="110" cy="110" r="100" fill="none" stroke="rgba(214,154,92,0.10)" strokeWidth="1" />
-                  <circle cx="110" cy="110" r="86" fill="none" stroke="rgba(214,154,92,0.07)" strokeWidth="1" />
-                  {/* Animated dashes — uses SVG animateTransform so rotation
-                      pivots correctly around the circle's own centre (110,110) */}
-                  <circle cx="110" cy="110" r="93"
-                    fill="none"
-                    stroke="rgba(214,154,92,0.25)"
-                    strokeWidth="1.5"
-                    strokeDasharray="8 14"
-                  >
-                    <animateTransform
-                      attributeName="transform"
-                      type="rotate"
-                      from="0 110 110"
-                      to="360 110 110"
-                      dur="22s"
-                      repeatCount="indefinite"
-                    />
-                  </circle>
-                  {/* Center glow */}
-                  <circle cx="110" cy="110" r="48" fill="url(#fireGlow)" />
-                  <defs>
-                    <radialGradient id="fireGlow" cx="50%" cy="60%" r="50%">
-                      <stop offset="0%" stopColor="#d69a5c" stopOpacity="0.35" />
-                      <stop offset="60%" stopColor="#8a5527" stopOpacity="0.12" />
-                      <stop offset="100%" stopColor="#0c1710" stopOpacity="0" />
-                    </radialGradient>
-                  </defs>
-                  {/* Small flame marks at 4 equidistant points (episodes) */}
-                  {[0, 90, 180, 270].map((deg, i) => {
-                    const r = 93
-                    const rad = (deg - 90) * Math.PI / 180
-                    const cx = 110 + r * Math.cos(rad)
-                    const cy = 110 + r * Math.sin(rad)
-                    return (
-                      <circle key={i} cx={cx} cy={cy} r="4"
-                        fill={i === 0 ? '#d69a5c' : 'rgba(214,154,92,0.35)'}
-                        style={i === 0 ? { filter: 'drop-shadow(0 0 4px #d69a5c)' } : {}}
-                      />
-                    )
-                  })}
-                  {/* SF monogram */}
-                  <text x="110" y="106" textAnchor="middle"
-                    fontFamily="Fraunces, Georgia, serif" fontSize="13"
-                    fill="rgba(245,236,216,0.35)" letterSpacing="4"
-                  >SF</text>
-                  <text x="110" y="122" textAnchor="middle"
-                    fontFamily="Manrope, sans-serif" fontSize="8"
-                    fill="rgba(214,154,92,0.55)" letterSpacing="3" fontWeight="700"
-                  >SEASON 01</text>
-                </svg>
-              </div>
+            {/* Right: animated interactive constellation */}
+            <div className="s1-hero-visual">
+              {/* Interactive Founder Constellation Graphic */}
+              <FounderConstellation activeStat={hoveredStat} />
 
               {/* 3 animated stats around the ring */}
               <div className="s1-stats-orbit">
-                <AnimatedStat target={16} label="Creator Founders" />
-                <AnimatedStat target={4}  label="Episodes" />
-                <AnimatedStat target={4}  label="Per Fire" />
+                <AnimatedStat
+                  target={16}
+                  label="Creator Founders"
+                  onMouseEnter={() => setHoveredStat('founders')}
+                  onMouseLeave={() => setHoveredStat(null)}
+                />
+                <AnimatedStat
+                  target={4}
+                  label="Episodes"
+                  onMouseEnter={() => setHoveredStat('episodes')}
+                  onMouseLeave={() => setHoveredStat(null)}
+                />
+                <AnimatedStat
+                  target={4}
+                  label="Per Episode"
+                  onMouseEnter={() => setHoveredStat('per_episode')}
+                  onMouseLeave={() => setHoveredStat(null)}
+                />
               </div>
             </div>
           </div>
