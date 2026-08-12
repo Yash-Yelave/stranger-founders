@@ -250,9 +250,6 @@ export default function Experience() {
                 <Link to="/apply" className="btn btn-primary" style={{ marginTop: 26 }}>
                   Request an Invitation <span className="arw">→</span>
                 </Link>
-                <Link to="/partners" className="text-link" style={{ marginTop: 18 }}>
-                  Partner enquiries <span className="arw">→</span>
-                </Link>
               </div>
             </Reveal>
           </div>

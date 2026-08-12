@@ -101,7 +101,6 @@ export default function CtaBand({
           <p className="lead muted narrow">{sub}</p>
           <div className="cta-actions">
             <Link to="/apply" className="btn btn-primary">Request an Invitation <span className="arw">→</span></Link>
-            <Link to="/partners" className="btn btn-ghost">Become a Partner</Link>
           </div>
         </Reveal>
       </div>

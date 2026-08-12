@@ -402,7 +402,6 @@ export default function Home() {
           <Reveal className="hero-tagline script" delay={2}>Meet Strangers. Build Legacies.</Reveal>
           <Reveal className="hero-actions" delay={3}>
             <Link to="/apply" className="btn btn-primary">Request an Invitation <span className="arw">→</span></Link>
-            <Link to="/partners" className="btn btn-ghost">Become a Partner</Link>
           </Reveal>
           <div className="scroll-cue"><span>Scroll</span><span className="line" /></div>
         </div>
