@@ -1,7 +1,9 @@
 import { useRef, useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import Reveal from '../components/Reveal.jsx'
 import CtaBand from '../components/CtaBand.jsx'
-import { journey } from '../data/content.js'
+import Faq from '../components/Faq.jsx'
+import { journey, founderFaqs } from '../data/content.js'
 
 function ManifestoQuote() {
   const quoteRef = useRef(null)
@@ -148,7 +150,7 @@ export default function Experience() {
     <>
       <section className="page-hero">
         <div className="container">
-          <Reveal><span className="eyebrow">The Experience</span></Reveal>
+          <Reveal><span className="eyebrow">The Story</span></Reveal>
           <Reveal as="h1" className="display" delay={1}>
             One arc, walked<br />by four strangers.
           </Reveal>
@@ -223,6 +225,36 @@ export default function Experience() {
                 <p>{p}</p>
               </Reveal>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="faq-section" id="faq">
+        <div className="container">
+          <Reveal className="faq-home-head">
+            <span className="eyebrow">Questions</span>
+            <h2 className="h-lg" style={{ marginTop: 18 }}>Everything you need to know.</h2>
+          </Reveal>
+          <div className="faq-home-grid">
+            <Reveal delay={1}>
+              <Faq items={founderFaqs} />
+            </Reveal>
+            <Reveal className="faq-aside" delay={2}>
+              <div className="faq-cta-card">
+                <p className="faq-aside-label">Still have questions?</p>
+                <p className="faq-aside-sub">
+                  We'd rather talk than send another FAQ. Tell us about yourself
+                  and we'll follow up personally.
+                </p>
+                <Link to="/apply" className="btn btn-primary" style={{ marginTop: 26 }}>
+                  Request an Invitation <span className="arw">→</span>
+                </Link>
+                <Link to="/partners" className="text-link" style={{ marginTop: 18 }}>
+                  Partner enquiries <span className="arw">→</span>
+                </Link>
+              </div>
+            </Reveal>
           </div>
         </div>
       </section>

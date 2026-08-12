@@ -2,20 +2,10 @@ import { useRef, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Reveal from '../components/Reveal.jsx'
 import CtaBand from '../components/CtaBand.jsx'
-import Faq from '../components/Faq.jsx'
 import { episodes, journey } from '../data/content.js'
 import { TbUsers, TbMountain, TbMessages, TbWalk, TbMicrophone, TbBuildingSkyscraper, TbUsersGroup, TbTent } from 'react-icons/tb'
 import { PiHandshakeThin } from 'react-icons/pi'
 import { GiPartyPopper } from 'react-icons/gi'
-
-/* Five most essential questions for a home-page visitor */
-const homeFaqs = [
-  { q: 'How do I get in?', a: 'By invitation or application. Curated founders are invited directly; others apply and are individually reviewed before an invitation is extended. There is no open sign-up.' },
-  { q: 'Is this a networking event?', a: "No. It's an immersive founder experience — no stage, no pitching, no business cards. Only four people, one fire, and real conversations that go somewhere." },
-  { q: 'How many founders per gathering?', a: "Four. Small by design — it's the only number where genuine relationships actually form, not just exchanges of details." },
-  { q: 'Where does it happen?', a: 'At nature venues across India — nature, farms and mountains, away from stages and noise. Exact locations are shared with confirmed founders only.' },
-  { q: 'Can my brand partner with Stranger Founders?', a: 'Yes — selectively. We work only with brands genuinely aligned with founders and creator communities. Start a conversation on the Partners page.' },
-]
 
 
 
@@ -498,129 +488,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===================== WHY DIFFERENT ===================== */}
-      <section className="diff-section">
-        <div className="container diff-inner">
-          <Reveal>
-            <span className="diff-eyebrow">WHY DIFFERENT</span>
-            <h2 className="diff-title">We traded the familiar for the real</h2>
-          </Reveal>
-
-          {/* Compared to Usual Formats Pills */}
-          <Reveal delay={1}>
-            <div className="compared-formats-bar">
-              <span className="compared-bar-label">COMPARED TO THE USUAL FORMATS:</span>
-              <div className="compared-pills-row">
-                {[
-                  { label: 'Podcast', icon: <TbMicrophone size={16} strokeWidth={1.5} /> },
-                  { label: 'Conference', icon: <TbBuildingSkyscraper size={16} strokeWidth={1.5} /> },
-                  { label: 'Networking Event', icon: <TbUsersGroup size={16} strokeWidth={1.5} /> },
-                  { label: 'Retreat', icon: <TbTent size={16} strokeWidth={1.5} /> }
-                ].map(({ icon, label }) => (
-                  <div className="compared-pill-item" key={label}>
-                    <div className="compared-pill-icon">{icon}</div>
-                    <span className="compared-pill-label">{label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Reveal>
-
-          {/* Paradigm Shift Comparison Matrix */}
-          <Reveal delay={2}>
-            <div className="diff-matrix-wrapper">
-              <div className="diff-matrix-header">
-                <div className="diff-header-col traditional">
-                  <span className="diff-dot-indicator traditional-dot" />
-                  <span>THE TRADITIONAL FORMAT</span>
-                </div>
-                <div className="diff-header-col divider">
-                  <span>VS</span>
-                </div>
-                <div className="diff-header-col sf-way">
-                  <span className="diff-dot-indicator sf-dot" />
-                  <span>THE STRANGER FOUNDERS WAY</span>
-                </div>
-              </div>
-
-              <div className="diff-matrix-body">
-                {[
-                  ['Conference Rooms', 'Nature'],
-                  ['Networking', 'Experiences'],
-                  ['Speeches', 'Conversations'],
-                  ['Business Cards', 'Relationships'],
-                  ['Audiences', 'Communities']
-                ].map(([from, to]) => (
-                  <div className="diff-matrix-row" key={from}>
-                    <div className="diff-row-cell from-cell">
-                      <span className="diff-from-text">{from}</span>
-                    </div>
-                    <div className="diff-row-cell arrow-cell">
-                      <span className="diff-arrow-icon">→</span>
-                    </div>
-                    <div className="diff-row-cell to-cell">
-                      <span className="diff-to-text">
-                        <span className="diff-live-dot" aria-hidden="true" />
-                        {to}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Reveal>
-
-          {/* The Rules of the Fire Bento Grid */}
-          <Reveal delay={3}>
-            <div className="fire-rules-container">
-              <div className="fire-rules-head">
-                <span className="fire-rules-label">THE RULES OF THE FIRE</span>
-                <h3 className="fire-rules-sub">Nothing like anything you've been to before</h3>
-              </div>
-              <div className="fire-rules-bento">
-                {[
-                  { num: '01', title: 'No Audience', desc: 'Only the three others at the fire.' },
-                  { num: '02', title: 'No Stage', desc: 'Everyone sits at the same height.' },
-                  { num: '03', title: 'No Pitching', desc: 'Leave the deck at home.' },
-                  { num: '04', title: 'Only This', desc: 'Real conversations. Captured. Never scripted.' }
-                ].map(({ num, title, desc }) => (
-                  <div className="fire-rule-card" key={num}>
-                    <span className="fire-rule-num">{num}</span>
-                    <h4 className="fire-rule-title">{title}</h4>
-                    <p className="fire-rule-desc">{desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ===================== THE FORMAT (4 rules) — hidden =====================
-      <section className="format-section" style={{ background: 'var(--forest-925)' }}>
-        <div className="container">
-          <Reveal className="format-head">
-            <span className="eyebrow">The Rules of the Fire</span>
-            <h2 className="h-lg" style={{ marginTop: 18 }}>Nothing like anything you've been to.</h2>
-          </Reveal>
-          <div className="format-grid-home">
-            {[
-              { num: '01', h: 'No Audience',  p: 'Only the three others at the fire.' },
-              { num: '02', h: 'No Stage',     p: 'Everyone sits at the same height.' },
-              { num: '03', h: 'No Pitching',  p: 'Leave the deck at home.' },
-              { num: '04', h: 'Only This',    p: 'Real conversations. Captured. Never scripted.' },
-            ].map(({ num, h, p }, i) => (
-              <Reveal className="format-card-home" key={h} delay={(i % 3) + 1}>
-                <span className="fc-num">{num}</span>
-                <h3 className="fc-head">{h}</h3>
-                <p className="fc-body">{p}</p>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-      */}
-
       {/* ===================== THE JOURNEY ARC ===================== */}
       <section className="journey-section" id="experience">
         <div className="container">
@@ -697,7 +564,7 @@ export default function Home() {
               </h2>
               <p className="lead muted" style={{ marginTop: 16, maxWidth: '38ch' }}>
                 16 founders. 4 fires. Episode 01 films on{' '}
-                <span className="copper">9 August</span>.
+                <span className="copper">23 August</span>.
               </p>
               <div style={{ marginTop: 28, display: 'flex', gap: 14, flexWrap: 'wrap' }}>
                 <Link to="/apply" className="btn btn-primary">Request an Invitation <span className="arw">→</span></Link>
@@ -711,7 +578,7 @@ export default function Home() {
                   <div>
                     <h3>{e.title}</h3>
                     {e.status === 'filming'
-                      ? <span className="badge"><span className="pulse" /> Filming 9 August</span>
+                      ? <span className="badge"><span className="pulse" /> Filming 23 August</span>
                       : <span className="badge soon">Coming this season</span>}
                   </div>
                 </Reveal>
@@ -723,36 +590,6 @@ export default function Home() {
 
       {/* ===================== MEDIA SHOWCASE ===================== */}
       <MediaShowcase />
-
-      {/* ===================== FAQ ===================== */}
-      <section className="faq-section" id="faq">
-        <div className="container">
-          <Reveal className="faq-home-head">
-            <span className="eyebrow">Questions</span>
-            <h2 className="h-lg" style={{ marginTop: 18 }}>Everything you need to know.</h2>
-          </Reveal>
-          <div className="faq-home-grid">
-            <Reveal delay={1}>
-              <Faq items={homeFaqs} />
-            </Reveal>
-            <Reveal className="faq-aside" delay={2}>
-              <div className="faq-cta-card">
-                <p className="faq-aside-label">Still have questions?</p>
-                <p className="faq-aside-sub">
-                  We'd rather talk than send another FAQ. Tell us about yourself
-                  and we'll follow up personally.
-                </p>
-                <Link to="/apply" className="btn btn-primary" style={{ marginTop: 26 }}>
-                  Request an Invitation <span className="arw">→</span>
-                </Link>
-                <Link to="/partners" className="text-link" style={{ marginTop: 18 }}>
-                  Partner enquiries <span className="arw">→</span>
-                </Link>
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
 
       {/* ===================== CTA ===================== */}
       <CtaBand />

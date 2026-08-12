@@ -44,6 +44,7 @@ export default function App() {
           <Route path="/"           element={<Home />} />
           <Route path="/lander"     element={<Navigate to="/" replace />} />
           <Route path="/experience" element={<Experience />} />
+          <Route path="/story"      element={<Experience />} />
           <Route path="/season-01"  element={<Season />} />
           <Route path="/partners"   element={<Partners />} />
           <Route path="/apply"      element={<Apply />} />

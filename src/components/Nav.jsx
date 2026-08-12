@@ -3,7 +3,7 @@ import { NavLink, Link, useLocation } from 'react-router-dom'
 import Logo from './Logo.jsx'
 
 const links = [
-  { to: '/experience', label: 'The Experience' },
+  { to: '/experience', label: 'The Story' },
   { to: '/season-01', label: 'Season 01' },
 ]
 
