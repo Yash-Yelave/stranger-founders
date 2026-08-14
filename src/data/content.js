@@ -24,11 +24,11 @@ export const audience = [
 
 export const episodes = [
   {
-    n: '01', title: 'Four Creator Founders', status: 'filming', date: '30 August',
+    n: '01', title: 'Episode 1 Creator Founders', status: 'filming', date: '30 August',
     d: 'Four creator founders — each commanding 50K–500K followers — brought together for one immersive experience. Filming 30 August.',
   },
   {
-    n: '02', title: 'Four Creator Founders', status: 'filming', date: '30 August',
+    n: '02', title: 'Episode 2 Creator Founders', status: 'filming', date: '30 August',
     d: 'The second gathering of four creator founders. Filming 30 August.',
   },
   { n: '03', title: 'Coming this season', status: 'soon', d: 'Details to be announced.' },
