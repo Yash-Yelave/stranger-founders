@@ -37,6 +37,15 @@ export default function Nav() {
                 {l.label}
               </NavLink>
             ))}
+            <span
+              className="nav-link coming-soon-link"
+              onClick={(e) => e.preventDefault()}
+              role="button"
+              tabIndex={0}
+            >
+              The Inner Circle
+              <span className="coming-soon-badge">Coming Soon</span>
+            </span>
           </nav>
           <div className="nav-cta">
             <Link to="/apply" className="btn btn-primary">Request an Invitation</Link>
@@ -55,6 +64,9 @@ export default function Nav() {
             {l.label}
           </NavLink>
         ))}
+        <span className="mm-coming-soon" onClick={(e) => e.preventDefault()}>
+          The Inner Circle <small className="mm-cs-badge">Coming Soon</small>
+        </span>
         <NavLink to="/apply">Apply</NavLink>
         <Link to="/apply" className="btn btn-primary mm-cta">Request an Invitation</Link>
       </div>
