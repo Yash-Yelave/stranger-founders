@@ -242,12 +242,45 @@ export default function CinematicIntroOverlay() {
     return () => cancelAnimationFrame(animId)
   }, [campfirePos, currentState, isReducedMotion, isTouch, lerpPosRef, transitionTo])
 
+  // Cursor visibility management: Hide default mouse cursor during torch effect, reveal after campfire is lit
+  useEffect(() => {
+    const isTorchEffectActive = [
+      INTRO_STATES.TORCH_AVAILABLE,
+      INTRO_STATES.TORCH_IGNITION,
+      INTRO_STATES.TORCH_LIT,
+      INTRO_STATES.SEARCHING_FOR_CAMPFIRE,
+      INTRO_STATES.CAMPFIRE_IGNITING
+    ].includes(currentState)
+
+    if (isTorchEffectActive && !isTouch && pathname === '/') {
+      document.body.classList.add('sf-hide-cursor')
+      document.documentElement.classList.add('sf-hide-cursor')
+      document.body.style.cursor = 'none'
+      document.documentElement.style.cursor = 'none'
+    } else {
+      document.body.classList.remove('sf-hide-cursor')
+      document.documentElement.classList.remove('sf-hide-cursor')
+      document.body.style.cursor = ''
+      document.documentElement.style.cursor = ''
+    }
+
+    return () => {
+      document.body.classList.remove('sf-hide-cursor')
+      document.documentElement.classList.remove('sf-hide-cursor')
+      document.body.style.cursor = ''
+      document.documentElement.style.cursor = ''
+    }
+  }, [currentState, isTouch, pathname])
+
   // Complete Teardown & Cleanup Strategy when intro finishes or on non-homepage route
   useEffect(() => {
     if (currentState === INTRO_STATES.INTRO_COMPLETED || pathname !== '/') {
       document.body.style.overflow = ''
       document.documentElement.style.overflow = ''
       document.body.style.cursor = ''
+      document.documentElement.style.cursor = ''
+      document.body.classList.remove('sf-hide-cursor')
+      document.documentElement.classList.remove('sf-hide-cursor')
     }
   }, [currentState, pathname])
 
