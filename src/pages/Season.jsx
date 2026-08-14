@@ -46,9 +46,9 @@ function AnimatedStat({ target, label, suffix = '', onMouseEnter, onMouseLeave }
   )
 }
 
-/* ── Countdown to 23 August 2025 ────────────────────────────────── */
+/* ── Countdown to 30 August 2025 ────────────────────────────────── */
 function Countdown() {
-  const target = new Date('2025-08-23T06:00:00+05:30').getTime()
+  const target = new Date('2025-08-30T06:00:00+05:30').getTime()
   const [diff, setDiff] = useState(target - Date.now())
 
   useEffect(() => {
@@ -201,7 +201,7 @@ export default function Season() {
                   <h3>{e.title}</h3>
                   <p>{e.d}</p>
                   {e.status === 'filming'
-                    ? <span className="badge"><span className="pulse" /> Filming 23 August</span>
+                    ? <span className="badge"><span className="pulse" /> Filming {e.date || '30 August'}</span>
                     : <span className="badge soon">Coming this season</span>}
                 </div>
                 <div className="ep-cta">

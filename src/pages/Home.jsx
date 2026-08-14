@@ -562,8 +562,8 @@ export default function Home() {
                 <em style={{ fontWeight: 400, color: 'var(--copper-light)' }}>Creator Founders</em>
               </h2>
               <p className="lead muted" style={{ marginTop: 16, maxWidth: '38ch' }}>
-                16 founders. 4 fires. Episode 01 films on{' '}
-                <span className="copper">23 August</span>.
+                16 founders. 4 fires. Episode 01 &amp; 02 film on{' '}
+                <span className="copper">30 August</span>.
               </p>
               <div style={{ marginTop: 28, display: 'flex', gap: 14, flexWrap: 'wrap' }}>
                 <Link to="/apply" className="btn btn-primary">Request an Invitation <span className="arw">→</span></Link>
@@ -577,7 +577,7 @@ export default function Home() {
                   <div>
                     <h3>{e.title}</h3>
                     {e.status === 'filming'
-                      ? <span className="badge"><span className="pulse" /> Filming 23 August</span>
+                      ? <span className="badge"><span className="pulse" /> Filming {e.date || '30 August'}</span>
                       : <span className="badge soon">Coming this season</span>}
                   </div>
                 </Reveal>
