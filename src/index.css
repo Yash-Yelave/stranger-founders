@@ -2722,39 +2722,53 @@ select:autofill {
 }
 
 /* =========================================================================
-   SEASON 01 APPLICATIONS OPEN FLOATING POPUP
+   SEASON 01 APPLICATIONS OPEN CENTERED POPUP MODAL
    ========================================================================= */
 .sf-app-popup-wrapper {
   position: fixed;
-  bottom: 28px;
-  right: 28px;
+  inset: 0;
   z-index: 1050;
-  max-width: 380px;
-  width: calc(100vw - 40px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(4, 10, 7, 0.78);
+  backdrop-filter: blur(12px) saturate(1.2);
   pointer-events: auto;
-  animation: popupSlideUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: popupFadeIn 0.35s ease-out forwards;
 }
 
-@keyframes popupSlideUp {
-  0% {
-    opacity: 0;
-    transform: translateY(40px) scale(0.95);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+@keyframes popupFadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 .sf-app-popup-card {
   position: relative;
-  background: rgba(11, 22, 16, 0.94);
-  backdrop-filter: blur(18px) saturate(1.1);
+  width: 100%;
+  max-width: 540px;
+  background: linear-gradient(165deg, rgba(16, 33, 23, 0.98), rgba(8, 18, 12, 0.98));
   border: 1px solid var(--copper);
-  border-radius: 12px;
-  padding: 24px 22px 20px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(214, 154, 92, 0.25);
+  border-radius: 16px;
+  padding: 40px 36px 32px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9), 0 0 50px rgba(214, 154, 92, 0.3);
   overflow: hidden;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: popupZoomIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes popupZoomIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .sf-app-popup-card::before {
@@ -2763,85 +2777,106 @@ select:autofill {
   top: 0;
   left: 0;
   right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--copper-deep), var(--copper-light), var(--copper-deep));
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--copper-deep), var(--copper-light), var(--copper-deep), transparent);
 }
 
 .sf-app-popup-close {
   position: absolute;
-  top: 14px;
-  right: 14px;
-  background: none;
-  border: none;
+  top: 16px;
+  right: 18px;
+  background: rgba(214, 154, 92, 0.08);
+  border: 1px solid rgba(214, 154, 92, 0.2);
   color: var(--cream-dim);
   font-size: 1.1rem;
   line-height: 1;
   cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
-  transition: color 0.25s var(--ease), background 0.25s var(--ease);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s var(--ease);
 }
 
 .sf-app-popup-close:hover {
   color: var(--cream);
-  background: rgba(214, 154, 92, 0.15);
+  background: rgba(214, 154, 92, 0.25);
+  border-color: var(--copper);
+  transform: scale(1.08);
 }
 
 .sf-app-popup-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-family: var(--sans);
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--copper-light);
-  margin-bottom: 10px;
+  background: rgba(214, 154, 92, 0.12);
+  border: 1px solid rgba(214, 154, 92, 0.3);
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 18px;
 }
 
 .sf-popup-flame {
-  font-size: 0.85rem;
+  font-size: 0.95rem;
 }
 
 .sf-app-popup-title {
   font-family: var(--serif);
   font-weight: 500;
-  font-size: 1.25rem;
+  font-size: clamp(1.6rem, 3.5vw, 2.1rem);
   color: var(--cream);
-  line-height: 1.25;
-  margin-bottom: 8px;
+  line-height: 1.2;
+  margin-bottom: 12px;
+  max-width: 22ch;
 }
 
 .sf-app-popup-desc {
   font-family: var(--sans);
-  font-size: 0.86rem;
+  font-size: clamp(0.92rem, 1.5vw, 1.02rem);
   color: var(--cream-dim);
-  line-height: 1.5;
-  margin-bottom: 18px;
+  line-height: 1.6;
+  margin-bottom: 28px;
+  max-width: 42ch;
 }
 
 .sf-app-popup-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
 }
 
 .sf-popup-btn {
-  padding: 9px 18px !important;
-  font-size: 0.75rem !important;
+  padding: 13px 28px !important;
+  font-size: 0.85rem !important;
+  letter-spacing: 0.06em !important;
 }
 
 .sf-popup-btn-ghost {
-  padding: 8px 14px !important;
-  font-size: 0.75rem !important;
-  border-color: rgba(214, 154, 92, 0.25) !important;
+  padding: 12px 22px !important;
+  font-size: 0.85rem !important;
+  border-color: rgba(214, 154, 92, 0.3) !important;
 }
 
-@media (max-width: 480px) {
-  .sf-app-popup-wrapper {
-    right: 20px;
-    bottom: 20px;
-    width: calc(100vw - 40px);
+@media (max-width: 540px) {
+  .sf-app-popup-card {
+    padding: 32px 24px 24px;
+    border-radius: 12px;
+  }
+  .sf-app-popup-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .sf-popup-btn, .sf-popup-btn-ghost {
+    width: 100%;
   }
 }

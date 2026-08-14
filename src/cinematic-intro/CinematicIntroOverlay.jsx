@@ -283,6 +283,7 @@ export default function CinematicIntroOverlay() {
       document.documentElement.classList.remove('sf-hide-cursor')
 
       if (currentState === INTRO_STATES.INTRO_COMPLETED && typeof window !== 'undefined') {
+        window.__SF_INTRO_COMPLETED__ = true
         window.dispatchEvent(new CustomEvent('sf_intro_completed'))
       }
     }

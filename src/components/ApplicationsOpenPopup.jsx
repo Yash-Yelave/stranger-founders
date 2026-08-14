@@ -6,44 +6,31 @@ export default function ApplicationsOpenPopup() {
   const [isDismissed, setIsDismissed] = useState(false)
 
   useEffect(() => {
-    // Check if dismissed in this session
-    try {
-      if (sessionStorage.getItem('sf_app_popup_dismissed') === 'true') {
-        return
-      }
-    } catch (e) {}
-
     const handleIntroCompleted = () => {
-      // Delay slightly for smooth entrance right as homepage illuminates
-      setTimeout(() => {
-        setIsVisible(true)
-      }, 600)
+      setIsVisible(true)
     }
 
-    // Listen for custom event from CinematicIntroOverlay
     window.addEventListener('sf_intro_completed', handleIntroCompleted)
 
-    // Fallback: If intro was skipped or already completed on page load
-    try {
-      if (sessionStorage.getItem('sf_from_other_page') === 'true') {
-        const timer = setTimeout(() => {
+    // Check if intro is already finished (or not present on screen)
+    const checkInterval = setInterval(() => {
+      if (typeof window !== 'undefined') {
+        const introRoot = document.querySelector('.cinematic-intro-root')
+        if (!introRoot || window.__SF_INTRO_COMPLETED__) {
           setIsVisible(true)
-        }, 800)
-        return () => clearTimeout(timer)
+        }
       }
-    } catch (e) {}
+    }, 200)
 
     return () => {
       window.removeEventListener('sf_intro_completed', handleIntroCompleted)
+      clearInterval(checkInterval)
     }
   }, [])
 
   const handleDismiss = () => {
     setIsVisible(false)
     setIsDismissed(true)
-    try {
-      sessionStorage.setItem('sf_app_popup_dismissed', 'true')
-    } catch (e) {}
   }
 
   if (!isVisible || isDismissed) return null
