@@ -281,6 +281,10 @@ export default function CinematicIntroOverlay() {
       document.documentElement.style.cursor = ''
       document.body.classList.remove('sf-hide-cursor')
       document.documentElement.classList.remove('sf-hide-cursor')
+
+      if (currentState === INTRO_STATES.INTRO_COMPLETED && typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('sf_intro_completed'))
+      }
     }
   }, [currentState, pathname])
 

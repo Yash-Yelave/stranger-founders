@@ -2720,3 +2720,128 @@ select:autofill {
   background-color: #102117 !important;
   color: #f5ecd8 !important;
 }
+
+/* =========================================================================
+   SEASON 01 APPLICATIONS OPEN FLOATING POPUP
+   ========================================================================= */
+.sf-app-popup-wrapper {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 1050;
+  max-width: 380px;
+  width: calc(100vw - 40px);
+  pointer-events: auto;
+  animation: popupSlideUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes popupSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.sf-app-popup-card {
+  position: relative;
+  background: rgba(11, 22, 16, 0.94);
+  backdrop-filter: blur(18px) saturate(1.1);
+  border: 1px solid var(--copper);
+  border-radius: 12px;
+  padding: 24px 22px 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(214, 154, 92, 0.25);
+  overflow: hidden;
+}
+
+.sf-app-popup-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--copper-deep), var(--copper-light), var(--copper-deep));
+}
+
+.sf-app-popup-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: none;
+  border: none;
+  color: var(--cream-dim);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: color 0.25s var(--ease), background 0.25s var(--ease);
+}
+
+.sf-app-popup-close:hover {
+  color: var(--cream);
+  background: rgba(214, 154, 92, 0.15);
+}
+
+.sf-app-popup-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--copper-light);
+  margin-bottom: 10px;
+}
+
+.sf-popup-flame {
+  font-size: 0.85rem;
+}
+
+.sf-app-popup-title {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.25rem;
+  color: var(--cream);
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+
+.sf-app-popup-desc {
+  font-family: var(--sans);
+  font-size: 0.86rem;
+  color: var(--cream-dim);
+  line-height: 1.5;
+  margin-bottom: 18px;
+}
+
+.sf-app-popup-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sf-popup-btn {
+  padding: 9px 18px !important;
+  font-size: 0.75rem !important;
+}
+
+.sf-popup-btn-ghost {
+  padding: 8px 14px !important;
+  font-size: 0.75rem !important;
+  border-color: rgba(214, 154, 92, 0.25) !important;
+}
+
+@media (max-width: 480px) {
+  .sf-app-popup-wrapper {
+    right: 20px;
+    bottom: 20px;
+    width: calc(100vw - 40px);
+  }
+}

@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Reveal from '../components/Reveal.jsx'
 import CtaBand from '../components/CtaBand.jsx'
+import ApplicationsOpenPopup from '../components/ApplicationsOpenPopup.jsx'
 import { episodes, journey } from '../data/content.js'
 import { TbUsers, TbMountain, TbMessages, TbWalk, TbMicrophone, TbBuildingSkyscraper, TbUsersGroup, TbTent } from 'react-icons/tb'
 import { PiHandshakeThin } from 'react-icons/pi'
@@ -592,6 +593,9 @@ export default function Home() {
 
       {/* ===================== CTA ===================== */}
       <CtaBand />
+
+      {/* Season 01 Applications Open Floating Popup */}
+      <ApplicationsOpenPopup />
     </>
   )
 }
