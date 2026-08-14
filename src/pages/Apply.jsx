@@ -174,7 +174,10 @@ export default function Apply() {
                     {contentTypes.map(type => (
                       <label key={type} className={`radio-card ${formData.contentType === type ? 'selected' : ''}`}>
                         <input type="radio" name="contentType" value={type} required onChange={handleChange} checked={formData.contentType === type} />
-                        {type}
+                        <span className="radio-label">{type}</span>
+                        <span className="radio-custom-indicator">
+                          {formData.contentType === type && <span className="radio-dot" />}
+                        </span>
                       </label>
                     ))}
                   </div>
@@ -192,7 +195,10 @@ export default function Apply() {
                     {businessTypes.map(type => (
                       <label key={type} className={`radio-card ${formData.buildingBusiness === type ? 'selected' : ''}`}>
                         <input type="radio" name="buildingBusiness" value={type} required onChange={handleChange} checked={formData.buildingBusiness === type} />
-                        {type}
+                        <span className="radio-label">{type}</span>
+                        <span className="radio-custom-indicator">
+                          {formData.buildingBusiness === type && <span className="radio-dot" />}
+                        </span>
                       </label>
                     ))}
                   </div>
@@ -211,7 +217,10 @@ export default function Apply() {
                     {revenueOptions.map(opt => (
                       <label key={opt} className={`radio-card ${formData.revenue === opt ? 'selected' : ''}`}>
                         <input type="radio" name="revenue" value={opt} required onChange={handleChange} checked={formData.revenue === opt} />
-                        {opt}
+                        <span className="radio-label">{opt}</span>
+                        <span className="radio-custom-indicator">
+                          {formData.revenue === opt && <span className="radio-dot" />}
+                        </span>
                       </label>
                     ))}
                   </div>
@@ -224,7 +233,10 @@ export default function Apply() {
                     {timeOptions.map(opt => (
                       <label key={opt} className={`radio-card ${formData.timeCreating === opt ? 'selected' : ''}`}>
                         <input type="radio" name="timeCreating" value={opt} required onChange={handleChange} checked={formData.timeCreating === opt} />
-                        {opt}
+                        <span className="radio-label">{opt}</span>
+                        <span className="radio-custom-indicator">
+                          {formData.timeCreating === opt && <span className="radio-dot" />}
+                        </span>
                       </label>
                     ))}
                   </div>

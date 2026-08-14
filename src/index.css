@@ -2556,7 +2556,8 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
   font-size: 0.95rem;
 }
 
-.checkbox-label {
+.checkbox-label,
+.radio-label {
   flex: 1;
   margin-right: 12px;
   line-height: 1.3;
@@ -2576,11 +2577,33 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
   transition: all 0.25s var(--ease);
 }
 
-.checkbox-card:hover .checkbox-custom-indicator {
+.radio-custom-indicator {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid rgba(214, 154, 92, 0.4);
+  background: rgba(12, 23, 16, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.25s var(--ease);
+}
+
+.radio-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #0c1710;
+}
+
+.checkbox-card:hover .checkbox-custom-indicator,
+.radio-card:hover .radio-custom-indicator {
   border-color: var(--copper);
 }
 
-.checkbox-card.selected .checkbox-custom-indicator {
+.checkbox-card.selected .checkbox-custom-indicator,
+.radio-card.selected .radio-custom-indicator {
   background: var(--copper-light);
   border-color: var(--copper-light);
   color: #0c1710;
