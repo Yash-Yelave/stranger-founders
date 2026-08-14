@@ -2545,6 +2545,7 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 14px 18px;
   background: var(--forest-900);
   border: 1px solid var(--forest-line-soft);
@@ -2553,6 +2554,37 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
   transition: all 0.3s var(--ease);
   color: var(--cream-dim);
   font-size: 0.95rem;
+}
+
+.checkbox-label {
+  flex: 1;
+  margin-right: 12px;
+  line-height: 1.3;
+}
+
+.checkbox-custom-indicator {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1px solid rgba(214, 154, 92, 0.4);
+  background: rgba(12, 23, 16, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--forest-950);
+  transition: all 0.25s var(--ease);
+}
+
+.checkbox-card:hover .checkbox-custom-indicator {
+  border-color: var(--copper);
+}
+
+.checkbox-card.selected .checkbox-custom-indicator {
+  background: var(--copper-light);
+  border-color: var(--copper-light);
+  color: #0c1710;
+  box-shadow: 0 0 8px rgba(214, 154, 92, 0.5);
 }
 
 .radio-card:hover, .checkbox-card:hover {
