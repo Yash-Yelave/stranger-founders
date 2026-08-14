@@ -111,7 +111,7 @@ export default function Apply() {
     <>
       <section className="page-hero">
         <div className="container narrow">
-          <Reveal><span className="eyebrow">Creator Application</span></Reveal>
+          <Reveal><span className="eyebrow">Season 01 Application</span></Reveal>
           <Reveal as="h1" className="display" delay={1}>
             Become a stranger founder
           </Reveal>
