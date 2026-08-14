@@ -4,66 +4,125 @@ import Seal from '../components/Seal.jsx'
 
 export default function Apply() {
   const [sent, setSent] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null)
+
   const [formData, setFormData] = useState({
+    // Section 1 — About You
     name: '',
     email: '',
     phone: '',
-    handle: '',
-    contentType: '',
-    contentTypeOther: '',
-    buildingBusiness: '',
-    businessDesc: '',
-    revenue: '',
-    timeCreating: '',
-    story: '',
-    hardestPart: '',
-    biggestStruggle: '',
-    threeYears: '',
-    expecting: [],
-    expectingOther: '',
-    whyInvited: '',
-    declaration: false
+    linkedin: '',
+    location: '',
+    hearAbout: '',
+    hearAboutOther: '',
+
+    // Section 2 — Your Founder Story
+    company: '',
+    website: '',
+    pitch: '',
+    problem: '',
+    stage: '',
+    timeWorking: '',
+
+    // Section 3 — The Human Side
+    whyWild: '',
+    gapsToFill: '',
+    whatCanOffer: '',
+    offGridComfort: '',
+
+    // Section 4 — Logistics
+    cohortSize: '',
+    availability: '',
+    availabilityMonths: '',
+    dietary: '',
+    anythingElse: '',
+
+    // Declaration
+    declaration: false,
   })
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
-    if (type === 'checkbox' && name !== 'declaration') {
-      // Handle the 'expecting' array
-      setFormData((prev) => {
-        const list = prev.expecting
-        if (checked) return { ...prev, expecting: [...list, value] }
-        return { ...prev, expecting: list.filter((item) => item !== value) }
-      })
-    } else if (type === 'checkbox' && name === 'declaration') {
+    if (type === 'checkbox' && name === 'declaration') {
       setFormData((prev) => ({ ...prev, [name]: checked }))
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }))
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // No backend wired yet — capture intent and confirm.
-    setSent(true)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    setIsSubmitting(true)
+    setErrorMessage(null)
+
+    // Apps Script Web App URL from Environment Variables
+    const scriptUrl = import.meta.env.VITE_SF_APPLY_SCRIPT_URL || 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec'
+
+    // Format final submission payload
+    const payload = {
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      linkedin: formData.linkedin,
+      location: formData.location,
+      hearAbout: formData.hearAbout === 'Other' ? `Other: ${formData.hearAboutOther}` : formData.hearAbout,
+      company: formData.company,
+      website: formData.website || 'N/A',
+      pitch: formData.pitch,
+      problem: formData.problem,
+      stage: formData.stage,
+      timeWorking: formData.timeWorking,
+      whyWild: formData.whyWild,
+      gapsToFill: formData.gapsToFill,
+      whatCanOffer: formData.whatCanOffer,
+      offGridComfort: formData.offGridComfort,
+      cohortSize: formData.cohortSize,
+      availability: formData.availability === 'Yes - specific months' ? `Yes - specific months (${formData.availabilityMonths})` : formData.availability,
+      dietary: formData.dietary || 'None',
+      anythingElse: formData.anythingElse || 'None',
+      submittedAt: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+    }
+
+    try {
+      // POST request to Google Apps Script Web App (no-cors mode as required)
+      await fetch(scriptUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8',
+        },
+        body: JSON.stringify(payload),
+      })
+
+      // Update UI to success state
+      setSent(true)
+      setIsSubmitting(false)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } catch (err) {
+      console.error('Submission error:', err)
+      setErrorMessage('Something went wrong submitting your application. Please check your connection and try again.')
+      setIsSubmitting(false)
+    }
   }
 
-  const contentTypes = ['Comedy', 'Lifestyle', 'Business', 'Education', 'Tech / AI', 'Fitness', 'Finance', 'Storytelling', 'Other']
-  const businessTypes = ['Personal brand', 'Product / Brand', 'Agency', 'Community', 'Startup', 'Course / Education', 'Not yet']
-  const revenueOptions = ['₹0–10,000', '₹10,000–50,000', '₹50,000–2L', '₹2L–10L', '₹10L+']
-  const timeOptions = ['< 6 months', '6–12 months', '1–2 years', '2–5 years', '5+ years']
-  const expectations = ['Clarity', 'Growth', 'Networking', 'Business opportunities', 'Accountability', 'Collaborations', 'Learning from other founders', 'Personal transformation', 'Other']
+  const hearAboutOptions = ['Instagram', 'LinkedIn', 'Friend Referral', 'StrangerFounders.com', 'Other']
+  const stageOptions = ['Idea', 'Prototype/MVP', 'Early Revenue', 'Scaling']
+  const timeWorkingOptions = ['< 6 months', '6–12 months', '1–2 years', '3+ years']
+  const offGridOptions = ['Yes', 'Yes, but a little nervous', "I'll adapt"]
+  const cohortOptions = ['Intimate - 4 founders', 'Standard - 8 founders', 'No preference']
+  const availabilityOptions = ['Yes - anytime', 'Yes - specific months', 'Not sure yet']
 
   return (
     <>
       <section className="page-hero">
         <div className="container narrow">
-          <Reveal><span className="eyebrow">Creator Application</span></Reveal>
+          <Reveal><span className="eyebrow">Founder Evaluation</span></Reveal>
           <Reveal as="h1" className="display" delay={1}>
             Become a stranger founder
           </Reveal>
           <Reveal as="p" className="lead muted" delay={2} style={{ maxWidth: '60ch' }}>
-            This is not a casting form. It is a founder and creator evaluation. Follower count does not decide selection. Story, ambition, honesty, business potential, and transformation value do.
+            An invite-only, off-grid founder retreat. 4 strangers meet in the wild — no stage, no audience, just real conversations. Follower count does not decide selection. Story, ambition, honesty, and business potential do.
           </Reveal>
         </div>
       </section>
@@ -83,8 +142,21 @@ export default function Apply() {
             </Reveal>
           ) : (
             <form onSubmit={handleSubmit}>
+              {errorMessage && (
+                <div className="form-error-banner" style={{ background: 'rgba(239, 68, 68, 0.12)', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '14px 18px', borderRadius: '8px', marginBottom: '24px', color: '#fca5a5', fontSize: '0.92rem' }}>
+                  {errorMessage}
+                </div>
+              )}
+
               <div className="form-grid">
                 
+                {/* ── SECTION 1: ABOUT YOU ────────────────────────────── */}
+                <div className="field full form-section-header" style={{ marginTop: '8px', marginBottom: '8px' }}>
+                  <h2 style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: '1.4rem', color: 'var(--copper-light)', borderBottom: '1px solid var(--forest-line-soft)', paddingBottom: '10px' }}>
+                    Section 1 — About You
+                  </h2>
+                </div>
+
                 {/* 1. Full Name */}
                 <div className="field full">
                   <label htmlFor="name">1. Full Name *</label>
@@ -103,131 +175,187 @@ export default function Apply() {
                   <input id="phone" name="phone" type="tel" required placeholder="+91..." value={formData.phone} onChange={handleChange} />
                 </div>
 
-                {/* 4. Handle */}
-                <div className="field full">
-                  <label htmlFor="handle">4. Instagram / YouTube Handle *</label>
-                  <input id="handle" name="handle" required placeholder="@username or Channel URL" value={formData.handle} onChange={handleChange} />
+                {/* 4. LinkedIn URL */}
+                <div className="field">
+                  <label htmlFor="linkedin">4. LinkedIn Profile URL *</label>
+                  <input id="linkedin" name="linkedin" required placeholder="https://linkedin.com/in/username" value={formData.linkedin} onChange={handleChange} />
                 </div>
 
-                {/* 5. Content Type */}
-                <div className="field full" style={{ marginTop: '16px' }}>
-                  <label>5. What type of content do you create? *</label>
+                {/* 5. City / Country */}
+                <div className="field">
+                  <label htmlFor="location">5. City / Country *</label>
+                  <input id="location" name="location" required placeholder="e.g. Mumbai, India or London, UK" value={formData.location} onChange={handleChange} />
+                </div>
+
+                {/* 6. How did you hear */}
+                <div className="field full" style={{ marginTop: '12px' }}>
+                  <label>6. How did you hear about Stranger Founders? *</label>
                   <div className="radio-grid cols-3">
-                    {contentTypes.map(type => (
-                      <label key={type} className={`radio-card ${formData.contentType === type ? 'selected' : ''}`}>
-                        <input type="radio" name="contentType" value={type} required onChange={handleChange} checked={formData.contentType === type} />
-                        {type}
+                    {hearAboutOptions.map(opt => (
+                      <label key={opt} className={`radio-card ${formData.hearAbout === opt ? 'selected' : ''}`}>
+                        <input type="radio" name="hearAbout" value={opt} required onChange={handleChange} checked={formData.hearAbout === opt} />
+                        {opt}
                       </label>
                     ))}
                   </div>
-                  {formData.contentType === 'Other' && (
+                  {formData.hearAbout === 'Other' && (
                     <div className="field other-input">
-                      <input name="contentTypeOther" required placeholder="Please specify" value={formData.contentTypeOther} onChange={handleChange} />
+                      <input name="hearAboutOther" required placeholder="Please specify how you heard about us" value={formData.hearAboutOther} onChange={handleChange} />
                     </div>
                   )}
                 </div>
 
-                {/* 6. Building a business */}
-                <div className="field full" style={{ marginTop: '16px' }}>
-                  <label>6. Are you building a business beyond content? *</label>
-                  <div className="radio-grid cols-3">
-                    {businessTypes.map(type => (
-                      <label key={type} className={`radio-card ${formData.buildingBusiness === type ? 'selected' : ''}`}>
-                        <input type="radio" name="buildingBusiness" value={type} required onChange={handleChange} checked={formData.buildingBusiness === type} />
-                        {type}
-                      </label>
-                    ))}
-                  </div>
+
+                {/* ── SECTION 2: YOUR FOUNDER STORY ──────────────────── */}
+                <div className="field full form-section-header" style={{ marginTop: '28px', marginBottom: '8px' }}>
+                  <h2 style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: '1.4rem', color: 'var(--copper-light)', borderBottom: '1px solid var(--forest-line-soft)', paddingBottom: '10px' }}>
+                    Section 2 — Your Founder Story
+                  </h2>
                 </div>
 
-                {/* 7. What business */}
+                {/* 7. Startup Name */}
+                <div className="field">
+                  <label htmlFor="company">7. What is your startup / venture? *</label>
+                  <input id="company" name="company" required placeholder="Company or project name" value={formData.company} onChange={handleChange} />
+                </div>
+
+                {/* 8. Website Link */}
+                <div className="field">
+                  <label htmlFor="website">8. Website or App Link (Optional)</label>
+                  <input id="website" name="website" placeholder="https://yourcompany.com" value={formData.website} onChange={handleChange} />
+                </div>
+
+                {/* 9. Campfire Pitch */}
                 <div className="field full">
-                  <label htmlFor="businessDesc">7. What business are you building? (1–2 lines) *</label>
-                  <textarea id="businessDesc" name="businessDesc" required placeholder="Describe your business..." rows="2" value={formData.businessDesc} onChange={handleChange}></textarea>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                    <label htmlFor="pitch">9. Describe what you're building in one sentence — your "campfire pitch" *</label>
+                    <span style={{ fontSize: '0.75rem', color: formData.pitch.length > 200 ? '#ef4444' : 'var(--cream-faint)' }}>
+                      {formData.pitch.length}/200
+                    </span>
+                  </div>
+                  <textarea id="pitch" name="pitch" required maxLength={200} placeholder="One line pitch..." rows="2" value={formData.pitch} onChange={handleChange}></textarea>
                 </div>
 
-                {/* 8. Revenue */}
-                <div className="field full" style={{ marginTop: '16px' }}>
-                  <label>8. What is your current monthly revenue? (Content + business combined) *</label>
-                  <div className="radio-grid">
-                    {revenueOptions.map(opt => (
-                      <label key={opt} className={`radio-card ${formData.revenue === opt ? 'selected' : ''}`}>
-                        <input type="radio" name="revenue" value={opt} required onChange={handleChange} checked={formData.revenue === opt} />
+                {/* 10. Problem obsessed with */}
+                <div className="field full">
+                  <label htmlFor="problem">10. What problem are you obsessed with solving and why? *</label>
+                  <textarea id="problem" name="problem" required placeholder="Describe the problem and why it matters to you..." rows="3" value={formData.problem} onChange={handleChange}></textarea>
+                </div>
+
+                {/* 11. Stage */}
+                <div className="field full" style={{ marginTop: '12px' }}>
+                  <label>11. What stage are you at? *</label>
+                  <div className="radio-grid cols-2">
+                    {stageOptions.map(opt => (
+                      <label key={opt} className={`radio-card ${formData.stage === opt ? 'selected' : ''}`}>
+                        <input type="radio" name="stage" value={opt} required onChange={handleChange} checked={formData.stage === opt} />
                         {opt}
                       </label>
                     ))}
                   </div>
                 </div>
 
-                {/* 9. Time creating */}
-                <div className="field full" style={{ marginTop: '16px' }}>
-                  <label>9. How long have you been creating content? *</label>
-                  <div className="radio-grid">
-                    {timeOptions.map(opt => (
-                      <label key={opt} className={`radio-card ${formData.timeCreating === opt ? 'selected' : ''}`}>
-                        <input type="radio" name="timeCreating" value={opt} required onChange={handleChange} checked={formData.timeCreating === opt} />
+                {/* 12. Time working */}
+                <div className="field full" style={{ marginTop: '12px' }}>
+                  <label>12. How long have you been working on this? *</label>
+                  <div className="radio-grid cols-2">
+                    {timeWorkingOptions.map(opt => (
+                      <label key={opt} className={`radio-card ${formData.timeWorking === opt ? 'selected' : ''}`}>
+                        <input type="radio" name="timeWorking" value={opt} required onChange={handleChange} checked={formData.timeWorking === opt} />
                         {opt}
                       </label>
                     ))}
                   </div>
                 </div>
 
-                {/* 10. Story */}
-                <div className="field full">
-                  <label htmlFor="story">10. Tell us your story in 4–5 lines. *</label>
-                  <textarea id="story" name="story" required placeholder="Your journey so far..." rows="4" value={formData.story} onChange={handleChange}></textarea>
+
+                {/* ── SECTION 3: THE HUMAN SIDE ───────────────────────── */}
+                <div className="field full form-section-header" style={{ marginTop: '28px', marginBottom: '8px' }}>
+                  <h2 style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: '1.4rem', color: 'var(--copper-light)', borderBottom: '1px solid var(--forest-line-soft)', paddingBottom: '10px' }}>
+                    Section 3 — The Human Side
+                  </h2>
                 </div>
 
-                {/* 11. Hardest part */}
+                {/* 13. Why wild */}
                 <div className="field full">
-                  <label htmlFor="hardestPart">11. What is the hardest part of your life or the moment that changed you forever? *</label>
-                  <textarea id="hardestPart" name="hardestPart" required placeholder="Be honest and raw..." rows="4" value={formData.hardestPart} onChange={handleChange}></textarea>
+                  <label htmlFor="whyWild">13. Why do you want to go into the wild with 3 strangers? *</label>
+                  <textarea id="whyWild" name="whyWild" required placeholder="Be honest and authentic..." rows="3" value={formData.whyWild} onChange={handleChange}></textarea>
                 </div>
 
-                {/* 12. Biggest struggle */}
+                {/* 14. Gaps to fill */}
                 <div className="field full">
-                  <label htmlFor="biggestStruggle">12. What is the biggest struggle you’re facing right now? *</label>
-                  <textarea id="biggestStruggle" name="biggestStruggle" required placeholder="Business, personal, or creative..." rows="3" value={formData.biggestStruggle} onChange={handleChange}></textarea>
+                  <label htmlFor="gapsToFill">14. What kind of founder do you want to meet? What gaps do you have that they could fill? *</label>
+                  <textarea id="gapsToFill" name="gapsToFill" required placeholder="Skills, perspectives, mindset..." rows="3" value={formData.gapsToFill} onChange={handleChange}></textarea>
                 </div>
 
-                {/* 13. 3 years */}
+                {/* 15. What can offer */}
                 <div className="field full">
-                  <label htmlFor="threeYears">13. Where do you see yourself in the next 3 years? *</label>
-                  <textarea id="threeYears" name="threeYears" required placeholder="Your ultimate vision..." rows="3" value={formData.threeYears} onChange={handleChange}></textarea>
+                  <label htmlFor="whatCanOffer">15. What can you offer to the other 3 founders in the cohort? *</label>
+                  <textarea id="whatCanOffer" name="whatCanOffer" required placeholder="Your strengths, insights, experiences..." rows="3" value={formData.whatCanOffer} onChange={handleChange}></textarea>
                 </div>
 
-                {/* 14. Expectations */}
-                <div className="field full" style={{ marginTop: '16px' }}>
-                  <label>14. What are you expecting from the Stranger Founder community? *</label>
-                  <div className="checkbox-grid cols-3">
-                    {expectations.map(opt => {
-                      const isChecked = formData.expecting.includes(opt)
-                      return (
-                        <label key={opt} className={`checkbox-card ${isChecked ? 'selected' : ''}`}>
-                          <input type="checkbox" name="expecting" value={opt} onChange={handleChange} checked={isChecked} />
-                          <span className="checkbox-label">{opt}</span>
-                          <span className="checkbox-custom-indicator">
-                            {isChecked && (
-                              <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M1.5 5L4.5 8L10.5 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                              </svg>
-                            )}
-                          </span>
-                        </label>
-                      )
-                    })}
+                {/* 16. Off grid comfort */}
+                <div className="field full" style={{ marginTop: '12px' }}>
+                  <label>16. Are you comfortable with being off-grid and away from devices for 48 hours? *</label>
+                  <div className="radio-grid cols-3">
+                    {offGridOptions.map(opt => (
+                      <label key={opt} className={`radio-card ${formData.offGridComfort === opt ? 'selected' : ''}`}>
+                        <input type="radio" name="offGridComfort" value={opt} required onChange={handleChange} checked={formData.offGridComfort === opt} />
+                        {opt}
+                      </label>
+                    ))}
                   </div>
-                  {formData.expecting.includes('Other') && (
+                </div>
+
+
+                {/* ── SECTION 4: LOGISTICS ─────────────────────────────── */}
+                <div className="field full form-section-header" style={{ marginTop: '28px', marginBottom: '8px' }}>
+                  <h2 style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: '1.4rem', color: 'var(--copper-light)', borderBottom: '1px solid var(--forest-line-soft)', paddingBottom: '10px' }}>
+                    Section 4 — Logistics
+                  </h2>
+                </div>
+
+                {/* 17. Cohort size */}
+                <div className="field full" style={{ marginTop: '12px' }}>
+                  <label>17. Preferred cohort size *</label>
+                  <div className="radio-grid cols-3">
+                    {cohortOptions.map(opt => (
+                      <label key={opt} className={`radio-card ${formData.cohortSize === opt ? 'selected' : ''}`}>
+                        <input type="radio" name="cohortSize" value={opt} required onChange={handleChange} checked={formData.cohortSize === opt} />
+                        {opt}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 18. Availability */}
+                <div className="field full" style={{ marginTop: '12px' }}>
+                  <label>18. Are you available for a 48–72 hour experience? *</label>
+                  <div className="radio-grid cols-3">
+                    {availabilityOptions.map(opt => (
+                      <label key={opt} className={`radio-card ${formData.availability === opt ? 'selected' : ''}`}>
+                        <input type="radio" name="availability" value={opt} required onChange={handleChange} checked={formData.availability === opt} />
+                        {opt}
+                      </label>
+                    ))}
+                  </div>
+                  {formData.availability === 'Yes - specific months' && (
                     <div className="field other-input">
-                      <input name="expectingOther" required placeholder="Please specify" value={formData.expectingOther} onChange={handleChange} />
+                      <input name="availabilityMonths" required placeholder="Specify months (e.g. September - October 2025)" value={formData.availabilityMonths} onChange={handleChange} />
                     </div>
                   )}
                 </div>
 
-                {/* 15. Why invited */}
+                {/* 19. Dietary */}
                 <div className="field full">
-                  <label htmlFor="whyInvited">15. Why should you be invited to Stranger Founder? (Optional)</label>
-                  <textarea id="whyInvited" name="whyInvited" placeholder="Make your final case..." rows="3" value={formData.whyInvited} onChange={handleChange}></textarea>
+                  <label htmlFor="dietary">19. Any dietary restrictions or physical limitations we should know about? (Optional)</label>
+                  <textarea id="dietary" name="dietary" placeholder="Dietary, allergies, physical considerations..." rows="2" value={formData.dietary} onChange={handleChange}></textarea>
+                </div>
+
+                {/* 20. Anything else */}
+                <div className="field full">
+                  <label htmlFor="anythingElse">20. Anything else you'd like us to know? (Optional)</label>
+                  <textarea id="anythingElse" name="anythingElse" placeholder="Final thoughts..." rows="2" value={formData.anythingElse} onChange={handleChange}></textarea>
                 </div>
 
                 {/* Declaration */}
@@ -243,8 +371,8 @@ export default function Apply() {
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginTop: 26, flexWrap: 'wrap' }}>
-                <button type="submit" className="btn btn-primary" disabled={!formData.declaration}>
-                  Request My Invitation <span className="arw">→</span>
+                <button type="submit" className="btn btn-primary" disabled={!formData.declaration || isSubmitting}>
+                  {isSubmitting ? 'Submitting Application...' : 'Request My Invitation'} <span className="arw">→</span>
                 </button>
                 <p className="form-note">Invite-only. We read every application carefully.</p>
               </div>

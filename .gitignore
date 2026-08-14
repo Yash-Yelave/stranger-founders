@@ -6,4 +6,11 @@ agent/
 Stranger_Forest_Cinematic_V2/
 blender-cinematic/
 
+# Environment variables
+.env
+.env*.local
+.env.production
+.env.development
+
+
 
