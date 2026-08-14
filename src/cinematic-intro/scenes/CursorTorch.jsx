@@ -49,17 +49,20 @@ export default function CursorTorch({ lerpPosRef, velocityRef, isLit, isIgniting
           >
             {/* Outer Warm Orange/Amber Flame */}
             <path
+              className="torch-flame-outer"
               d="M12 2 C16 12 23 22 23 33 C23 42 18.2 48 12 48 C5.8 48 1 42 1 33 C1 22 8 12 12 2 Z"
               fill="url(#outerFlameGradCursor)"
               style={{ filter: 'drop-shadow(0 0 8px rgba(245, 124, 0, 0.85))' }}
             />
             {/* Mid Golden Warm Flame Layer */}
             <path
+              className="torch-flame-mid"
               d="M12 12 C15 19 19.5 26 19.5 34 C19.5 41 16.2 45 12 45 C7.8 45 4.5 41 4.5 34 C4.5 26 9 19 12 12 Z"
               fill="url(#midFlameGradCursor)"
             />
             {/* Core Luminous White/Cream Flame Center */}
             <path
+              className="torch-flame-core"
               d="M12 24 C13.8 28 15.5 32 15.5 37 C15.5 41 13.9 43.5 12 43.5 C10.1 43.5 8.5 41 8.5 37 C8.5 32 10.2 28 12 24 Z"
               fill="url(#coreFlameGradCursor)"
             />

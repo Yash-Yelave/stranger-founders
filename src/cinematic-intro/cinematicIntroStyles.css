@@ -251,6 +251,44 @@ html.sf-hide-cursor *,
   100% { transform: scale(1.05, 0.95) rotate(1.5deg); filter: brightness(1.22); }
 }
 
+/* Organic Living Flame Layer Animations (Campfire-like dynamic wave motion) */
+.torch-flame-outer {
+  transform-origin: 12px 48px;
+  animation: torchFlameOuter 1.6s ease-in-out infinite alternate;
+}
+
+.torch-flame-mid {
+  transform-origin: 12px 45px;
+  animation: torchFlameMid 1.2s ease-in-out infinite alternate;
+}
+
+.torch-flame-core {
+  transform-origin: 12px 43.5px;
+  animation: torchFlameCore 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes torchFlameOuter {
+  0%   { transform: scaleX(1) scaleY(1) rotate(-1.5deg); opacity: 0.95; }
+  25%  { transform: scaleX(1.08) scaleY(0.96) rotate(2deg); opacity: 0.9; }
+  50%  { transform: scaleX(0.94) scaleY(1.06) rotate(-2.5deg); opacity: 1; }
+  75%  { transform: scaleX(1.05) scaleY(0.97) rotate(1.5deg); opacity: 0.92; }
+  100% { transform: scaleX(0.96) scaleY(1.03) rotate(-1deg); opacity: 0.98; }
+}
+
+@keyframes torchFlameMid {
+  0%   { transform: scaleX(1) scaleY(1) rotate(2deg); opacity: 0.92; }
+  33%  { transform: scaleX(1.1) scaleY(0.93) rotate(-2.5deg); opacity: 0.88; }
+  66%  { transform: scaleX(0.93) scaleY(1.07) rotate(2deg); opacity: 0.98; }
+  100% { transform: scaleX(1.04) scaleY(0.97) rotate(-1deg); opacity: 0.94; }
+}
+
+@keyframes torchFlameCore {
+  0%   { transform: scaleX(1) scaleY(1) rotate(-1deg); opacity: 1; }
+  40%  { transform: scaleX(0.9) scaleY(1.1) rotate(2deg); opacity: 0.95; }
+  80%  { transform: scaleX(1.1) scaleY(0.92) rotate(-1.5deg); opacity: 1; }
+  100% { transform: scaleX(0.97) scaleY(1.04) rotate(0.5deg); opacity: 0.98; }
+}
+
 /* Flame Transfer Ignition Animation FX */
 .flame-igniting-grow {
   animation: igniteFlame 0.75s cubic-bezier(0.25, 1, 0.5, 1) forwards;
