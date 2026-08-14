@@ -4,6 +4,9 @@ import Seal from '../components/Seal.jsx'
 
 export default function Apply() {
   const [sent, setSent] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null)
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -41,11 +44,50 @@ export default function Apply() {
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // No backend wired yet — capture intent and confirm.
-    setSent(true)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    setIsSubmitting(true)
+    setErrorMessage(null)
+
+    const scriptUrl = import.meta.env.VITE_SF_APPLY_SCRIPT_URL || 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec'
+
+    const payload = {
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      handle: formData.handle,
+      contentType: formData.contentType === 'Other' ? `Other: ${formData.contentTypeOther}` : formData.contentType,
+      buildingBusiness: formData.buildingBusiness,
+      businessDesc: formData.businessDesc,
+      revenue: formData.revenue,
+      timeCreating: formData.timeCreating,
+      story: formData.story,
+      hardestPart: formData.hardestPart,
+      biggestStruggle: formData.biggestStruggle,
+      threeYears: formData.threeYears,
+      expecting: formData.expecting.map(item => item === 'Other' ? `Other: ${formData.expectingOther}` : item).join(', '),
+      whyInvited: formData.whyInvited || 'N/A',
+      submittedAt: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+    }
+
+    try {
+      await fetch(scriptUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8',
+        },
+        body: JSON.stringify(payload),
+      })
+
+      setSent(true)
+      setIsSubmitting(false)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } catch (err) {
+      console.error('Submission error:', err)
+      setErrorMessage('Something went wrong submitting your application. Please check your connection and try again.')
+      setIsSubmitting(false)
+    }
   }
 
   const contentTypes = ['Comedy', 'Lifestyle', 'Business', 'Education', 'Tech / AI', 'Fitness', 'Finance', 'Storytelling', 'Other']
@@ -83,6 +125,11 @@ export default function Apply() {
             </Reveal>
           ) : (
             <form onSubmit={handleSubmit}>
+              {errorMessage && (
+                <div className="form-error-banner" style={{ background: 'rgba(239, 68, 68, 0.12)', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '14px 18px', borderRadius: '8px', marginBottom: '24px', color: '#fca5a5', fontSize: '0.92rem' }}>
+                  {errorMessage}
+                </div>
+              )}
               <div className="form-grid">
                 
                 {/* 1. Full Name */}
@@ -243,8 +290,8 @@ export default function Apply() {
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginTop: 26, flexWrap: 'wrap' }}>
-                <button type="submit" className="btn btn-primary" disabled={!formData.declaration}>
-                  Request My Invitation <span className="arw">→</span>
+                <button type="submit" className="btn btn-primary" disabled={!formData.declaration || isSubmitting}>
+                  {isSubmitting ? 'Submitting Application...' : 'Request My Invitation'} <span className="arw">→</span>
                 </button>
                 <p className="form-note">Invite-only. We read every application carefully.</p>
               </div>
