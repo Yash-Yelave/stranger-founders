@@ -25,7 +25,7 @@ export default function Apply() {
     expecting: [],
     expectingOther: '',
     whyInvited: '',
-    declaration: false
+    declaration: false,
   })
 
   const handleChange = (e) => {
