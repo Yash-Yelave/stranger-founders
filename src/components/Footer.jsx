@@ -24,7 +24,8 @@ export default function Footer() {
 
           <div className="footer-col">
             <h5>The Circle</h5>
-            <a href="https://instagram.com/thesfshow" target="_blank" rel="noreferrer">Instagram — @thesfshow</a>
+            <a href="https://www.instagram.com/ramprayaga/" target="_blank" rel="noreferrer">Instagram — @ramprayaga</a>
+            <a href="https://www.youtube.com/@RamPrayaga_MYB" target="_blank" rel="noreferrer">YouTube — @RamPrayaga_MYB</a>
             <a href="mailto:hello@strangerfounders.com">hello@strangerfounders.com</a>
             <p>Nature venues across India</p>
           </div>
