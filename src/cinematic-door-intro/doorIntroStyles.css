@@ -20,12 +20,12 @@
   pointer-events: none;
 }
 
-/* Full-Screen Pure Cream Curtain for Seamless Jitter-Free Handoff */
+/* Full-Screen Dark Torch Transition Curtain for Seamless Handoff */
 .sf-full-cream-curtain {
   position: absolute;
   inset: 0;
   z-index: 95;
-  background: #faf8f5;
+  background: #080f0b;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1);
@@ -107,20 +107,20 @@
   transform-style: preserve-3d;
 }
 
-/* Luminous Cream Interior Light Beyond Doorway */
+/* Deep Atmospheric Torch Interior Light Beyond Doorway */
 .sf-doorway-interior-light {
   position: absolute;
   inset: 0;
-  background: #ffffff;
+  background: radial-gradient(circle at center, rgba(214, 154, 92, 0.25) 0%, rgba(8, 15, 11, 0.98) 70%, #080f0b 100%);
   z-index: 1;
   overflow: hidden;
-  box-shadow: 0 0 180px #ffffff;
+  box-shadow: 0 0 80px rgba(214, 154, 92, 0.3);
 }
 
 .sf-cream-light-core {
   position: absolute;
   inset: 0;
-  background: #ffffff;
+  background: radial-gradient(ellipse at center, rgba(245, 236, 216, 0.2) 0%, transparent 80%);
 }
 
 /* Outer Heavy Molded Architectural Door Frame */
@@ -393,8 +393,13 @@
   pointer-events: none;
   filter: drop-shadow(0 10px 25px rgba(0,0,0,0.9)) drop-shadow(0 0 20px rgba(214, 154, 92, 0.8));
   cursor: grabbing;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: transform;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+  will-change: transform, opacity;
+  opacity: 1;
+}
+
+.sf-door-key-item.picked-up.is-key-fading {
+  opacity: 0;
 }
 
 .sf-door-scroll-hint {

@@ -16,7 +16,7 @@ import CampfireDirectionArrow from './scenes/CampfireDirectionArrow'
 
 import './cinematicIntroStyles.css'
 
-export default function CinematicIntroOverlay({ isDoorActive = false, onIntroComplete }) {
+export default function CinematicIntroOverlay({ onIntroComplete }) {
   const { pathname } = useLocation()
   const [currentState, setCurrentState] = useState(() => {
     try {
@@ -24,7 +24,7 @@ export default function CinematicIntroOverlay({ isDoorActive = false, onIntroCom
         return INTRO_STATES.INTRO_COMPLETED
       }
     } catch (e) {}
-    return INTRO_STATES.INITIALIZING
+    return INTRO_STATES.TORCH_AVAILABLE
   })
   const [ignitionProgress, setIgnitionProgress] = useState(0)
 
@@ -52,9 +52,9 @@ export default function CinematicIntroOverlay({ isDoorActive = false, onIntroCom
     transitionTo(INTRO_STATES.INTRO_COMPLETED)
   }, [transitionTo])
 
-  // Initialize intro on mounting homepage (deferred while door intro layer is active)
+  // Initialize intro on mounting homepage directly in TORCH_AVAILABLE state underneath door
   useEffect(() => {
-    if (pathname !== '/' || isDoorActive) {
+    if (pathname !== '/') {
       return
     }
 
@@ -70,7 +70,7 @@ export default function CinematicIntroOverlay({ isDoorActive = false, onIntroCom
     } catch (e) {}
 
     // Reset state for homepage load / reload
-    setCurrentState(INTRO_STATES.INITIALIZING)
+    setCurrentState(INTRO_STATES.TORCH_AVAILABLE)
 
     // Prevent automatic browser scroll restoration on refresh/reload
     if ('scrollRestoration' in window.history) {
@@ -80,14 +80,7 @@ export default function CinematicIntroOverlay({ isDoorActive = false, onIntroCom
 
     // Prevent body scroll during initial scenes
     document.body.style.overflow = 'hidden'
-
-    // Preload & transition to TEXT_STRANGER
-    const preloadTimer = setTimeout(() => {
-      transitionTo(INTRO_STATES.TEXT_STRANGER)
-    }, 50)
-
-    return () => clearTimeout(preloadTimer)
-  }, [pathname, isDoorActive, transitionTo])
+  }, [pathname])
 
   // Force programmatic scroll reset to top hero section (0,0) before torch scene starts & unlock webpage scroll during torch exploration
   useEffect(() => {
@@ -303,8 +296,8 @@ export default function CinematicIntroOverlay({ isDoorActive = false, onIntroCom
     }
   }, [currentState, pathname])
 
-  // Only render on homepage route, while intro is active, and NOT while door intro layer is active
-  if (pathname !== '/' || isDoorActive || currentState === INTRO_STATES.INTRO_COMPLETED) {
+  // Only render on homepage route while intro is active
+  if (pathname !== '/' || currentState === INTRO_STATES.INTRO_COMPLETED) {
     return null
   }
 
@@ -326,13 +319,8 @@ export default function CinematicIntroOverlay({ isDoorActive = false, onIntroCom
     INTRO_STATES.HOMEPAGE_ILLUMINATING
   ].includes(currentState)
 
-  const isTunnelSceneActive = [
-    INTRO_STATES.INITIALIZING,
-    INTRO_STATES.TEXT_STRANGER,
-    INTRO_STATES.TEXT_FOLLOW_ME,
-    INTRO_STATES.TUNNEL_SCROLLING,
-    INTRO_STATES.TRANSITIONING_TO_DARKNESS
-  ].includes(currentState)
+  // White text tunnel scene is permanently removed from intro sequence
+  const isTunnelSceneActive = false
 
   const isSolidBlackActive = [
     INTRO_STATES.TORCH_AVAILABLE,

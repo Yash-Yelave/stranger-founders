@@ -14,6 +14,7 @@ export default function CinematicDoorOverlay({ onDoorComplete, onSkipIntro }) {
   const { pathname } = useLocation()
   const [currentState, setCurrentState] = useState(DOOR_INTRO_STATES.DOOR_IDLE)
   const [isKeyPickedUp, setIsKeyPickedUp] = useState(false)
+  const [isKeyFading, setIsKeyFading] = useState(false)
   const [keyRotation, setKeyRotation] = useState(0)
   const [cameraZoom, setCameraZoom] = useState(1)
   const [proximityProgress, setProximityProgress] = useState(0)
@@ -101,38 +102,43 @@ export default function CinematicDoorOverlay({ onDoorComplete, onSkipIntro }) {
         // Lock key position onto keyhole center for 100% precision
         lerpPosRef.current = { x: lockCenter.x, y: lockCenter.y }
 
-        // 1. Key turns 90° smoothly in keyhole (300ms)
+        // 1. Key turns 90° smoothly in keyhole (350ms)
         setTimeout(() => {
           transitionTo(DOOR_INTRO_STATES.UNLOCKING)
           setKeyRotation(90)
 
-          // 2. Door leaves open smoothly into 3D perspective (700ms)
+          // 2. Key smoothly fades out into keyhole BEFORE door opens (450ms fade)
           setTimeout(() => {
-            transitionTo(DOOR_INTRO_STATES.DOOR_OPENING)
+            setIsKeyFading(true)
 
-            // 3. Camera zooms continuously through doorway into white light (1200ms)
+            // 3. Deliberate delay showing unlatched lock BEFORE door opens (500ms delay)
             setTimeout(() => {
-              transitionTo(DOOR_INTRO_STATES.ENTERING_DOOR)
-              setCameraZoom(4.0)
+              transitionTo(DOOR_INTRO_STATES.DOOR_OPENING)
 
-              // 4. White curtain smoothly covers screen & triggers handoff (2000ms)
+              // 4. Door leaves open AND camera SIMULTANEOUSLY zooms forward into dark doorway (1200ms)
               setTimeout(() => {
-                transitionTo(DOOR_INTRO_STATES.HANDOFF)
-                setIsHandoffFading(true)
-                if (onDoorComplete) onDoorComplete()
+                transitionTo(DOOR_INTRO_STATES.ENTERING_DOOR)
+                setCameraZoom(4.2)
 
+                // 5. Dark curtain smoothly covers screen & triggers direct handoff to torch scene (800ms)
                 setTimeout(() => {
-                  try {
-                    sessionStorage.setItem('sf_door_intro_completed', 'true')
-                  } catch (e) {}
-                  transitionTo(DOOR_INTRO_STATES.COMPLETE)
-                  document.body.style.overflow = ''
-                  document.documentElement.style.overflow = ''
-                }, 600)
-              }, 800)
+                  transitionTo(DOOR_INTRO_STATES.HANDOFF)
+                  setIsHandoffFading(true)
+                  if (onDoorComplete) onDoorComplete()
+
+                  setTimeout(() => {
+                    try {
+                      sessionStorage.setItem('sf_door_intro_completed', 'true')
+                    } catch (e) {}
+                    transitionTo(DOOR_INTRO_STATES.COMPLETE)
+                    document.body.style.overflow = ''
+                    document.documentElement.style.overflow = ''
+                  }, 600)
+                }, 800)
+              }, 400)
             }, 500)
-          }, 600)
-        }, 300)
+          }, 450)
+        }, 350)
       } else {
         animId = requestAnimationFrame(checkProximityLoop)
       }
@@ -172,7 +178,7 @@ export default function CinematicDoorOverlay({ onDoorComplete, onSkipIntro }) {
         Skip Intro ✕
       </button>
 
-      {/* Full-Screen Pure Cream Curtain for Seamless Jitter-Free Handoff */}
+      {/* Full-Screen Dark Torch Transition Curtain for Seamless Handoff */}
       <div className={`sf-full-cream-curtain ${isCreamCurtainActive ? 'is-active' : ''}`} />
 
       {/* Initial Door Scene with 3D Framing & Lock */}
@@ -197,10 +203,11 @@ export default function CinematicDoorOverlay({ onDoorComplete, onSkipIntro }) {
         isKeyPickedUp={isKeyPickedUp}
       />
 
-      {/* Floating Key Attached to Pointer once Picked Up */}
-      {isKeyPickedUp && (
+      {/* Floating Key Attached to Pointer once Picked Up (Fades out BEFORE door opens) */}
+      {isKeyPickedUp && ['KEY_PICKED', 'RETURNING_TO_DOOR', 'KEY_APPROACHING_LOCK', 'KEY_SNAPPING', 'KEY_INSERTED', 'UNLOCKING'].includes(currentState) && (
         <KeyItem
           isPickedUp={true}
+          isFading={isKeyFading}
           position={lerpPosRef.current}
           rotation={keyRotation}
         />

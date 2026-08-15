@@ -2,6 +2,7 @@ import React from 'react'
 
 export default function KeyItem({
   isPickedUp = false,
+  isFading = false,
   position = { x: 0, y: 0 },
   rotation = 0,
   onClick,
@@ -9,7 +10,7 @@ export default function KeyItem({
 }) {
   return (
     <div
-      className={`sf-door-key-item ${isPickedUp ? 'picked-up' : 'in-box'}`}
+      className={`sf-door-key-item ${isPickedUp ? 'picked-up' : 'in-box'} ${isFading ? 'is-key-fading' : ''}`}
       onClick={onClick}
       style={{
         transform: isPickedUp

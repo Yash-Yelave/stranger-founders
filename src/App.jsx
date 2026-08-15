@@ -22,7 +22,7 @@ function ScrollToTop() {
 export default function App() {
   const { pathname } = useLocation()
 
-  // Master One-Way Intro Phase: 'DOOR' -> 'CREAM_TEXT' -> 'COMPLETED'
+  // Master One-Way Intro Phase: 'DOOR' -> 'TORCH' -> 'COMPLETED'
   const [masterPhase, setMasterPhase] = useState(() => {
     if (typeof window === 'undefined' || pathname !== '/') return 'COMPLETED'
     try {
@@ -38,7 +38,7 @@ export default function App() {
     setMasterPhase((prev) => {
       if (prev === 'DOOR') {
         try { sessionStorage.setItem('sf_door_intro_done', 'true') } catch (e) {}
-        return 'CREAM_TEXT'
+        return 'TORCH'
       }
       return prev
     })
@@ -58,23 +58,22 @@ export default function App() {
   }
 
   const isDoorActive = masterPhase === 'DOOR' && pathname === '/'
-  const isIntroActive = (masterPhase === 'DOOR' || masterPhase === 'CREAM_TEXT') && pathname === '/'
+  const isIntroActive = (masterPhase === 'DOOR' || masterPhase === 'TORCH') && pathname === '/'
 
   return (
     <>
-      {/* 1. Door + Key + Box Cinematic Overlay Layer (Active during DOOR phase) */}
+      {/* 1. Torch Scene Layer (Mounted underneath door overlay, ready in dark torch mode) */}
+      {isIntroActive && (
+        <CinematicIntroOverlay
+          onIntroComplete={handleFullIntroComplete}
+        />
+      )}
+
+      {/* 2. Door + Key + Box Cinematic Overlay (Unmounts when camera enters dark doorway) */}
       {isDoorActive && (
         <CinematicDoorOverlay
           onDoorComplete={handleDoorComplete}
           onSkipIntro={handleSkipAllIntro}
-        />
-      )}
-
-      {/* 2. Cream Text & Torch Sequence (Active during DOOR & CREAM_TEXT phases, starts running when masterPhase === 'CREAM_TEXT') */}
-      {isIntroActive && (
-        <CinematicIntroOverlay
-          isDoorActive={isDoorActive}
-          onIntroComplete={handleFullIntroComplete}
         />
       )}
 
