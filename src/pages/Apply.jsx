@@ -103,7 +103,7 @@ export default function Apply() {
 
   const contentTypes = ['Comedy', 'Lifestyle', 'Business', 'Education', 'Tech / AI', 'Fitness', 'Finance', 'Storytelling', 'Other']
   const businessTypes = ['Personal brand', 'Product / Brand', 'Agency', 'Community', 'Startup', 'Course / Education', 'Not yet']
-  const revenueOptions = ['₹0–10,000', '₹10,000–50,000', '₹50,000–2L', '₹2L–10L', '₹10L+']
+  const revenueOptions = ['₹0 – 1 Lakh', '₹1 – 5 Lakh', '₹5 – 25 Lakh', '₹25 – 50 Lakh', '₹50 Lakh+']
   const timeOptions = ['< 6 months', '6–12 months', '1–2 years', '2–5 years', '5+ years']
   const expectations = ['Clarity', 'Growth', 'Networking', 'Business opportunities', 'Accountability', 'Collaborations', 'Learning from other founders', 'Personal transformation', 'Other']
 
