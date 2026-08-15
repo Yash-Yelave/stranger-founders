@@ -210,6 +210,12 @@ export default function CinematicIntroOverlay({ isDoorActive = false, onIntroCom
               // Fire final transition sequence EXACTLY ONCE
               transitionTo(INTRO_STATES.CAMPFIRE_LIT)
 
+              // Dispatch sf_campfire_lit event immediately when campfire ignites!
+              if (typeof window !== 'undefined') {
+                window.__SF_CAMPFIRE_LIT__ = true
+                window.dispatchEvent(new CustomEvent('sf_campfire_lit'))
+              }
+
               setTimeout(() => {
                 transitionTo(INTRO_STATES.HOMEPAGE_ILLUMINATING)
               }, 400)

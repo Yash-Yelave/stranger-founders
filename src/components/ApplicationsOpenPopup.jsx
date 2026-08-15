@@ -6,25 +6,43 @@ export default function ApplicationsOpenPopup() {
   const [isDismissed, setIsDismissed] = useState(false)
 
   useEffect(() => {
-    const handleIntroCompleted = () => {
-      setIsVisible(true)
+    let timerId = null
+
+    // Handler when campfire ignites: Push popup after EXACT 1 SECOND!
+    const handleCampfireLit = () => {
+      if (timerId) clearTimeout(timerId)
+      timerId = setTimeout(() => {
+        setIsVisible(true)
+      }, 1000)
     }
 
+    const handleIntroCompleted = () => {
+      if (timerId) clearTimeout(timerId)
+      timerId = setTimeout(() => {
+        setIsVisible(true)
+      }, 1000)
+    }
+
+    window.addEventListener('sf_campfire_lit', handleCampfireLit)
     window.addEventListener('sf_intro_completed', handleIntroCompleted)
 
-    // Check if intro is already finished (or not present on screen)
-    const checkInterval = setInterval(() => {
-      if (typeof window !== 'undefined') {
-        const introRoot = document.querySelector('.cinematic-intro-root')
-        if (!introRoot || window.__SF_INTRO_COMPLETED__) {
+    // Check if campfire was already lit or intro completed on mount
+    if (typeof window !== 'undefined') {
+      if (window.__SF_CAMPFIRE_LIT__) {
+        timerId = setTimeout(() => {
           setIsVisible(true)
-        }
+        }, 1000)
+      } else if (window.__SF_INTRO_COMPLETED__ || sessionStorage.getItem('sf_intro_master_done') === 'true') {
+        timerId = setTimeout(() => {
+          setIsVisible(true)
+        }, 1000)
       }
-    }, 200)
+    }
 
     return () => {
+      window.removeEventListener('sf_campfire_lit', handleCampfireLit)
       window.removeEventListener('sf_intro_completed', handleIntroCompleted)
-      clearInterval(checkInterval)
+      if (timerId) clearTimeout(timerId)
     }
   }, [])
 
