@@ -17,19 +17,6 @@ export default function TunnelScene({ currentState, onTransition }) {
   const ring2Ref = useRef(null)
   const particleGroupRef = useRef(null)
 
-  // Scene 1: Initial Text Fade-in Timing
-  useEffect(() => {
-    hasTransitionedRef.current = false
-    targetProgressRef.current = 0
-    currentProgressRef.current = 0
-
-    const timer = setTimeout(() => {
-      onTransition(INTRO_STATES.TEXT_STRANGER)
-    }, 400)
-
-    return () => clearTimeout(timer)
-  }, [onTransition])
-
   // Clean One-Time Handoff into pitch black torch scene
   const triggerDarknessHandoff = useCallback(() => {
     if (hasTransitionedRef.current) return
@@ -40,6 +27,13 @@ export default function TunnelScene({ currentState, onTransition }) {
     setTimeout(() => {
       onTransition(INTRO_STATES.TORCH_AVAILABLE)
     }, 200)
+  }, [onTransition])
+
+  // Scene 1: Initial State & Scroll Reset
+  useEffect(() => {
+    hasTransitionedRef.current = false
+    targetProgressRef.current = 0
+    currentProgressRef.current = 0
   }, [onTransition])
 
   // Background Color Interpolation: Soft Cream (#faf8f5) -> Muted Taupe -> Charcoal -> Pitch Black (#000000)
@@ -72,24 +66,24 @@ export default function TunnelScene({ currentState, onTransition }) {
         viewportRef.current.style.backgroundColor = getBackgroundColor(next)
       }
 
-      // 2. Centered Text Scale Growth: Small (1.0) -> Medium (2.5) -> Large (6.0) -> Very Large (11.0)
+      // 2. Centered Text Scale Growth on Scroll: Readable (1.0) -> 3D Expansion (7.0)
       if (titleWrapperRef.current) {
         const textGrowthP = Math.min(1, next / 0.65)
-        const textScale = 1.0 + Math.pow(textGrowthP, 2.1) * 10.0
+        const textScale = 1.0 + Math.pow(textGrowthP, 2.1) * 6.0
 
-        // Opacity: Fades gracefully as text scales past viewport bounds (next > 52%)
-        const textOpacity = next > 0.52
-          ? Math.max(0, 1 - (next - 0.52) / 0.18)
+        // Opacity: Fades gracefully as text scales past viewport bounds (next > 0.45)
+        const textOpacity = next > 0.45
+          ? Math.max(0, 1 - (next - 0.45) / 0.20)
           : 1
 
         titleWrapperRef.current.style.transform = `translate(-50%, -50%) scale(${textScale.toFixed(3)})`
         titleWrapperRef.current.style.opacity = textOpacity.toFixed(3)
       }
 
-      // 3. Vector SVG Black Circle Radius Expansion (Appears at 42% progress, expands smoothly to r=750)
+      // 3. Vector SVG Black Circle Radius Expansion (Appears at 35% progress, expands smoothly to r=750)
       if (circleRef.current) {
-        if (next > 0.42) {
-          const portalP = (next - 0.42) / 0.55
+        if (next > 0.35) {
+          const portalP = (next - 0.35) / 0.62
           const radius = Math.pow(portalP, 2.2) * 750 // Vector SVG radius up to 750px (covers fullscreen diagonally)
           const opacity = Math.min(1, portalP * 3.0)
 

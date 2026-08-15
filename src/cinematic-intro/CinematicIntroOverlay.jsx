@@ -16,7 +16,7 @@ import CampfireDirectionArrow from './scenes/CampfireDirectionArrow'
 
 import './cinematicIntroStyles.css'
 
-export default function CinematicIntroOverlay() {
+export default function CinematicIntroOverlay({ isDoorActive = false, onIntroComplete }) {
   const { pathname } = useLocation()
   const [currentState, setCurrentState] = useState(() => {
     try {
@@ -52,12 +52,9 @@ export default function CinematicIntroOverlay() {
     transitionTo(INTRO_STATES.INTRO_COMPLETED)
   }, [transitionTo])
 
-  // Initialize intro on mounting homepage
+  // Initialize intro on mounting homepage (deferred while door intro layer is active)
   useEffect(() => {
-    if (pathname !== '/') {
-      try {
-        sessionStorage.setItem('sf_from_other_page', 'true')
-      } catch (e) {}
+    if (pathname !== '/' || isDoorActive) {
       return
     }
 
@@ -90,7 +87,7 @@ export default function CinematicIntroOverlay() {
     }, 50)
 
     return () => clearTimeout(preloadTimer)
-  }, [pathname, transitionTo])
+  }, [pathname, isDoorActive, transitionTo])
 
   // Force programmatic scroll reset to top hero section (0,0) before torch scene starts & unlock webpage scroll during torch exploration
   useEffect(() => {
@@ -289,8 +286,8 @@ export default function CinematicIntroOverlay() {
     }
   }, [currentState, pathname])
 
-  // Only render on homepage route and while intro is active
-  if (pathname !== '/' || currentState === INTRO_STATES.INTRO_COMPLETED) {
+  // Only render on homepage route, while intro is active, and NOT while door intro layer is active
+  if (pathname !== '/' || isDoorActive || currentState === INTRO_STATES.INTRO_COMPLETED) {
     return null
   }
 
