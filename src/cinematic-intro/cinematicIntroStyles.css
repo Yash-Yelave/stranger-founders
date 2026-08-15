@@ -100,14 +100,13 @@ html.sf-hide-cursor *,
 .particle-4 { top: 80%; left: 20%; }
 .particle-5 { top: 20%; left: 65%; }
 
-/* Scene 1: "Are you a stranger?" Opening Title (Centered In-Place Growth) */
 .stranger-title-wrapper {
   position: absolute;
   top: 50%;
   left: 50%;
   transform-origin: center center;
   text-align: center;
-  width: min(90%, 650px);
+  width: min(92%, 850px);
   will-change: transform, opacity;
   pointer-events: none;
   display: flex;
@@ -118,13 +117,14 @@ html.sf-hide-cursor *,
 
 .stranger-title-text {
   font-family: var(--serif, Georgia, serif);
-  font-size: clamp(2.2rem, 6vw, 4.2rem);
+  font-size: clamp(1.8rem, 4.5vw, 3.4rem);
   font-weight: 400;
   color: #1a1714;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   margin: 0;
-  line-height: 1.15;
-  white-space: nowrap;
+  line-height: 1.2;
+  white-space: normal;
+  text-wrap: balance;
 }
 
 .scroll-pulse-hint {

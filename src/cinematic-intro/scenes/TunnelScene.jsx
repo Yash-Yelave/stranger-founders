@@ -195,7 +195,7 @@ export default function TunnelScene({ currentState, onTransition }) {
           <div className="tunnel-particle particle-3" />
         </div>
 
-        {/* Centered Text: "Are you a stranger?" (Grows in-place from Small -> Very Large) */}
+        {/* Centered Text: "A stranger… or a story waiting to begin?" (Grows in-place from Small -> Very Large) */}
         <div
           ref={titleWrapperRef}
           className="stranger-title-wrapper"
@@ -204,7 +204,7 @@ export default function TunnelScene({ currentState, onTransition }) {
             opacity: 1
           }}
         >
-          <h1 className="stranger-title-text">Are you a stranger?</h1>
+          <h1 className="stranger-title-text">A stranger… or a story waiting to begin?</h1>
           <div className="scroll-pulse-hint">
             <div className="scroll-pulse-arrow" />
           </div>
