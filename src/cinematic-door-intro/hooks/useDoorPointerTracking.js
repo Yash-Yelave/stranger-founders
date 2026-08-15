@@ -1,17 +1,28 @@
 import { useEffect, useRef } from 'react'
 
-export function useDoorPointerTracking(lerpFactor = 0.75) {
-  const pointerPosRef = useRef({ x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0 })
-  const lerpPosRef = useRef({ x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0 })
-  const velocityRef = useRef({ x: 0, y: 0 })
+export function useDoorPointerTracking(smoothing = 0.42) {
+  const pointerPosRef = useRef({
+    x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0,
+    y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0
+  })
+  const currentPosRef = useRef({
+    x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0,
+    y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0
+  })
+  const isTrackingEnabledRef = useRef(true)
 
-  const setPointerPos = (x, y) => {
+  const setInstantPosition = (x, y) => {
     pointerPosRef.current = { x, y }
-    lerpPosRef.current = { x, y }
+    currentPosRef.current = { x, y }
+  }
+
+  const setTrackingEnabled = (enabled) => {
+    isTrackingEnabledRef.current = enabled
   }
 
   useEffect(() => {
     const updatePos = (x, y) => {
+      if (!isTrackingEnabledRef.current) return
       pointerPosRef.current = { x, y }
     }
 
@@ -25,7 +36,6 @@ export function useDoorPointerTracking(lerpFactor = 0.75) {
       }
     }
 
-    // Attach capture-phase listeners to window and document for full-screen tracking
     window.addEventListener('pointermove', handlePointerMove, { capture: true, passive: true })
     window.addEventListener('pointerdown', handlePointerMove, { capture: true, passive: true })
     window.addEventListener('mousemove', handlePointerMove, { capture: true, passive: true })
@@ -36,24 +46,24 @@ export function useDoorPointerTracking(lerpFactor = 0.75) {
     document.addEventListener('touchmove', handleTouchMove, { capture: true, passive: true })
 
     let animId
-    const updateLerp = () => {
-      const target = pointerPosRef.current
-      const current = lerpPosRef.current
+    const updateLoop = () => {
+      if (isTrackingEnabledRef.current) {
+        const target = pointerPosRef.current
+        const current = currentPosRef.current
 
-      const dx = target.x - current.x
-      const dy = target.y - current.y
+        const dx = target.x - current.x
+        const dy = target.y - current.y
 
-      velocityRef.current = { x: dx, y: dy }
-
-      lerpPosRef.current = {
-        x: current.x + dx * lerpFactor,
-        y: current.y + dy * lerpFactor
+        currentPosRef.current = {
+          x: current.x + dx * smoothing,
+          y: current.y + dy * smoothing
+        }
       }
 
-      animId = requestAnimationFrame(updateLerp)
+      animId = requestAnimationFrame(updateLoop)
     }
 
-    animId = requestAnimationFrame(updateLerp)
+    animId = requestAnimationFrame(updateLoop)
 
     return () => {
       window.removeEventListener('pointermove', handlePointerMove, { capture: true })
@@ -61,12 +71,17 @@ export function useDoorPointerTracking(lerpFactor = 0.75) {
       window.removeEventListener('mousemove', handlePointerMove, { capture: true })
       window.removeEventListener('touchmove', handleTouchMove, { capture: true })
       window.removeEventListener('touchstart', handleTouchMove, { capture: true })
-
       document.removeEventListener('pointermove', handlePointerMove, { capture: true })
       document.removeEventListener('touchmove', handleTouchMove, { capture: true })
       cancelAnimationFrame(animId)
     }
-  }, [lerpFactor])
+  }, [smoothing])
 
-  return { pointerPosRef, lerpPosRef, velocityRef, setPointerPos }
+  return {
+    pointerPosRef,
+    currentPosRef,
+    lerpPosRef: currentPosRef,
+    setInstantPosition,
+    setTrackingEnabled
+  }
 }

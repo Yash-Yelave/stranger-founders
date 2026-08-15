@@ -21,8 +21,9 @@ export default function KeyItem({
       role="button"
       tabIndex={0}
       aria-label="Antique Brass Key"
+      draggable={false}
     >
-      <svg viewBox="0 0 120 40" className="sf-key-svg" preserveAspectRatio="xMidYMid meet">
+      <svg viewBox="0 0 120 40" className="sf-key-svg" preserveAspectRatio="xMidYMid meet" draggable={false} style={{ userSelect: 'none', WebkitUserDrag: 'none', pointerEvents: 'none' }}>
         <defs>
           <linearGradient id="brassKeyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#f5ecd8" />

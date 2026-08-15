@@ -39,8 +39,8 @@ export default function BoxContainer({
           {isOpen && (
             <div className="sf-box-content-reveal">
               {boxData.hasKey && !isKeyPickedUp ? (
-                <div className="sf-key-in-box-glow" onClick={(e) => { e.stopPropagation(); onPickupKey(); }}>
-                  <KeyItem isPickedUp={false} onClick={(e) => { e.stopPropagation(); onPickupKey(); }} />
+                <div className="sf-key-in-box-glow" onClick={(e) => { e.stopPropagation(); if (onPickupKey) onPickupKey(e); }}>
+                  <KeyItem isPickedUp={false} onClick={(e) => { e.stopPropagation(); if (onPickupKey) onPickupKey(e); }} />
                   <span className="sf-key-hint">Take Key</span>
                 </div>
               ) : boxData.content === 'envelope' ? (
