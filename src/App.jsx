@@ -58,22 +58,22 @@ export default function App() {
   }
 
   const isDoorActive = masterPhase === 'DOOR' && pathname === '/'
-  const isIntroActive = (masterPhase === 'DOOR' || masterPhase === 'TORCH') && pathname === '/'
+  const isTorchActive = masterPhase === 'TORCH' && pathname === '/'
 
   return (
     <>
-      {/* 1. Torch Scene Layer (Mounted underneath door overlay, ready in dark torch mode) */}
-      {isIntroActive && (
-        <CinematicIntroOverlay
-          onIntroComplete={handleFullIntroComplete}
-        />
-      )}
-
-      {/* 2. Door + Key + Box Cinematic Overlay (Unmounts when camera enters dark doorway) */}
+      {/* 1. Door + Key + Box Cinematic Overlay (ONLY VISIBLE ON PAGE LOAD DURING 'DOOR' PHASE) */}
       {isDoorActive && (
         <CinematicDoorOverlay
           onDoorComplete={handleDoorComplete}
           onSkipIntro={handleSkipAllIntro}
+        />
+      )}
+
+      {/* 2. Torch Scene Layer (ACTIVATES ONLY WHEN DOOR OPENING & CAMERA ENTRY FINISHES) */}
+      {isTorchActive && (
+        <CinematicIntroOverlay
+          onIntroComplete={handleFullIntroComplete}
         />
       )}
 

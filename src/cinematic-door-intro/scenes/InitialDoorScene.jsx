@@ -28,15 +28,8 @@ export default function InitialDoorScene({
 
       {/* 3D Architectural Door Frame Assembly */}
       <div className="sf-door-frame-assembly">
-        {/* Luminous Cream Light Environment Beyond Doorway */}
-        <div className="sf-doorway-interior-light">
-          <div className="sf-cream-light-core" />
-          <div className="sf-cream-light-particles">
-            <span className="cp1" />
-            <span className="cp2" />
-            <span className="cp3" />
-          </div>
-        </div>
+        {/* Dark Environment Beyond Doorway */}
+        <div className="sf-doorway-interior-light" />
 
         {/* Outer Heavy Molded Architectural Frame */}
         <div className="sf-door-outer-frame">

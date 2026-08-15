@@ -25,7 +25,7 @@
   position: absolute;
   inset: 0;
   z-index: 95;
-  background: #080f0b;
+  background: #060d09;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1);
@@ -39,14 +39,14 @@
 .sf-door-skip-btn {
   position: absolute;
   top: 24px;
-  right: 28px;
+  right: 24px;
   z-index: 10600;
-  background: rgba(16, 33, 23, 0.6);
-  backdrop-filter: blur(10px);
+  background: rgba(8, 15, 11, 0.7);
+  backdrop-filter: blur(8px);
   border: 1px solid rgba(214, 154, 92, 0.3);
-  color: var(--cream-dim, #d0c4b0);
-  font-size: 0.76rem;
-  letter-spacing: 0.12em;
+  color: var(--copper-light, #e4b37d);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   padding: 8px 16px;
   border-radius: 20px;
@@ -107,20 +107,18 @@
   transform-style: preserve-3d;
 }
 
-/* Deep Atmospheric Torch Interior Light Beyond Doorway */
+/* Dark Interior Beyond Doorway (Pure Dark Background matching Intro Environment) */
 .sf-doorway-interior-light {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(214, 154, 92, 0.25) 0%, rgba(8, 15, 11, 0.98) 70%, #080f0b 100%);
+  background: #060d09;
   z-index: 1;
   overflow: hidden;
-  box-shadow: 0 0 80px rgba(214, 154, 92, 0.3);
+  box-shadow: none;
 }
 
 .sf-cream-light-core {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at center, rgba(245, 236, 216, 0.2) 0%, transparent 80%);
+  display: none;
 }
 
 /* Outer Heavy Molded Architectural Door Frame */

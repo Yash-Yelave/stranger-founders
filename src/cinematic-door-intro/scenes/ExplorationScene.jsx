@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useMemo } from 'react'
 import BoxContainer from './BoxContainer.jsx'
 import { DOOR_INTRO_CONFIG } from '../doorIntroConfig'
 
@@ -10,6 +10,23 @@ export default function ExplorationScene({
 }) {
   // Translate exploration space based on scrollProgress (0 = hidden below door, 1 = fully visible)
   const translateY = (1 - scrollProgress) * 100 // % translate down
+
+  // Select key box index ONCE when the door intro starts (stable for the entire intro run)
+  const [randomKeyBoxIndex] = useState(() => {
+    return Math.floor(Math.random() * DOOR_INTRO_CONFIG.BOXES.length)
+  })
+
+  // Ensure exactly one box contains the key while maintaining all non-key contents
+  const randomizedBoxes = useMemo(() => {
+    return DOOR_INTRO_CONFIG.BOXES.map((box, index) => {
+      const isWinningBox = index === randomKeyBoxIndex
+      return {
+        ...box,
+        hasKey: isWinningBox,
+        content: isWinningBox ? 'key' : (box.content === 'key' ? 'envelope' : box.content)
+      }
+    })
+  }, [randomKeyBoxIndex])
 
   return (
     <div
@@ -27,7 +44,7 @@ export default function ExplorationScene({
 
       {/* Storage Containers Layer */}
       <div className="sf-archive-containers">
-        {DOOR_INTRO_CONFIG.BOXES.map((box) => (
+        {randomizedBoxes.map((box) => (
           <BoxContainer
             key={box.id}
             boxData={box}
