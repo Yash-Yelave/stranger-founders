@@ -18,6 +18,7 @@ export default function CinematicDoorOverlay({ onDoorComplete, onSkipIntro }) {
   const [keyRotation, setKeyRotation] = useState(0)
   const [cameraZoom, setCameraZoom] = useState(1)
   const [proximityProgress, setProximityProgress] = useState(0)
+
   const [isHandoffFading, setIsHandoffFading] = useState(false)
 
   const lockRef = useRef(null)
@@ -25,7 +26,7 @@ export default function CinematicDoorOverlay({ onDoorComplete, onSkipIntro }) {
   stateRef.current = currentState
 
   // Pointer & Scroll hooks
-  const { pointerPosRef, lerpPosRef } = useDoorPointerTracking(DOOR_INTRO_CONFIG.KEY_DRAG_LERP_FACTOR)
+  const { pointerPosRef, lerpPosRef, setPointerPos } = useDoorPointerTracking(DOOR_INTRO_CONFIG.KEY_DRAG_LERP_FACTOR)
   const { scrollProgress, setProgress } = useDoorScrollProgress(
     ['DOOR_IDLE', 'EXPLORING', 'BOXES_VISIBLE', 'SEARCHING'].includes(currentState)
   )
@@ -66,6 +67,9 @@ export default function CinematicDoorOverlay({ onDoorComplete, onSkipIntro }) {
   const handlePickupKey = () => {
     if (isKeyPickedUp) return
     setIsKeyPickedUp(true)
+    if (setPointerPos && pointerPosRef.current) {
+      setPointerPos(pointerPosRef.current.x, pointerPosRef.current.y)
+    }
     transitionTo(DOOR_INTRO_STATES.KEY_PICKED)
 
     // Smoothly return view to door so user can manually place key on lock

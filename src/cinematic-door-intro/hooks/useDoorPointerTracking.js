@@ -1,9 +1,14 @@
 import { useEffect, useRef } from 'react'
 
-export function useDoorPointerTracking(lerpFactor = 0.14) {
-  const pointerPosRef = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 })
-  const lerpPosRef = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 })
+export function useDoorPointerTracking(lerpFactor = 0.55) {
+  const pointerPosRef = useRef({ x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0 })
+  const lerpPosRef = useRef({ x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0 })
   const velocityRef = useRef({ x: 0, y: 0 })
+
+  const setPointerPos = (x, y) => {
+    pointerPosRef.current = { x, y }
+    lerpPosRef.current = { x, y }
+  }
 
   useEffect(() => {
     const handlePointerMove = (e) => {
@@ -17,7 +22,9 @@ export function useDoorPointerTracking(lerpFactor = 0.14) {
     }
 
     window.addEventListener('pointermove', handlePointerMove, { passive: true })
+    window.addEventListener('pointerdown', handlePointerMove, { passive: true })
     window.addEventListener('touchmove', handleTouchMove, { passive: true })
+    window.addEventListener('touchstart', handleTouchMove, { passive: true })
 
     let animId
     const updateLerp = () => {
@@ -41,10 +48,12 @@ export function useDoorPointerTracking(lerpFactor = 0.14) {
 
     return () => {
       window.removeEventListener('pointermove', handlePointerMove)
+      window.removeEventListener('pointerdown', handlePointerMove)
       window.removeEventListener('touchmove', handleTouchMove)
+      window.removeEventListener('touchstart', handleTouchMove)
       cancelAnimationFrame(animId)
     }
   }, [lerpFactor])
 
-  return { pointerPosRef, lerpPosRef, velocityRef }
+  return { pointerPosRef, lerpPosRef, velocityRef, setPointerPos }
 }

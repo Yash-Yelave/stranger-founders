@@ -3,9 +3,9 @@
  */
 export const DOOR_INTRO_CONFIG = {
   // Proximity & Interaction Radii
-  LOCK_ACTIVATION_RADIUS: 90,
-  LOCK_MOBILE_ACTIVATION_RADIUS: 110,
-  
+  LOCK_ACTIVATION_RADIUS: 100,
+  LOCK_MOBILE_ACTIVATION_RADIUS: 130,
+
   // Timings (in milliseconds)
   BOX_OPEN_DURATION: 600,
   KEY_REVEAL_DELAY: 300,
@@ -19,8 +19,8 @@ export const DOOR_INTRO_CONFIG = {
   HANDOFF_CROSSFADE_DURATION: 600,
 
   // Physics & Interpolation
-  POINTER_LERP_FACTOR: 0.12,
-  KEY_DRAG_LERP_FACTOR: 0.14,
+  POINTER_LERP_FACTOR: 0.25,
+  KEY_DRAG_LERP_FACTOR: 0.55,
   SCROLL_SENSITIVITY: 0.0018,
 
   // Storage Box Data (4 unique atmospheric containers with staggered organic layout)
