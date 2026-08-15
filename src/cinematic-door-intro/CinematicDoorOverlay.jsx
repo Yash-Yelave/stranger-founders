@@ -102,16 +102,16 @@ export default function CinematicDoorOverlay({ onDoorComplete, onSkipIntro }) {
         // Lock key position onto keyhole center for 100% precision
         lerpPosRef.current = { x: lockCenter.x, y: lockCenter.y }
 
-        // 1. Key turns 90° smoothly in keyhole (350ms)
+        // 1. Key turns 90° smoothly in keyhole (350ms) - Door leaves REMAIN CLOSED
         setTimeout(() => {
           transitionTo(DOOR_INTRO_STATES.UNLOCKING)
           setKeyRotation(90)
 
-          // 2. Key smoothly fades out into keyhole BEFORE door opens (450ms fade)
+          // 2. Key fades out into keyhole over 250ms until it is COMPLETELY NOT VISIBLE
           setTimeout(() => {
             setIsKeyFading(true)
 
-            // 3. Deliberate delay showing unlatched lock BEFORE door opens (500ms delay)
+            // 3. ONLY AFTER key is 100% gone, trigger door opening and camera zoom
             setTimeout(() => {
               transitionTo(DOOR_INTRO_STATES.DOOR_OPENING)
 
@@ -135,9 +135,9 @@ export default function CinematicDoorOverlay({ onDoorComplete, onSkipIntro }) {
                     document.documentElement.style.overflow = ''
                   }, 600)
                 }, 800)
-              }, 400)
-            }, 500)
-          }, 450)
+              }, 350)
+            }, 350)
+          }, 400)
         }, 350)
       } else {
         animId = requestAnimationFrame(checkProximityLoop)

@@ -9,7 +9,7 @@ export default function InitialDoorScene({
   scrollProgress = 0,
   cameraZoom = 1
 }) {
-  const isDoorOpening = ['UNLOCKING', 'UNLOCKED', 'DOOR_OPENING', 'DOOR_OPEN', 'ENTERING_DOOR', 'HANDOFF'].includes(doorState)
+  const isDoorOpening = ['DOOR_OPENING', 'DOOR_OPEN', 'ENTERING_DOOR', 'HANDOFF'].includes(doorState)
   const isEntering = ['ENTERING_DOOR', 'HANDOFF'].includes(doorState)
 
   return (
