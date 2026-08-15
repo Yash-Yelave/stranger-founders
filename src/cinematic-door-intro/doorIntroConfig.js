@@ -23,7 +23,7 @@ export const DOOR_INTRO_CONFIG = {
   KEY_DRAG_LERP_FACTOR: 0.14,
   SCROLL_SENSITIVITY: 0.0018,
 
-  // Storage Box Data (4–5 unique atmospheric containers)
+  // Storage Box Data (4 unique atmospheric containers with staggered organic layout)
   BOXES: [
     {
       id: 'box-wood-1',
@@ -31,8 +31,8 @@ export const DOOR_INTRO_CONFIG = {
       type: 'wooden-trunk',
       hasKey: false,
       content: 'envelope',
-      x: 18, // % from left in archive space
-      y: 40  // % from top
+      x: 5,  // % from left
+      y: 12  // % from top
     },
     {
       id: 'box-leather-key',
@@ -40,17 +40,8 @@ export const DOOR_INTRO_CONFIG = {
       type: 'leather-case',
       hasKey: true,
       content: 'key',
-      x: 48,
-      y: 55
-    },
-    {
-      id: 'box-metal-1',
-      title: 'Brass Document Vault',
-      type: 'metal-vault',
-      hasKey: false,
-      content: 'seal',
-      x: 78,
-      y: 38
+      x: 52,
+      y: 22
     },
     {
       id: 'box-wood-2',
@@ -58,8 +49,17 @@ export const DOOR_INTRO_CONFIG = {
       type: 'cedar-cask',
       hasKey: false,
       content: 'photograph',
-      x: 32,
-      y: 72
+      x: 18,
+      y: 62
+    },
+    {
+      id: 'box-metal-1',
+      title: 'Brass Document Vault',
+      type: 'metal-vault',
+      hasKey: false,
+      content: 'seal',
+      x: 74,
+      y: 56
     }
   ],
 
