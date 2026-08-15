@@ -148,6 +148,9 @@ export default function TunnelScene({ currentState, onTransition }) {
       const deltaY = touchStartYRef.current - currentY
       touchStartYRef.current = currentY
 
+      if (e.cancelable) {
+        e.preventDefault()
+      }
       const delta = deltaY * 0.0018
       targetProgressRef.current = Math.max(0, Math.min(1, targetProgressRef.current + delta))
 
@@ -158,7 +161,7 @@ export default function TunnelScene({ currentState, onTransition }) {
 
     window.addEventListener('wheel', handleWheel, { passive: true })
     window.addEventListener('touchstart', handleTouchStart, { passive: true })
-    window.addEventListener('touchmove', handleTouchMove, { passive: true })
+    window.addEventListener('touchmove', handleTouchMove, { passive: false })
 
     return () => {
       window.removeEventListener('wheel', handleWheel)

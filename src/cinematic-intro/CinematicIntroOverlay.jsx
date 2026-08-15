@@ -98,6 +98,17 @@ export default function CinematicIntroOverlay({ isDoorActive = false, onIntroCom
     }
 
     if (
+      currentState === INTRO_STATES.INITIALIZING ||
+      currentState === INTRO_STATES.TEXT_STRANGER ||
+      currentState === INTRO_STATES.TEXT_FOLLOW_ME ||
+      currentState === INTRO_STATES.TUNNEL_SCROLLING
+    ) {
+      document.body.style.overflow = 'hidden'
+      document.documentElement.style.overflow = 'hidden'
+      window.scrollTo(0, 0)
+    }
+
+    if (
       currentState === INTRO_STATES.TRANSITIONING_TO_DARKNESS ||
       currentState === INTRO_STATES.TORCH_AVAILABLE
     ) {
