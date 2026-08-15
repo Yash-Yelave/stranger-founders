@@ -32,6 +32,7 @@ export default function CinematicDoorOverlay({ onDoorComplete, onSkipIntro }) {
 
   // Safe State Transition Handler
   const transitionTo = useCallback((nextState) => {
+
     if (isValidDoorTransition(stateRef.current, nextState)) {
       stateRef.current = nextState
       setCurrentState(nextState)
@@ -47,7 +48,11 @@ export default function CinematicDoorOverlay({ onDoorComplete, onSkipIntro }) {
 
     setCurrentState(DOOR_INTRO_STATES.DOOR_IDLE)
 
-    // Lock body scroll while door overlay is active
+    // Lock body scroll & prevent browser native scroll leak on mobile
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual'
+    }
+    window.scrollTo(0, 0)
     document.body.style.overflow = 'hidden'
     document.documentElement.style.overflow = 'hidden'
 

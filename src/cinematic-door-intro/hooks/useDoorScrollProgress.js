@@ -22,10 +22,13 @@ export function useDoorScrollProgress(enabled = true) {
     }
 
     const handleTouchMove = (e) => {
+      if (e.cancelable) {
+        e.preventDefault()
+      }
       if (e.touches && e.touches[0]) {
         const dy = touchStartYRef.current - e.touches[0].clientY
         touchStartYRef.current = e.touches[0].clientY
-        const delta = dy * 0.0025
+        const delta = dy * 0.0035
         targetProgressRef.current = Math.max(0, Math.min(1, targetProgressRef.current + delta))
       }
     }
@@ -38,7 +41,7 @@ export function useDoorScrollProgress(enabled = true) {
     const updateLoop = () => {
       const target = targetProgressRef.current
       const current = currentProgressRef.current
-      const next = current + (target - current) * 0.1
+      const next = current + (target - current) * 0.18
 
       if (Math.abs(next - current) > 0.0001) {
         currentProgressRef.current = next

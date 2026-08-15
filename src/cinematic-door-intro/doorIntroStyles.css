@@ -432,26 +432,27 @@
 
 @media (max-width: 768px) {
   .sf-door-exploration-scene {
-    padding-top: 50px;
-    padding-bottom: 80px;
-    height: auto;
-    min-height: 100vh;
-    overflow-y: auto;
+    padding-top: 45px;
+    padding-bottom: 50px;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    touch-action: none;
   }
 
   .sf-archive-header {
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     padding: 0 16px;
   }
 
   .sf-archive-containers {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 24px 16px;
-    width: min(92%, 480px);
+    gap: 20px 14px;
+    width: min(94%, 440px);
     height: auto;
     margin: 0 auto;
-    padding-bottom: 40px;
+    padding-bottom: 20px;
   }
 
   .sf-archive-box-wrapper {
@@ -459,7 +460,7 @@
     left: auto !important;
     top: auto !important;
     width: 100% !important;
-    max-width: 200px;
+    max-width: 190px;
     margin: 0 auto;
   }
 }
@@ -467,7 +468,7 @@
 @media (max-width: 480px) {
   .sf-archive-containers {
     grid-template-columns: 1fr;
-    max-width: 280px;
-    gap: 20px;
+    max-width: 270px;
+    gap: 16px;
   }
 }
