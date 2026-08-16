@@ -22,15 +22,12 @@ function ScrollToTop() {
 export default function App() {
   const { pathname } = useLocation()
 
-  // Master One-Way Intro Phase: 'DOOR' -> 'TORCH' -> 'COMPLETED'
+  // Master Intro Phase: 'DOOR' -> 'TORCH' -> 'COMPLETED'
+  // Whole intro (Door -> Torch -> Popup) plays ONLY on fresh page load/refresh of home page ('/')
   const [masterPhase, setMasterPhase] = useState(() => {
-    if (typeof window === 'undefined' || pathname !== '/') return 'COMPLETED'
-    try {
-      if (sessionStorage.getItem('sf_intro_master_done') === 'true') {
-        return 'COMPLETED'
-      }
-    } catch (e) {}
-    return 'DOOR'
+    if (typeof window === 'undefined') return 'COMPLETED'
+    const isDirectRefreshOnHome = window.location.pathname === '/'
+    return isDirectRefreshOnHome ? 'DOOR' : 'COMPLETED'
   })
 
   // Handlers for strict ONE-WAY forward progression

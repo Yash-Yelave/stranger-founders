@@ -8,7 +8,7 @@ export default function ApplicationsOpenPopup() {
   useEffect(() => {
     let timerId = null
 
-    // Handler when campfire ignites: Push popup after EXACT 1 SECOND!
+    // Handler when campfire ignites during fresh intro flow: Push popup after EXACT 1 SECOND!
     const handleCampfireLit = () => {
       if (timerId) clearTimeout(timerId)
       timerId = setTimeout(() => {
@@ -25,19 +25,6 @@ export default function ApplicationsOpenPopup() {
 
     window.addEventListener('sf_campfire_lit', handleCampfireLit)
     window.addEventListener('sf_intro_completed', handleIntroCompleted)
-
-    // Check if campfire was already lit or intro completed on mount
-    if (typeof window !== 'undefined') {
-      if (window.__SF_CAMPFIRE_LIT__) {
-        timerId = setTimeout(() => {
-          setIsVisible(true)
-        }, 1000)
-      } else if (window.__SF_INTRO_COMPLETED__ || sessionStorage.getItem('sf_intro_master_done') === 'true') {
-        timerId = setTimeout(() => {
-          setIsVisible(true)
-        }, 1000)
-      }
-    }
 
     return () => {
       window.removeEventListener('sf_campfire_lit', handleCampfireLit)
