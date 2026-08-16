@@ -64,7 +64,7 @@ export default function ApplicationsOpenPopup() {
         </div>
         <h4 className="sf-app-popup-title">Request Your Seat at the Fire</h4>
         <p className="sf-app-popup-desc">
-          Season 01 applications are officially open for creator founders. Four seats per episode.
+          Season 01 applications are officially open for stranger founders. Four seats per episode.
         </p>
         <div className="sf-app-popup-actions">
           <Link to="/apply" className="btn btn-primary sf-popup-btn" onClick={handleDismiss}>
