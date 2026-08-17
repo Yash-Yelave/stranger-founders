@@ -288,6 +288,9 @@ export default function Home() {
                 <stop offset="55%" stopColor="#8a5527" stopOpacity="0.28" />
                 <stop offset="100%" stopColor="#8a5527" stopOpacity="0" />
               </radialGradient>
+              <filter id="smokeBlur" x="-50%" y="-100%" width="200%" height="300%">
+                <feGaussianBlur stdDeviation="12" />
+              </filter>
             </defs>
             <rect width="1600" height="1100" fill="url(#skyHero)" />
             <g opacity="0.65">
@@ -331,11 +334,11 @@ export default function Home() {
               <line x1="765" y1="1038" x2="835" y2="1038" stroke="#362010" strokeWidth="10" strokeLinecap="round" />
               <line x1="768" y1="1038" x2="832" y2="1038" stroke="#5a381c" strokeWidth="4" strokeLinecap="round" />
 
-              {/* Rising Smoke Wisps */}
-              <g opacity="0.6">
-                <path className="smoke-wisp smoke-1" d="M790 960 Q770 900 795 830 T780 730" fill="none" stroke="#d69a5c" strokeWidth="24" strokeLinecap="round" />
-                <path className="smoke-wisp smoke-2" d="M810 955 Q830 895 805 825 T815 720" fill="none" stroke="#f5ecd8" strokeWidth="20" strokeLinecap="round" />
-                <path className="smoke-wisp smoke-3" d="M800 965 Q780 905 810 840 T790 740" fill="none" stroke="#cdbe9c" strokeWidth="18" strokeLinecap="round" />
+              {/* Rising Smoke Wisps — iOS Safari WebKit & SVG Filter Accelerated */}
+              <g opacity="0.75" filter="url(#smokeBlur)">
+                <path className="smoke-wisp smoke-1" d="M790 960 Q770 900 795 830 T780 730" fill="none" stroke="#d69a5c" strokeWidth="26" strokeLinecap="round" />
+                <path className="smoke-wisp smoke-2" d="M810 955 Q830 895 805 825 T815 720" fill="none" stroke="#f5ecd8" strokeWidth="22" strokeLinecap="round" />
+                <path className="smoke-wisp smoke-3" d="M800 965 Q780 905 810 840 T790 740" fill="none" stroke="#cdbe9c" strokeWidth="20" strokeLinecap="round" />
               </g>
 
               {/* Layered Flickering Campfire Flames */}

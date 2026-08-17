@@ -126,7 +126,11 @@ export default function CinematicIntroOverlay({ onIntroComplete }) {
       document.documentElement.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = ''
+      document.body.style.overflowX = 'hidden'
+      document.body.style.overflowY = 'auto'
       document.documentElement.style.overflow = ''
+      document.documentElement.style.overflowX = 'hidden'
+      document.documentElement.style.overflowY = 'auto'
     }
   }, [currentState, pathname])
 

@@ -37,7 +37,12 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
 
 body {
   background: var(--forest-950);
@@ -50,6 +55,8 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: manipulation;
 }
 
 img { max-width: 100%; display: block; }
@@ -68,6 +75,14 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   position: fixed; inset: 0; z-index: 900; pointer-events: none;
   opacity: 0.05; mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* iOS Safari GPU composition fix for fixed grain overlay */
+@supports (-webkit-touch-callout: none) {
+  .grain {
+    mix-blend-mode: normal;
+    opacity: 0.035;
+  }
 }
 
 /* ---------- Layout -------------------------------------------------------- */
@@ -1931,34 +1946,75 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.1; 
   100% { transform: scaleX(1.05) scaleY(0.95); opacity: 0.9; }
 }
 
-/* Smoke Wisps */
+/* Smoke Wisps - iOS Safari & Cross-Browser Accelerated */
 .smoke-wisp {
+  -webkit-transform-box: view-box;
+  transform-box: view-box;
+  -webkit-transform-origin: 800px 960px;
   transform-origin: 800px 960px;
+  -webkit-animation: smokeRise 6s ease-in-out infinite;
   animation: smokeRise 6s ease-in-out infinite;
-  animation-fill-mode: backwards;
-  filter: blur(18px);
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-filter: blur(12px);
+  filter: blur(12px);
   will-change: transform, opacity;
   opacity: 0;
 }
 
-.smoke-1 { animation-delay: 0s; }
-.smoke-2 { animation-delay: 2s; }
-.smoke-3 { animation-delay: 4s; }
+.smoke-1 {
+  -webkit-animation-delay: 0s;
+  animation-delay: 0s;
+}
 
-@keyframes smokeRise {
+.smoke-2 {
+  -webkit-animation-delay: 2s;
+  animation-delay: 2s;
+}
+
+.smoke-3 {
+  -webkit-animation-delay: 4s;
+  animation-delay: 4s;
+}
+
+@-webkit-keyframes smokeRise {
   0% {
+    -webkit-transform: translateY(0) scaleX(0.8) rotate(0deg);
     transform: translateY(0) scaleX(0.8) rotate(0deg);
     opacity: 0;
   }
-  30% {
-    opacity: 0.28;
+  25% {
+    opacity: 0.35;
   }
   60% {
-    transform: translateY(-80px) scaleX(1.4) rotate(4deg);
-    opacity: 0.15;
+    -webkit-transform: translateY(-90px) scaleX(1.4) rotate(4deg);
+    transform: translateY(-90px) scaleX(1.4) rotate(4deg);
+    opacity: 0.22;
   }
   100% {
-    transform: translateY(-180px) scaleX(2.0) rotate(-6deg);
+    -webkit-transform: translateY(-200px) scaleX(2.0) rotate(-6deg);
+    transform: translateY(-200px) scaleX(2.0) rotate(-6deg);
+    opacity: 0;
+  }
+}
+
+@keyframes smokeRise {
+  0% {
+    -webkit-transform: translateY(0) scaleX(0.8) rotate(0deg);
+    transform: translateY(0) scaleX(0.8) rotate(0deg);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.35;
+  }
+  60% {
+    -webkit-transform: translateY(-90px) scaleX(1.4) rotate(4deg);
+    transform: translateY(-90px) scaleX(1.4) rotate(4deg);
+    opacity: 0.22;
+  }
+  100% {
+    -webkit-transform: translateY(-200px) scaleX(2.0) rotate(-6deg);
+    transform: translateY(-200px) scaleX(2.0) rotate(-6deg);
     opacity: 0;
   }
 }

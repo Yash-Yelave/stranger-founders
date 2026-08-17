@@ -155,7 +155,11 @@ export default function CinematicDoorOverlay({ onDoorComplete, onSkipIntro }) {
                   } catch (e) {}
                   transitionTo(DOOR_INTRO_STATES.COMPLETE)
                   document.body.style.overflow = ''
+                  document.body.style.overflowX = 'hidden'
+                  document.body.style.overflowY = 'auto'
                   document.documentElement.style.overflow = ''
+                  document.documentElement.style.overflowX = 'hidden'
+                  document.documentElement.style.overflowY = 'auto'
                 }, 600)
               }, 800)
             }, 350)
@@ -174,7 +178,11 @@ export default function CinematicDoorOverlay({ onDoorComplete, onSkipIntro }) {
     } catch (e) {}
     transitionTo(DOOR_INTRO_STATES.COMPLETE)
     document.body.style.overflow = ''
+    document.body.style.overflowX = 'hidden'
+    document.body.style.overflowY = 'auto'
     document.documentElement.style.overflow = ''
+    document.documentElement.style.overflowX = 'hidden'
+    document.documentElement.style.overflowY = 'auto'
     if (onSkipIntro) onSkipIntro()
     if (onDoorComplete) onDoorComplete()
   }
