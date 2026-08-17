@@ -33,15 +33,39 @@ export default function ApplicationsOpenPopup() {
     }
   }, [])
 
+  useEffect(() => {
+    if (isVisible && !isDismissed) {
+      document.body.classList.add('sf-popup-open')
+    } else {
+      document.body.classList.remove('sf-popup-open')
+    }
+
+    return () => {
+      document.body.classList.remove('sf-popup-open')
+    }
+  }, [isVisible, isDismissed])
+
   const handleDismiss = () => {
     setIsVisible(false)
     setIsDismissed(true)
+    document.body.classList.remove('sf-popup-open')
+  }
+
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) {
+      handleDismiss()
+    }
   }
 
   if (!isVisible || isDismissed) return null
 
   return (
-    <div className="sf-app-popup-wrapper" role="dialog" aria-label="Season 01 Applications Open">
+    <div
+      className="sf-app-popup-wrapper"
+      role="dialog"
+      aria-label="Season 01 Applications Open"
+      onClick={handleBackdropClick}
+    >
       <div className="sf-app-popup-card">
         <button className="sf-app-popup-close" onClick={handleDismiss} aria-label="Close notification">
           ✕

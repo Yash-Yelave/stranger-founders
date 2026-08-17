@@ -2787,11 +2787,23 @@ select:autofill {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
-  background: rgba(4, 10, 7, 0.78);
-  backdrop-filter: blur(12px) saturate(1.2);
+  padding: clamp(12px, 3.5vw, 24px);
+  background: rgba(4, 10, 7, 0.82);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
   pointer-events: auto;
+  overscroll-behavior: contain;
+  box-sizing: border-box;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
   animation: popupFadeIn 0.35s ease-out forwards;
+}
+
+body.sf-popup-open {
+  overflow: hidden !important;
+  touch-action: none;
+  -webkit-overflow-scrolling: auto;
 }
 
 @keyframes popupFadeIn {
@@ -2802,17 +2814,20 @@ select:autofill {
 .sf-app-popup-card {
   position: relative;
   width: 100%;
-  max-width: 540px;
+  max-width: 520px;
+  max-height: calc(100dvh - 28px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   background: linear-gradient(165deg, rgba(16, 33, 23, 0.98), rgba(8, 18, 12, 0.98));
   border: 1px solid var(--copper);
   border-radius: 16px;
-  padding: 40px 36px 32px;
+  padding: 46px 32px 32px;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9), 0 0 50px rgba(214, 154, 92, 0.3);
-  overflow: hidden;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-sizing: border-box;
   animation: popupZoomIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -2839,12 +2854,13 @@ select:autofill {
 
 .sf-app-popup-close {
   position: absolute;
-  top: 16px;
-  right: 18px;
-  background: rgba(214, 154, 92, 0.08);
-  border: 1px solid rgba(214, 154, 92, 0.2);
+  top: 14px;
+  right: 14px;
+  z-index: 10;
+  background: rgba(214, 154, 92, 0.12);
+  border: 1px solid rgba(214, 154, 92, 0.25);
   color: var(--cream-dim);
-  font-size: 1.1rem;
+  font-size: 1rem;
   line-height: 1;
   cursor: pointer;
   width: 32px;
@@ -2854,11 +2870,12 @@ select:autofill {
   align-items: center;
   justify-content: center;
   transition: all 0.25s var(--ease);
+  -webkit-tap-highlight-color: transparent;
 }
 
 .sf-app-popup-close:hover {
   color: var(--cream);
-  background: rgba(214, 154, 92, 0.25);
+  background: rgba(214, 154, 92, 0.28);
   border-color: var(--copper);
   transform: scale(1.08);
 }
@@ -2866,11 +2883,12 @@ select:autofill {
 .sf-app-popup-badge {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   font-family: var(--sans);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--copper-light);
   background: rgba(214, 154, 92, 0.12);
@@ -2878,6 +2896,7 @@ select:autofill {
   padding: 6px 16px;
   border-radius: 20px;
   margin-bottom: 18px;
+  box-sizing: border-box;
 }
 
 .sf-popup-flame {
@@ -2887,7 +2906,7 @@ select:autofill {
 .sf-app-popup-title {
   font-family: var(--serif);
   font-weight: 500;
-  font-size: clamp(1.6rem, 3.5vw, 2.1rem);
+  font-size: clamp(1.5rem, 3.5vw, 2.1rem);
   color: var(--cream);
   line-height: 1.2;
   margin-bottom: 12px;
@@ -2896,10 +2915,10 @@ select:autofill {
 
 .sf-app-popup-desc {
   font-family: var(--sans);
-  font-size: clamp(0.92rem, 1.5vw, 1.02rem);
+  font-size: clamp(0.9rem, 1.5vw, 1.02rem);
   color: var(--cream-dim);
   line-height: 1.6;
-  margin-bottom: 28px;
+  margin-bottom: 26px;
   max-width: 42ch;
 }
 
@@ -2925,14 +2944,49 @@ select:autofill {
 
 @media (max-width: 540px) {
   .sf-app-popup-card {
-    padding: 32px 24px 24px;
-    border-radius: 12px;
+    padding: 48px 20px 24px;
+    border-radius: 14px;
+    max-width: 94%;
+  }
+  .sf-app-popup-badge {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    padding: 5px 12px;
+    margin-bottom: 14px;
+    max-width: 90%;
+  }
+  .sf-app-popup-title {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+  }
+  .sf-app-popup-desc {
+    font-size: 0.88rem;
+    margin-bottom: 20px;
   }
   .sf-app-popup-actions {
     flex-direction: column;
     width: 100%;
+    gap: 10px;
   }
   .sf-popup-btn, .sf-popup-btn-ghost {
     width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 380px) {
+  .sf-app-popup-card {
+    padding: 44px 16px 20px;
+  }
+  .sf-app-popup-badge {
+    font-size: 0.64rem;
+    padding: 4px 10px;
+  }
+  .sf-app-popup-close {
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    font-size: 0.88rem;
   }
 }
